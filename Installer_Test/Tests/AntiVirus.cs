@@ -1,20 +1,24 @@
 ﻿using System;
-using FrameworkLibraries.Utils;
-using FrameworkLibraries.ActionLibs;
-using TestStack.White.UIItems.WindowItems;
-using System.Threading;
-using TestStack.White.UIItems.Finders;
-using FrameworkLibraries.ActionLibs.WhiteAPI;
-using FrameworkLibraries;
-using System.Collections.Generic;
-using TestStack.White.UIItems;
-using Xunit;
-using TestStack.BDDfy;
-using FrameworkLibraries.AppLibs.QBDT;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Reflection;
 using System.Diagnostics;
-using System.Linq;
+using System.Collections.Generic;
+
+using FrameworkLibraries;
+using FrameworkLibraries.Utils;
+using FrameworkLibraries.AppLibs.QBDT;
+using FrameworkLibraries.ActionLibs.WhiteAPI;
+
+using TestStack.BDDfy;
+using TestStack.White.UIItems;
+using TestStack.White.UIItems.Finders;
+using TestStack.White.UIItems.WindowItems;
+
+using Xunit;
+
+using Installer_Test;
 
 namespace Installer_Test.Tests
 {
@@ -50,19 +54,19 @@ namespace Installer_Test.Tests
         [Then(StepTitle = @"Then - Copy the AntiVirus Software(s) to C:\Temp\AntiVirus\")]
         public void Copy_AntiVirus()
         {
-             Installer_Test.Install_Functions.Copy_AVSoftware(AVName); // str
+             Install_Functions.Copy_AVSoftware(AVName); // str
         }
 
         [AndThen(StepTitle = "And Then - Install the selected AntiVirus software.")]
         public void Install_AntiVirus()
         {
-            Installer_Test.Install_Functions.Install_AVSoftware(AVName);
+            Install_Functions.Install_AVSoftware(AVName);
         }
 
         [AndThen(StepTitle = "And Then - Scan the QuickBooks Installer with the installed antivirus software.")]
         public void Scan_AntiVirus()
         {
-            Installer_Test.Install_Functions.Scan_AVSoftware(AVName);
+            Install_Functions.Scan_AVSoftware(AVName);
         }
 
         [Fact]

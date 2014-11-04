@@ -11,9 +11,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 using FrameworkLibraries;
 using FrameworkLibraries.Utils;
-using FrameworkLibraries.ActionLibs.QBDT;
-using FrameworkLibraries.AppLibs.QBDT.WhiteAPI;
-using FrameworkLibraries.ActionLibs.QBDT.WhiteAPI;
+using FrameworkLibraries.ActionLibs;
+using FrameworkLibraries.AppLibs.QBDT;
 
 using TestStack.BDDfy;
 using TestStack.White.UIItems;
@@ -21,6 +20,9 @@ using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.WindowItems;
 
 using Xunit;
+
+using Installer_Test;
+
 
 namespace Installer_Test.Tests
 {
@@ -99,7 +101,7 @@ namespace Installer_Test.Tests
         [Then(StepTitle = @"Then - Run the diff")]
         public void Run_Windiff_Compare()
         {
-            Installer_Test.PFTW.Windiff_Compare(Local_Windiff,Local_B1Path,Local_B2Path);
+            PFTW.Windiff_Compare(Local_Windiff,Local_B1Path,Local_B2Path);
         }
 
         //[AndThen(StepTitle = "And Then - Install the selected AntiVirus software.")]

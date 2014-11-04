@@ -1,23 +1,26 @@
 ﻿using System;
-using FrameworkLibraries.Utils;
-using FrameworkLibraries.ActionLibs.QBDT;
-using TestStack.White.UIItems.WindowItems;
-using System.Threading;
-using TestStack.White.UIItems.Finders;
-using FrameworkLibraries.ActionLibs.QBDT.WhiteAPI;
-using FrameworkLibraries;
-using System.Collections.Generic;
-using TestStack.White.UIItems;
-using Xunit;
-using System.Linq;
-using TestStack.BDDfy;
-using FrameworkLibraries.AppLibs.QBDT.WhiteAPI;
 using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Management;
 using System.Reflection;
 using System.Diagnostics;
-using Microsoft.Win32;
-using System.Management;
+using System.Collections.Generic;
 
+using FrameworkLibraries;
+using FrameworkLibraries.Utils;
+using FrameworkLibraries.ActionLibs;
+using TestStack.White.UIItems.WindowItems;
+
+using TestStack.BDDfy;
+using TestStack.White.UIItems;
+using TestStack.White.UIItems.Finders;
+
+using Xunit;
+
+using Microsoft.Win32;
+
+using FrameworkLibraries.AppLibs.QBDT;
 
 namespace QBInstall.Tests
 {

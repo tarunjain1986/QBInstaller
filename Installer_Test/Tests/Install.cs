@@ -11,9 +11,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 using FrameworkLibraries;
 using FrameworkLibraries.Utils;
-using FrameworkLibraries.ActionLibs.QBDT;
-using FrameworkLibraries.AppLibs.QBDT.WhiteAPI;
-using FrameworkLibraries.ActionLibs.QBDT.WhiteAPI;
+using FrameworkLibraries.ActionLibs;
+using FrameworkLibraries.AppLibs.QBDT;
 
 using TestStack.BDDfy;
 using TestStack.White.UIItems;
@@ -21,6 +20,8 @@ using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.WindowItems;
 
 using Xunit;
+
+using Installer_Test;
 
 
 namespace Installer_Test.Tests
@@ -118,7 +119,7 @@ namespace Installer_Test.Tests
         [AndThen(StepTitle = "Then - Install QuickBooks")]
         public void RunInstallQB()
         {
-            Installer_Test.Install_Functions.Install_QB(targetPath, wkflow, customOpt, LicenseNo, ProductNo, UserID, Passwd, firstName, lastName, installPath);
+            Install_Functions.Install_QB(targetPath, wkflow, customOpt, LicenseNo, ProductNo, UserID, Passwd, firstName, lastName, installPath);
         
         }
 

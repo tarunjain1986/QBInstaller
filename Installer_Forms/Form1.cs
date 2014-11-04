@@ -1,21 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System.IO;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 using System.Windows.Forms;
-using System.IO;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 using FrameworkLibraries;
 using FrameworkLibraries.Utils;
-using FrameworkLibraries.AppLibs.QBDT.WhiteAPI;
-using FrameworkLibraries.ActionLibs.QBDT.WhiteAPI;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FrameworkLibraries.AppLibs.QBDT;
+using FrameworkLibraries.ActionLibs.WhiteAPI;
+
 using Installer_Test;
+using Installer_Test.Lib;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using TestStack.BDDfy;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems;
@@ -134,7 +138,7 @@ namespace Installer_Forms
 
                 if (!Directory.Exists(targetPath))
                 {
-                    Actions.DirectoryCopy(sourcePath, targetPath, true);
+                    File_Functions.DirectoryCopy(sourcePath, targetPath, true);
                 }
                 targetPath = targetPath + @"QBooks\";
 

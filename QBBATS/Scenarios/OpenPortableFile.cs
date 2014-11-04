@@ -1,21 +1,25 @@
 ﻿using System;
-using FrameworkLibraries.Utils;
-using System.Windows.Automation;
-using System.Windows.Forms;
-using FrameworkLibraries.ActionLibs;
-using TestStack.White.UIItems.WindowItems;
+using System.IO;
 using System.Threading;
-using TestStack.White.UIItems.Finders;
-using FrameworkLibraries.ActionLibs.WhiteAPI;
-using FrameworkLibraries;
+using System.Windows.Forms;
+using System.Windows.Automation;
 using System.Collections.Generic;
+
+using FrameworkLibraries;
+using FrameworkLibraries.Utils;
+using FrameworkLibraries.AppLibs.QBDT;
+using FrameworkLibraries.ActionLibs.WhiteAPI;
+
+using TestStack.BDDfy;
 using TestStack.White.UIItems;
+using TestStack.White.UIItems.Finders;
+using TestStack.White.UIItems.WindowItems;
+
 using Xunit;
 using Xunit.Extensions;
-using TestStack.BDDfy;
-using FrameworkLibraries.AppLibs.QBDT;
+
 using BATS.DATA;
-using System.IO;
+
 
 namespace BATS.Tests
 {

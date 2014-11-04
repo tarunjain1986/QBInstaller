@@ -1,23 +1,30 @@
 ﻿using System;
-using FrameworkLibraries.Utils;
-using FrameworkLibraries.ActionLibs.QBDT;
-using TestStack.White.UIItems.WindowItems;
-using System.Threading;
-using TestStack.White.UIItems.Finders;
-using FrameworkLibraries.ActionLibs.QBDT.WhiteAPI;
-using FrameworkLibraries;
-using System.Collections.Generic;
-using TestStack.White.UIItems;
-using System.Linq;
-using Xunit;
-using TestStack.BDDfy;
-using FrameworkLibraries.AppLibs.QBDT.WhiteAPI;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Reflection;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using Microsoft.Win32;
 using System.Management;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+using FrameworkLibraries;
+using FrameworkLibraries.Utils;
+using FrameworkLibraries.ActionLibs;
+using FrameworkLibraries.AppLibs.QBDT;
+using TestStack.White.UIItems.WindowItems;
+using FrameworkLibraries.ActionLibs.WhiteAPI;
+
+using TestStack.BDDfy;
+using TestStack.White.UIItems;
+using TestStack.White.UIItems.Finders;
+
+using Xunit;
+
+using Microsoft.Win32;
+
+using Installer_Test.Lib;
+
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Installer_Test.Tests
@@ -44,7 +51,7 @@ namespace Installer_Test.Tests
             
             Dictionary<string, string> dic = new Dictionary<string, string>();
            
-            dic = Installer_Test.Lib.File_Functions.ReadExcelValues(readpath,"Path","B2:B10");
+            dic = File_Functions.ReadExcelValues(readpath,"Path","B2:B10");
 
             ver = dic["B7"];
             reg_ver = dic["B8"];
@@ -65,7 +72,7 @@ namespace Installer_Test.Tests
         public void CheckReg_QBVersion()
         {
            // Assert.Equal(ver, installed_version);
-            Actions.XunitAssertEuqals(expected_ver, installed_version);
+           Actions.XunitAssertEuqals(expected_ver, installed_version);
         }
 
 

@@ -14,8 +14,10 @@ using System.Runtime.InteropServices;
 
 using FrameworkLibraries;
 using FrameworkLibraries.Utils;
-using FrameworkLibraries.AppLibs.QBDT.WhiteAPI;
-using FrameworkLibraries.ActionLibs.QBDT.WhiteAPI;
+using FrameworkLibraries.ActionLibs;
+using FrameworkLibraries.ActionLibs.WhiteAPI;
+using FrameworkLibraries.AppLibs.QBDT;
+
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -988,7 +990,7 @@ namespace Installer_Test
             {
                 flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("Install ESET NOD32 Antivirus"), "I accept");
             }
-            Actions.ClickElementByName(Actions.GetDesktopWindow("Install ESET NOD32 Antivirus"), "I accept");
+            FrameworkLibraries.ActionLibs.WhiteAPI.Actions.ClickElementByName(Actions.GetDesktopWindow("Install ESET NOD32 Antivirus"), "I accept");
 
             Actions.ClickElementByName(Actions.GetDesktopWindow("Install ESET NOD32 Antivirus"), "Enable detection of potentially unwanted applications");
             Actions.ClickElementByName(Actions.GetDesktopWindow("Install ESET NOD32 Antivirus"), "Install");

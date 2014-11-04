@@ -12,9 +12,8 @@ using System.Collections.Generic;
 
 using FrameworkLibraries;
 using FrameworkLibraries.Utils;
-using FrameworkLibraries.ActionLibs.QBDT;
-using FrameworkLibraries.AppLibs.QBDT.WhiteAPI;
-using FrameworkLibraries.ActionLibs.QBDT.WhiteAPI;
+using FrameworkLibraries.ActionLibs;
+using FrameworkLibraries.AppLibs.QBDT;
 using TestStack.White.UIItems.WindowItems;
 
 using TestStack.BDDfy;
@@ -22,6 +21,8 @@ using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 
 using Xunit;
+
+using Installer_Test;
 
 //using ScreenShotDemo;
 
@@ -93,7 +94,7 @@ namespace QBInstall.Tests
         [Then (StepTitle = "Delete dlls")]
         public void DeleteDLLs()
         {
-            Installer_Test.Install_Functions.Delete_QBDLLs(installed_dir);
+            Install_Functions.Delete_QBDLLs(installed_dir);
         }
 
         [AndThen(StepTitle = "Invoke QuickBooks")]

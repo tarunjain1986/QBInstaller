@@ -4,7 +4,7 @@ using FrameworkLibraries.ActionLibs;
 using TestStack.White.UIItems.WindowItems;
 using System.Threading;
 using TestStack.White.UIItems.Finders;
-using FrameworkLibraries.ActionLibs.WhiteAPI;
+using FrameworkLibraries.ActionLibs;
 using FrameworkLibraries;
 using System.Collections.Generic;
 using TestStack.White.UIItems;
