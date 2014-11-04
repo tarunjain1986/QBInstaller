@@ -17,6 +17,7 @@ using FrameworkLibraries.Utils;
 using FrameworkLibraries.ActionLibs;
 using FrameworkLibraries.ActionLibs.WhiteAPI;
 using FrameworkLibraries.AppLibs.QBDT;
+using TestStack.White.UIItems.WindowItems;
 
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -834,6 +835,12 @@ namespace Installer_Test
             }
         }
 
+        public static void CheckF2value(TestStack.White.Application qbApp, Window qbWindow)
+        {
+            //Actions.SelectMenu(qbApp, qbWindow, "File", "New Company...");
+            Actions.SendF2ToWindow(qbWindow);
+
+        }
         public static void Copy_AVSoftware(string SWName)
         {
             Logger.logMessage("Function call @ :" + DateTime.Now);

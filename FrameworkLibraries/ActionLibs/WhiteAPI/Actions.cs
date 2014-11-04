@@ -56,7 +56,32 @@ namespace FrameworkLibraries.ActionLibs.WhiteAPI
         }
 
         //**************************************************************************************************************************************************************
+      
 
+        public static void SendF2ToWindow(Window window)
+        {
+            Logger.logMessage("Function call @ :" + DateTime.Now);
+            try
+            {
+                TestStack.White.InputDevices.AttachedKeyboard kb = window.Keyboard;
+                kb.PressSpecialKey(TestStack.White.WindowsAPI.KeyboardInput.SpecialKeys.F2);
+                Thread.Sleep(int.Parse(Execution_Speed));
+                Logger.logMessage("SendF2ToWindow " + window + " - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("SendF2ToWindow " + window + " - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+                String sMessage = e.Message;
+                LastException.SetLastError(sMessage);
+                throw new Exception(sMessage);
+            }
+        }
+
+        //**************************************************************************************************************************************************************
         public static bool CheckMenuEnabled(TestStack.White.Application app, Window win, string level1)
         {
             try

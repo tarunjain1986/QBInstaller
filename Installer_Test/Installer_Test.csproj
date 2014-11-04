@@ -93,6 +93,7 @@
     <Compile Include="Tests\Repair.cs" />
     <Compile Include="Tests\PFTW_Comparison.cs" />
     <Compile Include="Tests\Help_Update.cs" />
+    <Compile Include="Tests\CheckF2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
