@@ -839,7 +839,107 @@ namespace Installer_Test
         {
             //Actions.SelectMenu(qbApp, qbWindow, "File", "New Company...");
             Actions.SendF2ToWindow(qbWindow);
+            ScreenCapture sc = new ScreenCapture();
+            System.Drawing.Image img = sc.CaptureScreen();
+            IntPtr pointer = GetForegroundWindow();
+            string resultsPath = @"C:\Temp\Results\CheckF2_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "\\";
+            if (!Directory.Exists(resultsPath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(resultsPath);
+                    Logger.logMessage("Directory " + resultsPath + " created - Successful");
+                    Logger.logMessage("------------------------------------------------------------------------------");
+                }
+                catch (Exception e)
+                {
+                    Logger.logMessage("Directory " + resultsPath + " could not be created - Failed");
+                    Logger.logMessage(e.Message);
+                    Logger.logMessage("------------------------------------------------------------------------------");
+                }
+                pointer = GetForegroundWindow();
+                sc.CaptureWindowToFile(pointer, resultsPath + "01_CheckF2.png", ImageFormat.Png);
 
+
+            }
+        }
+
+        public static void CheckCurrentEdition(TestStack.White.Application qbApp, Window qbWindow, Dictionary<String, String> dic, String exe)
+        {
+            try
+            {
+                //getting current edition of Qb.
+                String title = qbWindow.Title;
+                foreach (var pair in dic)
+                {
+                    if (pair.Value.Equals(title))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        qbApp = QuickBooks.Initialize(exe);
+                        SwitchEdition(qbApp, qbWindow, pair.Key, exe);
+                    }
+                }
+
+            }
+            catch
+            {
+            }
+
+        }
+
+
+        public static void SwitchEdition(TestStack.White.Application qbApp, Window qbWindow, String edi, String exe)
+        {
+            try
+            {
+                Logger.logMessage("Inside Try");
+                
+                Actions.SelectMenu(qbApp, qbWindow, "Help", "Manage My License", "Change to a Different Industry Edition...");
+                Thread.Sleep(3000);
+                Logger.logMessage("Inside Try");
+                Window editionWindow = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
+                Thread.Sleep(3000);
+                //Actions.ClickButtonByName(editionWindow, "Cancel");
+                Actions.ClickElementByName(editionWindow, edi);
+                Actions.ClickElementByName(editionWindow, "Next >");
+
+                // Actions.ClickElementByAutomationID(editionWindow,"10057");
+                // Actions.ClickElementByAutomationID(editionWindow,"10002");
+                //Actions.ClickButtonByName(editionWindow, "Next>");
+                //Thread.Sleep(300);
+
+                // Actions.WaitForWindow(Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition"),int.Parse(300));
+                //Actions.WaitForElementEnabledOrTransformed(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Next>", "Finish", 3000);
+                Window editionWindow1 = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
+                Thread.Sleep(3000);
+                Actions.ClickElementByAutomationID(editionWindow1, "10004");
+                Thread.Sleep(30000);
+                SendKeys.SendWait("Tab");
+                SendKeys.SendWait("Enter");
+                Thread.Sleep(20000);
+                SendKeys.SendWait("%L");
+                Thread.Sleep(10000);
+                SendKeys.SendWait("%L");
+                Thread.Sleep(30000);
+
+
+
+                //Actions.ClickElementByName(editionWindow, "Finish");
+                // Actions.ClickButtonByName(editionWindow, "Finish");
+                //Actions.WaitForWindow("QuickBooks Enterprise Solution Product Configuration",int.Parse(Sync_Timeout));
+                //Window Confwin = Actions.GetDesktopWindow("QuickBooks Product Configuration");
+                // ("QuickBooks Product Configuration",int.Parse(Sync_Timeout));
+                //Actions.ClickButtonByName(Actions.GetDesktopWindow("QuickBooks Product Configuration"),"No");
+
+            }
+
+            catch (Exception e)
+            {
+                Logger.logMessage("failed" + e.GetBaseException());
+            }
         }
         public static void Copy_AVSoftware(string SWName)
         {
@@ -875,6 +975,59 @@ namespace Installer_Test
                 catch (Exception e)
                 {
                     Logger.logMessage("File " + SWName + " could not be copied to " + targetPath + " - Failed");
+                    Logger.logMessage(e.Message);
+                    Logger.logMessage("------------------------------------------------------------------------------");
+                }
+            }
+        }
+
+        public static void Copy_WebPatch(string sku, string wppath)
+        {
+            string exename;
+            wppath = wppath + sku + "\\qbwebpatch";
+            Logger.logMessage("Function call @ :" + DateTime.Now);
+
+            if(sku=="BEL")
+            {
+                exename = "en_qbwebpatch.exe";
+                
+            }
+            else
+            {
+                exename = "qbwebpatch.exe";
+
+            }
+            
+            Logger.logMessage("Copy" + sku + " WebPatch- Started..");
+
+            string targetPath = @"C:\Temp\WebPatch\";
+
+            if (!Directory.Exists(targetPath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(targetPath);
+                    Logger.logMessage("Directory " + targetPath + " created - Successful");
+                    Logger.logMessage("------------------------------------------------------------------------------");
+                }
+                catch (Exception e)
+                {
+                    Logger.logMessage("Directory " + targetPath + " could not be created - Failed");
+                    Logger.logMessage(e.Message);
+                    Logger.logMessage("------------------------------------------------------------------------------");
+                }
+            }
+            if (!File.Exists(targetPath + exename))
+            {
+                try
+                {
+                    File.Copy(wppath + exename, targetPath + exename);
+                    Logger.logMessage("File " + exename + " copied to " + targetPath + " - Successful");
+                    Logger.logMessage("------------------------------------------------------------------------------");
+                }
+                catch (Exception e)
+                {
+                    Logger.logMessage("File " + exename + " could not be copied to " + targetPath + " - Failed");
                     Logger.logMessage(e.Message);
                     Logger.logMessage("------------------------------------------------------------------------------");
                 }

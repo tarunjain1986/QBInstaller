@@ -89,6 +89,43 @@ namespace Installer_Test.Lib
             }
             return dic;
         }
+
+        public static Dictionary<string, string> ReadExcelCellValues(string readpath, string workSheet)
+        {
+            Excel.Application xlApp;
+            Excel.Workbook xlWorkBook;
+            Excel.Worksheet xlWorkSheet;
+            Excel.Range range;
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            string str1, str2;
+
+            int rCnt = 0;
+
+            // object misValue = System.Reflection.Missing.Value;
+
+            xlApp = new Excel.Application();
+            xlWorkBook = xlApp.Workbooks.Open("C:\\temp\\Parameters.xlsx", 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+
+
+            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(workSheet);
+
+            range = xlWorkSheet.UsedRange;
+
+            for (rCnt = 1; rCnt <= range.Rows.Count; rCnt++)
+            {
+
+                str1 = Convert.ToString((range.Cells[rCnt, 1] as Excel.Range).Value2);
+                str2 = Convert.ToString((range.Cells[rCnt, 2] as Excel.Range).Value2);
+                dic.Add(str1, str2);
+
+            }
+
+            xlWorkBook.Close();
+            xlApp.Quit();
+            return dic;
+
+        }
         
         public static string GetOS()
         {
