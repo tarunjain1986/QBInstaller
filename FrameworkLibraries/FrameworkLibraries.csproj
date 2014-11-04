@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{41150A92-AC11-4A13-B88B-45E36310E2F9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FrameworkLibraries</RootNamespace>
+    <AssemblyName>FrameworkLibraries</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Castle.Core.3.3.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServerCompact">
+      <HintPath>..\packages\EntityFramework.SqlServerCompact.6.1.1\lib\net45\EntityFramework.SqlServerCompact.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TestStack.BDDfy">
+      <HintPath>..\packages\TestStack.BDDfy.4.0.0\lib\NET40\TestStack.BDDfy.dll</HintPath>
+    </Reference>
+    <Reference Include="TestStack.White">
+      <HintPath>..\packages\TestStack.White.0.13.3\lib\net40\TestStack.White.dll</HintPath>
+    </Reference>
+    <Reference Include="TestStack.White.Reporting">
+      <HintPath>..\packages\TestStack.White.ScreenObjects.0.13.3\lib\net40\TestStack.White.Reporting.dll</HintPath>
+    </Reference>
+    <Reference Include="TestStack.White.ScreenObjects">
+      <HintPath>..\packages\TestStack.White.ScreenObjects.0.13.3\lib\net40\TestStack.White.ScreenObjects.dll</HintPath>
+    </Reference>
+    <Reference Include="TestStack.White.WebBrowser">
+      <HintPath>..\packages\TestStack.White.WebBrowser.0.13.3\lib\net40\TestStack.White.WebBrowser.dll</HintPath>
+    </Reference>
+    <Reference Include="UIAutomationClient" />
+    <Reference Include="UIAutomationClientsideProviders" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="xunit">
+      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.extensions">
+      <HintPath>..\packages\xunit.extensions.1.9.2\lib\net20\xunit.extensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActionLibs\WhiteAPI\Actions.cs" />
+    <Compile Include="AppLibs\MayaConnected\Maya.cs" />
+    <Compile Include="AppLibs\Payments\EinvoicingPayments.cs" />
+    <Compile Include="AppLibs\Payments\Payments.cs" />
+    <Compile Include="AppLibs\QBDT\QuickBooks.cs" />
+    <Compile Include="EntityFramework\BankFeedsTestData.cs">
+      <DependentUpon>SQLCompactDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Invoice_TestData.cs">
+      <DependentUpon>SQLCompactDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Siebel_TestData.cs">
+      <DependentUpon>SQLCompactDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\SQLCompactDBModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SQLCompactDBModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\SQLCompactDBModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SQLCompactDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\SQLCompactDBModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SQLCompactDBModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Test_Results.cs">
+      <DependentUpon>SQLCompactDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ObjMaps\QBDT\Silk4NetAPI\BankFeeds\Objects.cs" />
+    <Compile Include="ObjMaps\QBDT\Silk4NetAPI\ChartOfAccounts\Objects.cs" />
+    <Compile Include="ObjMaps\QBDT\Silk4NetAPI\FileDoctorExternal\Objects.cs" />
+    <Compile Include="ObjMaps\QBDT\Silk4NetAPI\Common\Objects.cs" />
+    <Compile Include="ObjMaps\QBDT\Silk4NetAPI\Siebel\Objects.cs" />
+    <Compile Include="ObjMaps\QBDT\WhiteAPI\BankFeeds\Objects.cs" />
+    <Compile Include="ObjMaps\QBDT\WhiteAPI\Common\Objects.cs" />
+    <Compile Include="ObjMaps\QBDT\WhiteAPI\Invoice\Objects.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="SQLCompactDBDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SQLCompactDBDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\BDDfyCustomReporter.cs" />
+    <Compile Include="Utils\BDDfyReporterConfig.cs" />
+    <Compile Include="Utils\DateTimeOperations.cs" />
+    <Compile Include="Utils\FileOperations.cs" />
+    <Compile Include="Utils\KeyStrokeSimulator.cs" />
+    <Compile Include="Utils\LastException.cs" />
+    <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Utils\OSOperations.cs" />
+    <Compile Include="Utils\PathBuilder.cs" />
+    <Compile Include="Utils\Properties.cs" />
+    <Compile Include="Utils\StringFunctions.cs" />
+    <Compile Include="Utils\TestResults.cs" />
+    <Compile Include="Utils\Timer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ObjMaps\QBDT\Silk4NetAPI\Invoice\" />
+    <Folder Include="Reporting\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <EntityDeploy Include="EntityFramework\SQLCompactDBModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SQLCompactDBModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="EntityFramework\SQLCompactDBModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SQLCompactDBModel.edmx</DependentUpon>
+      <LastGenOutput>SQLCompactDBModel.Context.cs</LastGenOutput>
+    </None>
+    <None Include="EntityFramework\SQLCompactDBModel.edmx.diagram">
+      <DependentUpon>SQLCompactDBModel.edmx</DependentUpon>
+    </None>
+    <None Include="EntityFramework\SQLCompactDBModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SQLCompactDBModel.edmx</DependentUpon>
+      <LastGenOutput>SQLCompactDBModel.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="SQLCompactDBDataSet.xsc">
+      <DependentUpon>SQLCompactDBDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="SQLCompactDBDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>SQLCompactDBDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="SQLCompactDBDataSet.xss">
+      <DependentUpon>SQLCompactDBDataSet.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SQLCompactDB.sdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
+    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
+    if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
+    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

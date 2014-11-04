@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SQLCompactDBModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="SQLCompactDBModelStoreContainer">
+          <EntitySet Name="BankFeedsTestData" EntityType="SQLCompactDBModel.Store.BankFeedsTestData" store:Type="Tables" />
+          <EntitySet Name="Invoice_TestData" EntityType="SQLCompactDBModel.Store.Invoice_TestData" store:Type="Tables" />
+          <EntitySet Name="Siebel_TestData" EntityType="SQLCompactDBModel.Store.Siebel_TestData" store:Type="Tables" />
+          <EntitySet Name="Test_Results" EntityType="SQLCompactDBModel.Store.Test_Results" store:Type="Tables" />
+        </EntityContainer>
+        <EntityType Name="BankFeedsTestData">
+          <Key>
+            <PropertyRef Name="Test_Name" />
+          </Key>
+          <Property Name="Test_Name" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="Account" Type="nvarchar" MaxLength="100" />
+          <Property Name="Payee" Type="nvarchar" MaxLength="100" />
+          <Property Name="DownloadedAs_Search_String" Type="nvarchar" MaxLength="100" />
+          <Property Name="Customer_ID" Type="nvarchar" MaxLength="100" />
+          <Property Name="PIN" Type="nvarchar" MaxLength="100" />
+          <Property Name="OFX_Server" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Invoice_TestData">
+          <Key>
+            <PropertyRef Name="Test_Name" />
+          </Key>
+          <Property Name="Customer_Job" Type="nvarchar" MaxLength="500" />
+          <Property Name="Template" Type="nvarchar" MaxLength="100" />
+          <Property Name="Ship_To" Type="nvarchar" MaxLength="100" />
+          <Property Name="PO_Number" Type="nvarchar" MaxLength="100" />
+          <Property Name="VIA" Type="nvarchar" MaxLength="100" />
+          <Property Name="FOB" Type="nvarchar" MaxLength="100" />
+          <Property Name="REP" Type="nvarchar" MaxLength="100" />
+          <Property Name="Qunatity" Type="nvarchar" MaxLength="100" />
+          <Property Name="Item" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" />
+          <Property Name="Test_Name" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Class" Type="nvarchar" MaxLength="100" />
+          <Property Name="Account" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Siebel_TestData">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Product_Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="Product_Version" Type="nvarchar" MaxLength="100" />
+          <Property Name="Product_Edition" Type="nvarchar" MaxLength="100" />
+          <Property Name="Fulfillment_Method" Type="nvarchar" MaxLength="100" />
+          <Property Name="Users" Type="nvarchar" MaxLength="100" />
+          <Property Name="License_Key" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Product_Code" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="AccountName" Type="nvarchar" MaxLength="100" />
+          <Property Name="CACI" Type="nvarchar" MaxLength="100" />
+          <Property Name="AuthID" Type="nvarchar" MaxLength="100" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="FName" Type="nvarchar" MaxLength="100" />
+          <Property Name="LName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Test_Results">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Environment" Type="nvarchar" Nullable="false" MaxLength="300" />
+          <Property Name="Release_Name" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Product_Version" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Module_Name" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Test_Name" Type="nvarchar" Nullable="false" MaxLength="300" />
+          <Property Name="Test_Result" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Failure_Reason" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Failure_Category" Type="nvarchar" MaxLength="100" />
+          <Property Name="Execution_Date" Type="datetime" Nullable="false" />
+          <Property Name="Run_Name" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Id" Type="bigint" Nullable="false" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SQLCompactDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="SQLCompactDBEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="BankFeedsTestDatas" EntityType="SQLCompactDBModel.BankFeedsTestData" />
+          <EntitySet Name="Invoice_TestData" EntityType="SQLCompactDBModel.Invoice_TestData" />
+          <EntitySet Name="Siebel_TestData" EntityType="SQLCompactDBModel.Siebel_TestData" />
+          <EntitySet Name="Test_Results" EntityType="SQLCompactDBModel.Test_Results" />
+        </EntityContainer>
+        <EntityType Name="BankFeedsTestData">
+          <Key>
+            <PropertyRef Name="Test_Name" />
+          </Key>
+          <Property Name="Test_Name" Type="String" Nullable="false" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="Account" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Payee" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="DownloadedAs_Search_String" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Customer_ID" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="PIN" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="OFX_Server" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Invoice_TestData">
+          <Key>
+            <PropertyRef Name="Test_Name" />
+          </Key>
+          <Property Name="Customer_Job" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="Template" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Ship_To" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="PO_Number" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="VIA" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="FOB" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="REP" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Qunatity" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Item" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Test_Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Class" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Account" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Siebel_TestData">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Product_Name" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="Product_Version" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Product_Edition" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Fulfillment_Method" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Users" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="License_Key" Type="String" MaxLength="1000" Unicode="true" FixedLength="false" />
+          <Property Name="Product_Code" Type="String" MaxLength="1000" Unicode="true" FixedLength="false" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="AccountName" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="CACI" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="AuthID" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Email" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="FName" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="LName" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Test_Results">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Environment" Type="String" Nullable="false" MaxLength="300" Unicode="true" FixedLength="false" />
+          <Property Name="Release_Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Product_Version" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Module_Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Test_Name" Type="String" Nullable="false" MaxLength="300" Unicode="true" FixedLength="false" />
+          <Property Name="Test_Result" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Failure_Reason" Type="String" MaxLength="1000" Unicode="true" FixedLength="false" />
+          <Property Name="Failure_Category" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Execution_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Run_Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Id" Type="Int64" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SQLCompactDBModelStoreContainer" CdmEntityContainer="SQLCompactDBEntities">
+          <EntitySetMapping Name="BankFeedsTestDatas">
+            <EntityTypeMapping TypeName="SQLCompactDBModel.BankFeedsTestData">
+              <MappingFragment StoreEntitySet="BankFeedsTestData">
+                <ScalarProperty Name="Test_Name" ColumnName="Test_Name" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
+                <ScalarProperty Name="Payee" ColumnName="Payee" />
+                <ScalarProperty Name="DownloadedAs_Search_String" ColumnName="DownloadedAs_Search_String" />
+                <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+                <ScalarProperty Name="PIN" ColumnName="PIN" />
+                <ScalarProperty Name="OFX_Server" ColumnName="OFX_Server" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invoice_TestData">
+            <EntityTypeMapping TypeName="SQLCompactDBModel.Invoice_TestData">
+              <MappingFragment StoreEntitySet="Invoice_TestData">
+                <ScalarProperty Name="Account" ColumnName="Account" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+                <ScalarProperty Name="Customer_Job" ColumnName="Customer_Job" />
+                <ScalarProperty Name="Template" ColumnName="Template" />
+                <ScalarProperty Name="Ship_To" ColumnName="Ship_To" />
+                <ScalarProperty Name="PO_Number" ColumnName="PO_Number" />
+                <ScalarProperty Name="VIA" ColumnName="VIA" />
+                <ScalarProperty Name="FOB" ColumnName="FOB" />
+                <ScalarProperty Name="REP" ColumnName="REP" />
+                <ScalarProperty Name="Qunatity" ColumnName="Qunatity" />
+                <ScalarProperty Name="Item" ColumnName="Item" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Test_Name" ColumnName="Test_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Siebel_TestData">
+            <EntityTypeMapping TypeName="SQLCompactDBModel.Siebel_TestData">
+              <MappingFragment StoreEntitySet="Siebel_TestData">
+                <ScalarProperty Name="Product_Name" ColumnName="Product_Name" />
+                <ScalarProperty Name="Product_Version" ColumnName="Product_Version" />
+                <ScalarProperty Name="Product_Edition" ColumnName="Product_Edition" />
+                <ScalarProperty Name="Fulfillment_Method" ColumnName="Fulfillment_Method" />
+                <ScalarProperty Name="Users" ColumnName="Users" />
+                <ScalarProperty Name="License_Key" ColumnName="License_Key" />
+                <ScalarProperty Name="Product_Code" ColumnName="Product_Code" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="CACI" ColumnName="CACI" />
+                <ScalarProperty Name="AuthID" ColumnName="AuthID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
+                <ScalarProperty Name="LName" ColumnName="LName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Test_Results">
+            <EntityTypeMapping TypeName="SQLCompactDBModel.Test_Results">
+              <MappingFragment StoreEntitySet="Test_Results">
+                <ScalarProperty Name="Environment" ColumnName="Environment" />
+                <ScalarProperty Name="Release_Name" ColumnName="Release_Name" />
+                <ScalarProperty Name="Product_Version" ColumnName="Product_Version" />
+                <ScalarProperty Name="Module_Name" ColumnName="Module_Name" />
+                <ScalarProperty Name="Test_Name" ColumnName="Test_Name" />
+                <ScalarProperty Name="Test_Result" ColumnName="Test_Result" />
+                <ScalarProperty Name="Failure_Reason" ColumnName="Failure_Reason" />
+                <ScalarProperty Name="Failure_Category" ColumnName="Failure_Category" />
+                <ScalarProperty Name="Execution_Date" ColumnName="Execution_Date" />
+                <ScalarProperty Name="Run_Name" ColumnName="Run_Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>XmlUnit.Xunit</id>
+    <version>0.4</version>
+    <title>XmlUnit</title>
+    <authors>http://xmlunit.sf.net/</authors>
+    <owners>http://xmlunit.sf.net/</owners>
+    <licenseUrl>https://github.com/horsdal/XmlUnit.Xunit/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/horsdal/XmlUnit.Xunit</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Xunit extension for Xml testing
+Note that you will probably have to configure an assembly rebind of Xunit.NET after installing this package. For inspiration see: http://horsdal.blogspot.com/2011/09/tip-for-making-autofixture-and-xunitnet.html</description>
+    <summary>Xunit extension for Xml testing</summary>
+    <copyright>Copyright 2011</copyright>
+    <tags>xunit xmlunit xml unit-testing</tags>
+    <dependencies>
+      <dependency id="xunit" version="1.8.0.1545" />
+    </dependencies>
+  </metadata>
+</package>

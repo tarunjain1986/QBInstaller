@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>TestStack.White.ScreenObjects</id>
+    <version>0.13.3</version>
+    <title>TestStack.White.ScreenObjects</title>
+    <authors>Vivek Singh,  Jake Ginnivan</authors>
+    <owners>Vivek Singh,  Jake Ginnivan</owners>
+    <licenseUrl>https://github.com/TestStack/White/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/TestStack/White</projectUrl>
+    <iconUrl>https://raw.github.com/TestStack/White/master/logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>TestStack.White.ScreenObjects adds support for the Page Object Pattern, allowing you to write clean maintainable UI Tests</description>
+    <copyright>Copyright Jake Ginnivan 2013</copyright>
+    <tags>White UIAutomation Testing UIA WPF Silverlight Win32 Automation PageObject TestStack</tags>
+    <dependencies>
+      <dependency id="TestStack.White" version="0.13.3" />
+    </dependencies>
+  </metadata>
+</package>

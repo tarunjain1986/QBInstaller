@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="QBBATS.Data" GeneratedClassName="Invoice">
+  <Profiles />
+  <Settings>
+    <Setting Name="Customer_Job" Type="System.String" Scope="User">
+      <Value Profile="(Default)">John</Value>
+    </Setting>
+    <Setting Name="Template" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Intuit Product Invoice</Value>
+    </Setting>
+    <Setting Name="VIA" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DHL</Value>
+    </Setting>
+    <Setting Name="FOB" Type="System.String" Scope="User">
+      <Value Profile="(Default)">FOB</Value>
+    </Setting>
+    <Setting Name="REP" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Net 15</Value>
+    </Setting>
+    <Setting Name="Quantity" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="Item" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Simulator</Value>
+    </Setting>
+    <Setting Name="Class" Type="System.String" Scope="User">
+      <Value Profile="(Default)">100HT</Value>
+    </Setting>
+    <Setting Name="Account" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Accounts Receivable</Value>
+    </Setting>
+    <Setting Name="Test_Name" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Invoice</Value>
+    </Setting>
+    <Setting Name="Module_Name" Type="System.String" Scope="User">
+      <Value Profile="(Default)">BATS</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

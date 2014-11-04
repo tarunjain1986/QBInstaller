@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>TestStack.BDDfy.Samples</id>
+    <version>4.0.0</version>
+    <title>TestStack.BDDfy.Samples</title>
+    <authors>Mehdi Khalili,  Michael Whelan</authors>
+    <owners>Mehdi Khalili,  Michael Whelan</owners>
+    <licenseUrl>https://github.com/TestStack/TestStack.BDDfy/blob/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/TestStack/TestStack.BDDfy</projectUrl>
+    <iconUrl>https://raw.github.com/TestStack/TestStack.BDDfy/master/logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Contains two small samples that showcase BDDfy's API and usage</description>
+    <dependencies>
+      <dependency id="TestStack.BDDfy" version="4.0.0" />
+      <dependency id="nunit" version="2.5" />
+    </dependencies>
+  </metadata>
+</package>
