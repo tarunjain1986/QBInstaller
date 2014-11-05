@@ -47,14 +47,13 @@ namespace Installer_Test.Tests
             var dic = lines.Select(line => line.Split('=')).ToDictionary(keyValue => keyValue[0], bits => bits[1]);
 
             AVName = dic["AntiVirusSW"];
-           // AntiVirusSW = AVName.Split(new char [] {','}, StringSplitOptions.RemoveEmptyEntries);
         }
         
 
         [Then(StepTitle = @"Then - Copy the AntiVirus Software(s) to C:\Temp\AntiVirus\")]
         public void Copy_AntiVirus()
         {
-             Install_Functions.Copy_AVSoftware(AVName); // str
+             Install_Functions.Copy_AVSoftware(AVName); 
         }
 
         [AndThen(StepTitle = "And Then - Install the selected AntiVirus software.")]

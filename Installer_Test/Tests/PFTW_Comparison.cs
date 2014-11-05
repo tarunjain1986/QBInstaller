@@ -48,22 +48,9 @@ namespace Installer_Test.Tests
 
             string readpath = "C:\\Temp\\Parameters.xlsx"; // "C:\\Installation\\Sample.txt";
 
-            Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
-            Excel.Workbook xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-            Excel.Worksheet xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item("Path");
-            Excel.Range xlRng = (Excel.Range)xlWorkSheet.get_Range("B2:B4", Type.Missing);
-
             Dictionary<string, string> dic = new Dictionary<string, string>();
-
-            foreach (Excel.Range cell in xlRng)
-            {
-
-                string cellIndex = cell.get_AddressLocal(false, false, Excel.XlReferenceStyle.xlA1, Type.Missing, Type.Missing);
-
-                string cellValue = Convert.ToString(cell.Value2);
-                dic.Add(cellIndex, cellValue);
-
-            }
+           
+            dic = Installer_Test.Lib.File_Functions.ReadExcelValues(readpath, "PFTW", "B2:B4");
 
             Build01_Path = dic["B2"];
             Build02_Path = dic["B3"];
@@ -73,7 +60,7 @@ namespace Installer_Test.Tests
             Local_B2Path = @"C:\Temp\PFTW\Web\";
             Local_Windiff = @"C:\Temp\PFTW\";
 
-            string[] list_of_files = Directory.GetFiles(Local_B1Path, "*.exe");
+           
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////
             //if (!Directory.Exists(Local_B1Path))
@@ -98,20 +85,28 @@ namespace Installer_Test.Tests
         }
 
 
-        [Then(StepTitle = @"Then - Run the diff")]
+        [Then(StepTitle = "Then - Run the diff")]
         public void Run_Windiff_Compare()
         {
-            PFTW.Windiff_Compare(Local_Windiff,Local_B1Path,Local_B2Path);
+            PFTW.Windiff_Compare(Local_Windiff, Local_B1Path, Local_B2Path);
         }
 
-        //[AndThen(StepTitle = "And Then - Install the selected AntiVirus software.")]
-        //public void Install_AntiVirus()
-        //{
-           
-        //}
+        [AndThen (StepTitle = "And Then - Compare the file size" )]
+        public void Run_FileSize_Compare()
+        {
+            string[] B1_files = Directory.GetFiles(Local_B1Path, "*.exe");
+            string[] B2_files = Directory.GetFiles(Local_B2Path, "*.exe");
+            string file_name;
 
-        //[AndThen(StepTitle = "And Then - Scan the QuickBooks Installer with the installed antivirus software.")]
-        //public void Scan_AntiVirus()
+           foreach (string file in B1_files)
+           {
+               file_name = Path.GetFileName(file);
+               PFTW.Compare_FileSize(Local_B1Path, Local_B2Path, file_name);
+           }
+        }
+
+        //[AndThen(StepTitle = "And Then - Compare the Digital Signatures")]
+        //public void Run_DigSign_Compare()
         //{
            
         //}

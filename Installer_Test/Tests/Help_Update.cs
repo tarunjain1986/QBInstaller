@@ -29,7 +29,7 @@ namespace Installer_Test.Tests
         public TestStack.White.UIItems.WindowItems.Window qbWindow = null;
         public static Property conf = Property.GetPropertyInstance();
         public string exe = conf.get("QBExePath");
-        public Random rand = new Random();
+        // public Random rand = new Random();
         public string testName = "Help_Update";        
         
         

@@ -27,7 +27,7 @@ namespace Installer_Test
 
     public class PFTW
     {
-        public static void Windiff_Compare(string Local_Windiff, string Local_B1Path,string Local_B2Path)
+        public static void Windiff_Compare(string Local_Windiff, string Local_B1Path, string Local_B2Path)
         {
             Logger.logMessage("Function call @ :" + DateTime.Now);
             Logger.logMessage("Windiff comparison started:" + Local_B1Path + Local_B2Path + " - Started..");
@@ -55,8 +55,36 @@ namespace Installer_Test
                 Logger.logMessage("------------------------------------------------------------------------------");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
+        }
 
+        public static void Compare_FileSize(string filePath1, string filePath2, string file)
+        {
+            Logger.logMessage("Function call @ :" + DateTime.Now);
+            Logger.logMessage("PFTW File Comparison " + filePath1 + file + " " + filePath2 + file + " - Started..");
+            
+            FileInfo FileInfo_01 = new FileInfo(filePath1 + file);
+            FileInfo FileInfo_02 = new FileInfo(filePath2 + file);
 
+            try
+            {
+                if (FileInfo_01.Length == FileInfo_02.Length)
+                {
+                    Logger.logMessage("Files " + filePath1 + file + " and " + filePath2 + file + " are of same size: " + FileInfo_01.Length +" - Passed");
+                    Logger.logMessage("------------------------------------------------------------------------------------------------------------------");
+                }
+                else
+                {
+                    Logger.logMessage("Files " + filePath1 + file + "(" + FileInfo_01.Length + ")" + " and " + filePath2 + file + "(" + FileInfo_02.Length + ")" + " are of not of same size - Failed");
+                    Logger.logMessage("---------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                }
+            }
+
+            catch (Exception e)
+            {
+                Logger.logMessage("Error in file comparison!");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
         }
     }
 }

@@ -23,10 +23,6 @@ using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.WindowItems;
 
-
-
-
-
 namespace Installer_Test
 {
 
@@ -166,7 +162,6 @@ namespace Installer_Test
                 string OS_Name = Installer_Test.Lib.File_Functions.GetOS();
                 Dictionary<string, string> dic = new Dictionary<string, string>();
 
-
                 dic = Installer_Test.Lib.File_Functions.ReadExcelValues("C:\\Temp\\Parameters.xlsx", "Path", "B2:B10");
 
                 string ver = dic["B7"];
@@ -186,7 +181,7 @@ namespace Installer_Test
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
 
-            SendKeys.SendWait(" ");
+            SendKeys.SendWait(" "); // To close the About dialog
 
         }
     }
