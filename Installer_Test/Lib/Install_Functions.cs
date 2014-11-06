@@ -872,6 +872,7 @@ namespace Installer_Test
                 String title = qbWindow.Title;
                 foreach (var pair in dic)
                 {
+                    title = qbWindow.Title;
                     if (pair.Value.Equals(title))
                     {
                         continue;
@@ -879,13 +880,15 @@ namespace Installer_Test
                     else
                     {
                         qbApp = QuickBooks.Initialize(exe);
+                        qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
                         SwitchEdition(qbApp, qbWindow, pair.Key, exe);
                     }
                 }
 
             }
-            catch
+            catch(Exception e)
             {
+                Logger.logMessage(e.Message);
             }
 
         }
@@ -902,17 +905,12 @@ namespace Installer_Test
                 Logger.logMessage("Inside Try");
                 Window editionWindow = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
                 Thread.Sleep(3000);
-                //Actions.ClickButtonByName(editionWindow, "Cancel");
+                
                 Actions.ClickElementByName(editionWindow, edi);
+                Thread.Sleep(1000);
                 Actions.ClickElementByName(editionWindow, "Next >");
 
-                // Actions.ClickElementByAutomationID(editionWindow,"10057");
-                // Actions.ClickElementByAutomationID(editionWindow,"10002");
-                //Actions.ClickButtonByName(editionWindow, "Next>");
-                //Thread.Sleep(300);
-
-                // Actions.WaitForWindow(Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition"),int.Parse(300));
-                //Actions.WaitForElementEnabledOrTransformed(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Next>", "Finish", 3000);
+              
                 Window editionWindow1 = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
                 Thread.Sleep(3000);
                 Actions.ClickElementByAutomationID(editionWindow1, "10004");
@@ -924,16 +922,6 @@ namespace Installer_Test
                 Thread.Sleep(10000);
                 SendKeys.SendWait("%L");
                 Thread.Sleep(30000);
-
-
-
-                //Actions.ClickElementByName(editionWindow, "Finish");
-                // Actions.ClickButtonByName(editionWindow, "Finish");
-                //Actions.WaitForWindow("QuickBooks Enterprise Solution Product Configuration",int.Parse(Sync_Timeout));
-                //Window Confwin = Actions.GetDesktopWindow("QuickBooks Product Configuration");
-                // ("QuickBooks Product Configuration",int.Parse(Sync_Timeout));
-                //Actions.ClickButtonByName(Actions.GetDesktopWindow("QuickBooks Product Configuration"),"No");
-
             }
 
             catch (Exception e)
@@ -984,7 +972,7 @@ namespace Installer_Test
         public static void Copy_WebPatch(string sku, string wppath)
         {
             string exename;
-            wppath = wppath + sku + "\\qbwebpatch";
+            wppath = wppath + sku + "\\qbwebpatch\\";
             Logger.logMessage("Function call @ :" + DateTime.Now);
 
             if(sku=="BEL")

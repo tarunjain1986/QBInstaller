@@ -34,7 +34,7 @@ namespace Installer_Test.Tests
         public static Property conf = Property.GetPropertyInstance();
         public static int Sync_Timeout = int.Parse(conf.get("SyncTimeOut"));
         public static string testName = "WebPatch";
-        public string targetPath, installPath, fileName, wkflow, customOpt, License_No, Product_No, UserID, Passwd, firstName, lastName;
+        public string targetPath,patchpath, installPath, fileName, wkflow, customOpt, License_No, Product_No, UserID, Passwd, firstName, lastName;
         string [] LicenseNo, ProductNo;
 
 
@@ -48,27 +48,28 @@ namespace Installer_Test.Tests
             //////////////////////////////////////////////////////////////////////////
             // Following code is for reading from text file
             //////////////////////////////////////////////////////////////////////////
-            //string readpath = @"C:\Temp\Parameters.txt";
-            //File.WriteAllLines(readpath, File.ReadAllLines(readpath).Where(l => !string.IsNullOrWhiteSpace(l))); // Remove white space from the file
+            string readpath = @"C:\Temp\Parameters.txt";
+            File.WriteAllLines(readpath, File.ReadAllLines(readpath).Where(l => !string.IsNullOrWhiteSpace(l))); // Remove white space from the file
 
-            //string[] lines = File.ReadAllLines(readpath);
-            //var dic = lines.Select(line => line.Split('=')).ToDictionary(keyValue => keyValue[0], bits => bits[1]);
+            string[] lines = File.ReadAllLines(readpath);
+            var dic = lines.Select(line => line.Split('=')).ToDictionary(keyValue => keyValue[0], bits => bits[1]);
 
-            //targetPath = dic["Target Path"];
-            //wkflow = dic["Workflow"];
-            //customOpt = dic["Installation Type"];
-            //License_No = dic["License No"];
-            //Product_No = dic["Product No"];
-            //UserID = dic["UserID"];
-            //Passwd = dic["Password"];
-            //firstName = dic["First Name"];
-            //lastName = dic["Last Name"];
+            targetPath = dic["Target Path"];
+            patchpath = dic["Patch Path"];
+            wkflow = dic["Workflow"];
+            customOpt = dic["Installation Type"];
+            License_No = dic["License No"];
+            Product_No = dic["Product No"];
+            UserID = dic["UserID"];
+            Passwd = dic["Password"];
+            firstName = dic["First Name"];
+            lastName = dic["Last Name"];
 
             //////////////////////////////////////////////////////////////////////////////////////////////
             // The following code is for reading from an excel file
             //////////////////////////////////////////////////////////////////////////////////////////////
 
-            string readpath = "C:\\Temp\\Parameters.xlsx"; // "C:\\Installation\\Sample.txt";
+           /* string readpath = "C:\\Temp\\Parameters.xlsx"; // "C:\\Installation\\Sample.txt";
 
             Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
             Excel.Workbook xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
@@ -97,7 +98,7 @@ namespace Installer_Test.Tests
             //Passwd = dic["Password"];
             //firstName = dic["First Name"];
             //lastName = dic["Last Name"];
-
+            */
 
             var regex = new Regex(@".{4}");
             string temp = regex.Replace(License_No, "$&" + "\n");
@@ -109,7 +110,7 @@ namespace Installer_Test.Tests
             
         }
 
-        [Then(StepTitle = "Then - Invoke QuickBooks installer")]
+      [Then(StepTitle = "Then - Invoke QuickBooks installer")]
         public void InvokeQB()
         {
            OSOperations.InvokeInstaller(targetPath, "setup.exe");
@@ -123,17 +124,33 @@ namespace Installer_Test.Tests
         
         }
 
-        [AndThen(StepTitle = "Then - Kill QuickBooks")]
+      [AndThen(StepTitle = "Then - Kill QuickBooks")]
         public void KillQB()
         {
-            OSOperations.KillProcess("setup.exe");
+            OSOperations.KillProcess("setup");
+            
         }
         [AndThen(StepTitle = "Copy the web patch to local")]
         public void copyPatch()
         {
-            Installer_Test.Install_Functions.Copy_WebPatch("\\\\mtvfsqbscm\\Build\\MangoOct14\\Patch\\Test\\US_R4_26.1.nb\\1\\","BEL");
+            Installer_Test.Install_Functions.Copy_WebPatch("BEL",patchpath);
+        }
+
+        [AndThen(StepTitle = "Then - Invoke Web Patch installer")]
+        public void InvokeWP()
+        {
+            OSOperations.InvokeInstaller(patchpath, "en_qbwebpatch.exe");
 
         }
+        [AndThen(StepTitle = "Then - Run Web Patch installer")]
+        public void InstallWP()
+        {
+            Thread.Sleep(3000);
+            SendKeys.SendWait("%I");
+
+        }
+
+
 
        [Fact]
         public void RunInstallWebPatch()
