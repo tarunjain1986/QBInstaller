@@ -19,6 +19,7 @@ using TestStack.White.UIItems.WindowItems;
 using Xunit;
 
 using Installer_Test;
+using Installer_Test.Lib;
 
 namespace Installer_Test.Tests
 {
@@ -40,13 +41,20 @@ namespace Installer_Test.Tests
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
             Logger log = new Logger(testName + "_" + timeStamp);
            
-            string readpath = @"C:\Temp\Parameters.txt";
-            File.WriteAllLines(readpath, File.ReadAllLines(readpath).Where(l => !string.IsNullOrWhiteSpace(l))); // Remove white space from the file
+            //string readpath = @"C:\Temp\Parameters.txt";
+            //File.WriteAllLines(readpath, File.ReadAllLines(readpath).Where(l => !string.IsNullOrWhiteSpace(l))); // Remove white space from the file
 
-            string[] lines = File.ReadAllLines(readpath);
-            var dic = lines.Select(line => line.Split('=')).ToDictionary(keyValue => keyValue[0], bits => bits[1]);
+            //string[] lines = File.ReadAllLines(readpath);
+            //var dic = lines.Select(line => line.Split('=')).ToDictionary(keyValue => keyValue[0], bits => bits[1]);
 
-            AVName = dic["AntiVirusSW"];
+            //AVName = dic["AntiVirusSW"];
+
+            string readpath = "C:\\Temp\\Parameters.xlsx"; // "C:\\Installation\\Sample.txt";
+
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic = File_Functions.ReadExcelValues(readpath, "AntiVirus", "B2:B2");
+            AVName = dic["B2"];
+
         }
         
 

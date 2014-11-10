@@ -22,6 +22,7 @@ using TestStack.White.UIItems.WindowItems;
 using Xunit;
 
 using Installer_Test;
+using Installer_Test.Lib;
 
 
 namespace Installer_Test.Tests
@@ -68,26 +69,31 @@ namespace Installer_Test.Tests
             // The following code is for reading from an excel file
             //////////////////////////////////////////////////////////////////////////////////////////////
 
+            //string readpath = "C:\\Temp\\Parameters.xlsx"; // "C:\\Installation\\Sample.txt";
+
+            //Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+            //Excel.Workbook xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+            //Excel.Worksheet xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item("Path");
+            //Excel.Range xlRng = (Excel.Range)xlWorkSheet.get_Range("B2:B4", Type.Missing);
+
+            //Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            //foreach (Excel.Range cell in xlRng)
+            //{
+
+            //    string cellIndex = cell.get_AddressLocal(false, false, Excel.XlReferenceStyle.xlA1, Type.Missing, Type.Missing);
+
+            //    string cellValue = Convert.ToString(cell.Value2);
+            //    dic.Add(cellIndex, cellValue);
+
+            //}
+
             string readpath = "C:\\Temp\\Parameters.xlsx"; // "C:\\Installation\\Sample.txt";
 
-            Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
-            Excel.Workbook xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-            Excel.Worksheet xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item("Path");
-            Excel.Range xlRng = (Excel.Range)xlWorkSheet.get_Range("B2:B4", Type.Missing);
-
             Dictionary<string, string> dic = new Dictionary<string, string>();
-
-            foreach (Excel.Range cell in xlRng)
-            {
-
-                string cellIndex = cell.get_AddressLocal(false, false, Excel.XlReferenceStyle.xlA1, Type.Missing, Type.Missing);
-
-                string cellValue = Convert.ToString(cell.Value2);
-                dic.Add(cellIndex, cellValue);
-
-            }
-            
-            targetPath = dic["B2"];
+            dic = File_Functions.ReadExcelValues(readpath, "Path", "B2:B10");
+                     
+            targetPath = dic["B6"];
             installPath = dic["B9"];
             //wkflow = dic["Workflow"];
             //customOpt = dic["Installation Type"];
@@ -97,7 +103,6 @@ namespace Installer_Test.Tests
             //Passwd = dic["Password"];
             //firstName = dic["First Name"];
             //lastName = dic["Last Name"];
-
 
             var regex = new Regex(@".{4}");
             string temp = regex.Replace(License_No, "$&" + "\n");

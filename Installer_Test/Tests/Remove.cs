@@ -22,6 +22,9 @@ using Microsoft.Win32;
 
 using FrameworkLibraries.AppLibs.QBDT;
 
+using Installer_Test;
+using Installer_Test.Lib;
+
 namespace QBInstall.Tests
 {
     public class Remove
@@ -42,36 +45,26 @@ namespace QBInstall.Tests
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
             Logger log = new Logger(testName + "_" + timeStamp);
 
-            string readpath = @"C:\Temp\Parameters.txt";
-            File.WriteAllLines(readpath, File.ReadAllLines(readpath).Where(l => !string.IsNullOrWhiteSpace(l))); // Remove white space from the file
+            //string readpath = @"C:\Temp\Parameters.txt";
+            //File.WriteAllLines(readpath, File.ReadAllLines(readpath).Where(l => !string.IsNullOrWhiteSpace(l))); // Remove white space from the file
 
-            string[] lines = File.ReadAllLines(readpath);
-            var dic = lines.Select(line => line.Split('=')).ToDictionary(keyValue => keyValue[0], bits => bits[1]);
+            //string[] lines = File.ReadAllLines(readpath);
+            //var dic = lines.Select(line => line.Split('=')).ToDictionary(keyValue => keyValue[0], bits => bits[1]);
 
-            ver = dic["Version"];
-            reg_ver = dic["Registry Folder"];
+            //ver = dic["Version"];
+            //reg_ver = dic["Registry Folder"];
 
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem");
-            foreach (ManagementObject os in searcher.Get())
-            {
-                OS_Name = os["Caption"].ToString();
-                break;
-            }
+            string readpath = "C:\\Temp\\Parameters.xlsx"; 
 
-            if (OS_Name.Contains("Windows 7"))
-            {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic = File_Functions.ReadExcelValues(readpath, "Path", "B2:B10");
+            ver = dic["B7"];
+            reg_ver = dic["B8"];
 
-                RegistryKey key = Registry.LocalMachine.OpenSubKey("Software\\Wow6432Node\\Intuit\\QuickBooks\\" + ver + "\\" + reg_ver);
-                if (key != null)
-                {
-                    product = key.GetValue("Product");
-                    if (product != null)
-                    {
-                        installed_product = product as string;
-                    }
-                }
-               
-            }
+            OS_Name = File_Functions.GetOS();
+            installed_product = Installer_Test.Lib.File_Functions.GetProduct(OS_Name, ver, reg_ver);
+                        
+            
             //Repair
             QuickBooks.RepairOrUnInstallQB(installed_product, false, true);
         }

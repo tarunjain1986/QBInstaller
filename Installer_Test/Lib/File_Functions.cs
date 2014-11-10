@@ -220,6 +220,34 @@ namespace Installer_Test.Lib
                 return installed_dataPath;
           }
 
+        public static string GetPath(string OS_Name, string ver, string reg_ver)
+        {
+            Object QBPath;
+            string installed_QBPath = string.Empty;
+            RegistryKey key = Registry.LocalMachine.OpenSubKey("Software\\Wow6432Node\\Intuit\\QuickBooks\\" + ver + "\\" + reg_ver);
+            if (OS_Name.Contains("Windows 7"))
+            {
+                if (key != null)
+                {
+                    QBPath = key.GetValue("Path");
+                    if (QBPath != null)
+                    {
+                        installed_QBPath = QBPath as string;
+                    }
+                }
+
+
+                if (key == null)
+                {
+                    // Install_QB?
+
+                }
+
+            }
+            return installed_QBPath;
+        }
+
+
         public static string GetDataPathKey(string OS_Name, string ver, string reg_ver)
         {
             Object dataPath = new Object();

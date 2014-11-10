@@ -8,6 +8,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Drawing;
+using System.IO.Packaging;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
@@ -61,9 +62,63 @@ namespace Installer_Test
         {
             Logger.logMessage("Function call @ :" + DateTime.Now);
             Logger.logMessage("PFTW File Comparison " + filePath1 + file + " " + filePath2 + file + " - Started..");
-            
+            file = "Test.txt";
+
             FileInfo FileInfo_01 = new FileInfo(filePath1 + file);
             FileInfo FileInfo_02 = new FileInfo(filePath2 + file);
+            try
+            {
+
+                DateTime DateTime1;
+                //DateTime1 = System.IO.File.GetLastWriteTime(filePath2 + file);
+
+                // Open the package.
+
+                //FileStream fr = new FileStream(filePath2 + file, FileMode.Open, FileAccess.Read, FileShare.Read);
+                
+                /////////////////////////////////////////////////////////////
+                byte[] buffer = File.ReadAllBytes(filePath2 + file);
+                //string base64Encoded = Convert.ToBase64String(buffer);
+                MemoryStream stream = new MemoryStream(buffer);
+
+                //// TODO: do something with the bas64 encoded string
+                //buffer = Convert.FromBase64String(base64Encoded);
+                //File.WriteAllBytes(filePath2 + file, buffer);
+                /////////////////////////////////////////////////////////////
+                //Stream sr = File.OpenRead(filePath2 + file);
+
+                // Stream fs1 = File.Open(filePath2 + file, FileMode.OpenOrCreate);
+               // stream.Position = 0;
+               //using (var package1 = Package.Open(stream,FileMode.Open));//,fs1.Read);// Package.Open(fs1,FileMode.Open);
+               // //sr.Close();
+
+                using (var package = Package.Open(stream))
+                {
+                    // do something with package
+                }
+
+
+                using (var stream1 = new FileStream(filePath2 + file, FileMode.Open, FileAccess.Read))
+                {
+                    using (var package = Package.Open(stream1))
+                    {
+                        // do something with package
+                    }
+                }
+            }
+
+            catch (Exception e)
+            {
+                Logger.logMessage(e.Message);
+            }
+
+            // Create the PackageDigitalSignatureManager
+           // PackageDigitalSignatureManager dsm = new PackageDigitalSignatureManager(package1);
+            //foreach (PackageDigitalSignature signature in dsm.Signatures)
+            //{
+            //    DateTime1 = GetDigTimeStamp(signature);
+            //}
+
 
             try
             {
@@ -86,5 +141,11 @@ namespace Installer_Test
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
         }
+
+        public static DateTime GetDigTimeStamp(PackageDigitalSignature p)
+        {
+            return p.SigningTime;
+        }
+
     }
 }

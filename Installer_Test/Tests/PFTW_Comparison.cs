@@ -85,11 +85,11 @@ namespace Installer_Test.Tests
         }
 
 
-        [Then(StepTitle = "Then - Run the diff")]
-        public void Run_Windiff_Compare()
-        {
-            PFTW.Windiff_Compare(Local_Windiff, Local_B1Path, Local_B2Path);
-        }
+        //[Then(StepTitle = "Then - Run the diff")]
+        //public void Run_Windiff_Compare()
+        //{
+        //    PFTW.Windiff_Compare(Local_Windiff, Local_B1Path, Local_B2Path);
+        //}
 
         [AndThen (StepTitle = "And Then - Compare the file size" )]
         public void Run_FileSize_Compare()
