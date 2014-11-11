@@ -19,7 +19,7 @@ namespace Installer_Test.Tests
 
         public string testName = "Switch";
         public TestStack.White.Application qbApp = null;
-        public TestStack.White.UIItems.WindowItems.Window qbWindow = null;
+      public TestStack.White.UIItems.WindowItems.Window qbWindow = null;
         public static Property conf = Property.GetPropertyInstance();
         public static string exe = conf.get("QBExePath");
         Dictionary<String, String> dic = new Dictionary<string, string>();
@@ -43,7 +43,7 @@ namespace Installer_Test.Tests
         public void SwitchEdition()
         {
             //Actions.SelectMenu(qbApp, qbWindow, "File", "New Company...");
-            Install_Functions.CheckCurrentEdition(qbApp, qbWindow, dic, exe);
+            Install_Functions.CheckCurrentEdition(dic, exe);
 
         }
         [Fact]

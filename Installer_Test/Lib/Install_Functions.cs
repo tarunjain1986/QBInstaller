@@ -865,24 +865,29 @@ namespace Installer_Test
             }
         }
 
-        public static void CheckCurrentEdition(TestStack.White.Application qbApp, Window qbWindow, Dictionary<String, String> dic, String exe)
+        public static void CheckCurrentEdition(Dictionary<String, String> dic, String exe)
         {
             try
             {
+                //TestStack.White.Application temp = qbApp;
                 //getting current edition of Qb.
-                String title = qbWindow.Title;
+                //String title = qbWindow.Title;
                 foreach (var pair in dic)
                 {
-                    title = qbWindow.Title;
+                    
+                   TestStack.White.Application qbApp1 = null;
+                    TestStack.White.UIItems.WindowItems.Window qbWindow1 = null;
+                   qbApp1 = QuickBooks.Initialize(exe);
+                    qbWindow1 = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp1);
+                   String title = qbWindow1.Title;
                     if (pair.Value.Equals(title))
                     {
                         continue;
                     }
                     else
                     {
-                        qbApp = QuickBooks.Initialize(exe);
-                        qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
-                        SwitchEdition(qbApp, qbWindow, pair.Key, exe);
+                        
+                        SwitchEdition(qbApp1, pair.Key, exe);
                     }
                 }
 
@@ -895,12 +900,26 @@ namespace Installer_Test
         }
 
 
-        public static void SwitchEdition(TestStack.White.Application qbApp, Window qbWindow, String edi, String exe)
+        public static void SwitchEdition(TestStack.White.Application qbApp,String edi, String exe)
         {
             try
             {
-                Logger.logMessage("Inside Try");
+               // TestStack.White.Application qbApp = null;
+                TestStack.White.UIItems.WindowItems.Window qbWindow = null;
+               // qbApp = QuickBooks.Initialize(exe);
+                qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+                if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
+                {
+                    Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
+                }
                 
+                //if (Actions.DesktopInstance_CheckElementExistsByName("QuickBooks Update Service") == true)
+                //{ SendKeys.SendWait("%L"); }
+               // if (Actions.CheckWindowExists(Actions.GetDesktopWindow("Desktop"), "QuickBooks Update Service") == true)
+               // { SendKeys.SendWait("%L"); }
+                Thread.Sleep(1000);
+                if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
+                { SendKeys.SendWait("%L"); }               
                 Actions.SelectMenu(qbApp, qbWindow, "Help", "Manage My License", "Change to a Different Industry Edition...");
                 Thread.Sleep(3000);
                 Logger.logMessage("Inside Try");
@@ -916,13 +935,34 @@ namespace Installer_Test
                 Thread.Sleep(3000);
                 Actions.ClickElementByAutomationID(editionWindow1, "10004");
                 Thread.Sleep(30000);
-                SendKeys.SendWait("Tab");
-                SendKeys.SendWait("Enter");
-                Thread.Sleep(20000);
-                SendKeys.SendWait("%L");
-                Thread.Sleep(10000);
-                SendKeys.SendWait("%L");
+                //SendKeys.SendWait("Tab");
+                //SendKeys.SendWait("Enter");
+                //Thread.Sleep(20000);
+                //SendKeys.SendWait("%L");
+                //Thread.Sleep(10000);
+                //SendKeys.SendWait("%L");
+                //Thread.Sleep(30000);
+                Window win1 = Actions.GetDesktopWindow("Product Configuration");
+                Thread.Sleep(1000);
+                Actions.ClickElementByName(Actions.GetChildWindow(win1,"QuickBooks Product Configuration"),"No");
                 Thread.Sleep(30000);
+                
+              //  SendKeys.SendWait("%L"); 
+                
+                Thread.Sleep(10000);
+                if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
+                { SendKeys.SendWait("%L"); }
+                
+                Thread.Sleep(30000);
+                try
+                {
+                    OSOperations.KillProcess("qbw32");
+                }
+                catch (Exception e)
+                {
+                    Logger.logMessage(e.ToString());
+                }
+
             }
 
             catch (Exception e)
