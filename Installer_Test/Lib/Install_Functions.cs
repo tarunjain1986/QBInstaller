@@ -1398,6 +1398,172 @@ namespace Installer_Test
 
         }
 
+// -------------------------Sunder Raj added for creating company file -----------------------------------------------------------------------------------------------------------
+        public static void CreateCompanyFile(Dictionary<string, string> refkeyvaluepairdic)
+        {
+            var qbApp = QuickBooks.GetApp("QuickBooks");
+            var qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+            var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
+            string bizName = null, industryList = null, industryType = null, businessType = null, address1 = null, address2 = null, state = null, city = null, country = null, taxid = null, phone = null, zip = null;
+
+            Actions.SelectMenu(qbApp, qbWindow, "File", "New Company...");
+
+            Actions.WaitForChildWindow(qbWindow, "QuickBooks Setup", 999999);
+
+            if ((Actions.CheckElementExistsByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btnExpressStart")) == true)
+            {
+                Logger.logMessage("Express Start button found and hence creating company file for Older version of QB");
+                Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btnExpressStart");
+            }
+            else
+            {
+                Logger.logMessage("Start button found and hence creating company file for newer version of QB");
+                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Start Setup");
+            }
+
+            //Enter Business Name
+            if (refkeyvaluepairdic.ContainsKey("CompanyName"))
+            {
+                bizName = refkeyvaluepairdic["CompanyName"];
+                Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txtBox_BusinessName", bizName);
+            }
+
+            Window QBSetupWindow = Actions.GetChildWindow(qbWindow, "QuickBooks Setup");
+
+            //Enter Industry Type 
+            if (refkeyvaluepairdic.ContainsKey("IndustryList"))
+            {
+                industryList = refkeyvaluepairdic["IndustryList"];
+                Actions.SetTextByAutomationID(QBSetupWindow, FrameworkLibraries.ObjMaps.QBDT.WhiteAPI.Common.Objects.IndustryList_TxtField_AutoID, industryList);
+            }
+            if (refkeyvaluepairdic.ContainsKey("IndustryType"))
+            {
+                industryType = refkeyvaluepairdic["IndustryType"];
+                Actions.SelectListBoxItemByText(QBSetupWindow, "lstBox_Industry", industryType);
+            }
+            if (refkeyvaluepairdic.ContainsKey("BusinessType"))
+            {
+                businessType = refkeyvaluepairdic["BusinessType"];
+                Actions.SelectComboBoxItemByText(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "cmbBox_TaxStructure", businessType);
+
+            }
+            if (refkeyvaluepairdic.ContainsKey("TaxID"))
+            {
+                taxid = refkeyvaluepairdic["TaxID"];
+                Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txtBox_TaxID", taxid);
+            }
+            // Find if the company file consists of single page or 2 pages
+            if ((Actions.CheckElementExistsByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btn_Continue")) == true)
+            {
+                Logger.logMessage("Continue button found and hence creating company file for Older version of QB");
+                Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btn_Continue");
+            }
+
+            //Enter Address 1
+            if (refkeyvaluepairdic.ContainsKey("Address1"))
+            {
+                address1 = refkeyvaluepairdic["Address1"];
+                Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txtBoxAddress1", address1);
+            }
+            //Enter Address 2
+            if (refkeyvaluepairdic.ContainsKey("Address2"))
+            {
+                address2 = refkeyvaluepairdic["Address2"];
+                Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txtBoxAddress2", address2);
+            }
+
+            //Enter City
+            if (refkeyvaluepairdic.ContainsKey("City"))
+            {
+                city = refkeyvaluepairdic["City"];
+                Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txtBoxCity", city);
+            }
+            //Enter State
+            if (refkeyvaluepairdic.ContainsKey("State"))
+            {
+                state = refkeyvaluepairdic["State"];
+                Actions.SelectComboBoxItemByText(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "CmbBox_StateName", state);
+            }
+            //Enter Country
+            if (refkeyvaluepairdic.ContainsKey("Country"))
+            {
+                country = refkeyvaluepairdic["Country"];
+                Actions.SelectComboBoxItemByText(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "CmbBox_CountryName", country);
+            }
+            //Enter Zip Code
+            if (refkeyvaluepairdic.ContainsKey("Zip"))
+            {
+                zip = refkeyvaluepairdic["Zip"];
+                Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txtBoxZip", zip);
+            }
+            //Enter Phone Number
+            if (refkeyvaluepairdic.ContainsKey("PhoneNo"))
+            {
+                phone = refkeyvaluepairdic["PhoneNo"];
+                Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txtBoxPhone", phone);
+            }
+
+            Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btnCreateCompany");
+
+            //Wait for the Marketing Page window
+            qbWindow = Actions.GetAppWindow(qbApp, "QuickBooks");
+            Actions.WaitForChildWindow(qbWindow, "QuickBooks Setup", 1000);
+            var qbchild = Actions.GetChildWindow(qbWindow, "QuickBooks Setup");
+
+            // Close the Marketing page window
+            if ((Actions.CheckElementExistsByAutomationID(Actions.GetChildWindow(qbchild, "QuickBooks Setup"), "btnCreateCompany")) == true)
+            {
+                Actions.ClickElementByAutomationID(qbchild, "btnCreateCompany");
+
+            }
+            else
+
+            Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btnCreateCompany");
+            Actions.SelectMenu(qbApp, qbWindow, "Windows", "Close");
+
+
+            String Title = qbWindow.Title;
+
+            if (Title.Contains(bizName) == true)
+            {
+               Logger.logMessage("Company File Created successfully");
+                
+            }
+
+            else
+                Logger.logMessage("Company file creation failed");
+
+    }
+//------------------------End of code for creating company file -----------------------------------------------------------------------------------------------------------
+
+ //------Code by Sunder Raj for Invoke QB-------------------------------------------
+
+        public static void InvokeQB(Dictionary<string, string> refkeyvaluepairdic)
+
+        {
+            string qbwin = "Intuit QuickBooks Installer";
+            string industryEdition = null;
+            //if (Actions.CheckDesktopWindowExists(qbwin))
+            //{
+            //    Actions.ClickElementByName(Actions.GetDesktopWindow(qbwin), "Open QuickBooks");
+
+                if( Actions.CheckDesktopWindowExists("Select QuickBooks Industry-Specific Edition")==true)
+                {
+                      if (refkeyvaluepairdic.ContainsKey("IndustryEdition"))
+                        {
+                           industryEdition = refkeyvaluepairdic["IndustryEdition"];
+                           Actions.ClickElementByName((Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition")), industryEdition);
+                           Actions.ClickElementByName(((Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"))), "Exit QuickBooks");
+
+                        }
+                }
+                
+            //}
+            //else
+            //    Logger.logMessage("Unable to Open QuickBooks");
+        }
+        
+ //------Code by SUnder Raj for Invoke QB-------------------------------------------       
         public static void Delete_QBDLLs(string installed_path)
         {
             string[] dlls = { "abmapi.DLL", "Accountant.DLL", "AccountRegistersUI.DLL", "ACE.DLL", "ACM.DLL", "ADR.DLL", "acXMLParser.dll", "QBADRHelper.dll" };
