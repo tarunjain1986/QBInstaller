@@ -88,6 +88,9 @@
     <Compile Include="Lib\File_Functions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\Help_About.cs" />
+    <Compile Include="Tests\NewCompanyFile.cs" />
+    <Compile Include="Tests\Switch.cs" />
+    <Compile Include="Tests\InvokeQB.cs" />
     <Compile Include="Tests\WebPatch.cs" />
     <Compile Include="Tests\Install.cs" />
     <Compile Include="ScreenCapture.cs" />
@@ -98,7 +101,6 @@
     <Compile Include="Tests\PFTW_Comparison.cs" />
     <Compile Include="Tests\Help_Update.cs" />
     <Compile Include="Tests\CheckF2.cs" />
-    <Compile Include="Tests\Switch.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
