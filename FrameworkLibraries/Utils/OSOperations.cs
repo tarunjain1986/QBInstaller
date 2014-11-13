@@ -14,7 +14,7 @@ namespace FrameworkLibraries.Utils
         {
             foreach (Process p in Process.GetProcesses("."))
             {
-                Logger.logMessage(p.ProcessName);
+              
                 if (p.ProcessName.Contains(processName) || p.ProcessName.Contains(processName.ToUpper()))
                 {
                     p.Kill();

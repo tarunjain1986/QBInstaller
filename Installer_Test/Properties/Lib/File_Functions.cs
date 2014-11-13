@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using Microsoft.Win32;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace Installer_Test.Lib
 {
@@ -126,6 +128,50 @@ namespace Installer_Test.Lib
             return dic;
 
         }
+
+
+        //-------------Sunder Raj Added----
+        public static void  ReadExcelSheet(string readpath, string workSheet,int rowno,ref List<string> stList)
+        {
+            Excel.Application xlApp;
+            Excel.Workbook xlWorkBook;
+            Excel.Worksheet xlWorkSheet;
+            Excel.Range range;
+
+            string str;
+            int rCnt = 0;
+            int cCnt = 0;
+            // object misValue = System.Reflection.Missing.Value;
+
+            xlApp = new Excel.Application();
+            xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+            // Get worksheet names
+            foreach (Excel.Worksheet sh in xlWorkBook.Worksheets)
+                Debug.WriteLine(sh.Name);
+
+            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(workSheet);
+            range = xlWorkSheet.UsedRange;
+
+            for (rCnt = 1; rCnt <= rowno; rCnt++)
+            {
+                for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
+                {
+                    if(rCnt == rowno)
+                    {
+                        str = Convert.ToString((range.Cells[rCnt, cCnt] as Excel.Range).Value2);
+                        stList.Add(str);
+                    }
+                    
+                }
+
+            }
+
+            xlWorkBook.Close();
+            xlApp.Quit();
+
+
+        }
+    //-----End of Sunder Raj Code
         
         public static string GetOS()
         {

@@ -22,6 +22,7 @@ using TestStack.White.UIItems.WindowItems;
 using Xunit;
 
 using Installer_Test;
+using FrameworkLibraries.ActionLibs.WhiteAPI;
 
 
 namespace Installer_Test.Tests
@@ -139,17 +140,17 @@ namespace Installer_Test.Tests
         [AndThen(StepTitle = "Then - Invoke Web Patch installer")]
         public void InvokeWP()
         {
-            OSOperations.InvokeInstaller(patchpath, "en_qbwebpatch.exe");
+            string targetPath = @"C:\Temp\WebPatch\";
+            OSOperations.InvokeInstaller(targetPath, "en_qbwebpatch.exe");
+            Logger.logMessage("Copied");
+            Thread.Sleep(1000);
+            Window patchWin= Actions.GetDesktopWindow("QuickBooks Update,Version");
+            Thread.Sleep(1000);
+            Actions.ClickButtonByName(patchWin, "Install Now");
+            Logger.logMessage("Installing webpatch");
 
         }
-        [AndThen(StepTitle = "Then - Run Web Patch installer")]
-        public void InstallWP()
-        {
-            Thread.Sleep(3000);
-            SendKeys.SendWait("%I");
-
-        }
-
+      
 
 
        [Fact]
