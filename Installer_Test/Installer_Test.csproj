@@ -81,17 +81,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Lib\Install_Functions.cs" />
-    <Compile Include="Lib\ScreenCapture.cs" />
-    <Compile Include="Lib\PFTW.cs" />
-    <Compile Include="Lib\Help.cs" />
-    <Compile Include="Lib\File_Functions.cs" />
+    <Compile Include="Properties\Lib\Install_Functions.cs" />
+    <Compile Include="Properties\Lib\ScreenCapture.cs" />
+    <Compile Include="Properties\Lib\PFTW.cs" />
+    <Compile Include="Properties\Lib\Help.cs" />
+    <Compile Include="Properties\Lib\File_Functions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\Help_About.cs" />
-    <Compile Include="Tests\Toggle.cs" />
-    <Compile Include="Tests\NewCompanyFile.cs" />
-    <Compile Include="Tests\Switch.cs" />
-    <Compile Include="Tests\InvokeQB.cs" />
     <Compile Include="Tests\WebPatch.cs" />
     <Compile Include="Tests\Install.cs" />
     <Compile Include="ScreenCapture.cs" />
@@ -102,6 +98,7 @@
     <Compile Include="Tests\PFTW_Comparison.cs" />
     <Compile Include="Tests\Help_Update.cs" />
     <Compile Include="Tests\CheckF2.cs" />
+    <Compile Include="Tests\Switch.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
