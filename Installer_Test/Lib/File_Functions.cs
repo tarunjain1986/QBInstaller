@@ -88,6 +88,8 @@ namespace Installer_Test.Lib
                 dic.Add(cellIndex, cellValue);
 
             }
+            xlWorkBook.Close();
+            xlApp.Quit();
             return dic;
         }
 

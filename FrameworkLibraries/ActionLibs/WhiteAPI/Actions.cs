@@ -3164,7 +3164,7 @@ namespace FrameworkLibraries.ActionLibs.WhiteAPI
                 allChildWindows = Desktop.Instance.Windows();
                 foreach (Window w in allChildWindows)
                 {
-                    Logger.logMessage(w.ToString());
+                   
                     if (w.Name.Equals(alertWindowName) || w.Name.Contains(alertWindowName))
                     {
                         exists = true;

@@ -903,6 +903,7 @@ namespace Installer_Test
                         if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
                         { SendKeys.SendWait("%L"); }
                         Thread.Sleep(1000);
+                        qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
                         Actions.SelectMenu(qbApp, qbWindow, "Help", "Manage My License", "Change to a Different Industry Edition...");
                         Thread.Sleep(3000);
                         Logger.logMessage("Inside Try");
