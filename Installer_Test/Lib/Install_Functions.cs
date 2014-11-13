@@ -980,16 +980,29 @@ namespace Installer_Test
 
                     else
                     {
-                        if (Actions.CheckWindowExists(qbWindow, "QuickBooks Update Service"))
+                        try
                         {
+                            if (Actions.CheckWindowExists(qbWindow, "QuickBooks Update Service"))
+                            {
 
-                            Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Update Service"), "Install Later");
+                                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Update Service"), "Install Later");
+                            }
                         }
-                        if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
+                        catch(Exception e)
                         {
-                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
+                            Logger.logMessage(e.ToString());
                         }
-
+                        try
+                        {
+                            if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
+                            {
+                                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.logMessage(e.ToString());
+                        }
                         //if (Actions.DesktopInstance_CheckElementExistsByName("QuickBooks Update Service") == true)
                         //{ SendKeys.SendWait("%L"); }
                         // if (Actions.CheckWindowExists(Actions.GetDesktopWindow("Desktop"), "QuickBooks Update Service") == true)
@@ -998,23 +1011,28 @@ namespace Installer_Test
                         if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
                         { SendKeys.SendWait("%L"); }
                         Thread.Sleep(1000);
-                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"),"Set Up an External Accountant User") == true)
+                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Set Up an External Accountant User") == true)
                         {
-                            Logger.logMessage("External User Pane");
-                            Actions.SendTABToWindow(qbWindow);
-                            Actions.SendENTERoWindow(qbWindow);
-                           
+                            Window ExtAcctWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Set Up an External Accountant User");
+                            Actions.ClickElementByName(ExtAcctWin,"No");
+                         //   Actions.SendTABToWindow(qbWindow);
+                           // Actions.SendENTERoWindow(qbWindow);
+
                         }
-                        Thread.Sleep(1000);
                         if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Accountant Center") == true)
                         {
-                            SendKeys.SendWait("Esc");
-                            
+
+                            Window AcctCenWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Accountant Center");
+                            Actions.ClickElementByName(AcctCenWin,"Close");
+                           // Actions.SendESCAPEToWindow(qbWindow);
                         }
                         Thread.Sleep(1000);
+
+                        //Thread.Sleep(1000);
+                        qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
                         Actions.SelectMenu(qbApp, qbWindow, "File", "Toggle to Another Edition... ");
                         Thread.Sleep(3000);
-                        
+
                         Window editionWindow = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
                         Thread.Sleep(3000);
 
@@ -1039,23 +1057,76 @@ namespace Installer_Test
                         //Actions.ClickElementByName(Actions.GetChildWindow(win1, "QuickBooks Product Configuration"), "No");
                         Thread.Sleep(30000);
 
+                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Automatic Backup") == true)
+                        {
+                            Logger.logMessage("Backup Window Found");
+                            //Actions.SendTABToWindow(qbWindow);
+                            //Actions.SendENTERoWindow(qbWindow);
+                            SendKeys.SendWait("%N");
+
+                        }
+                        try
+                        { 
                         if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
                         {
+                            // SendKeys.SendWait("%L");
+                            Logger.logMessage("Update window found");
+                            Window UpdateWin = Actions.GetDesktopWindow("QuickBooks Update Service");
+                            Actions.SendTABToWindow(UpdateWin);
+                            Actions.SendENTERoWindow(UpdateWin);
+                        
+                           // Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
+                        }
+                        else
+                        {
                             SendKeys.SendWait("%L");
-                            // Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
+                        }
+                        }
+                        catch(Exception e)
+                        {
+                            Logger.logMessage(e.ToString());
                         }
 
-                        //  SendKeys.SendWait("%L"); 
+                        try
+                        {
+                            if (Actions.CheckDesktopWindowExists("QuickBooks Product Configuration"))
+                            {
+                                Logger.logMessage("Update/Product window found");
+                                Window ProdConfWin = Actions.GetDesktopWindow("QuickBooks Product Configuration");
+                                Actions.SendTABToWindow(ProdConfWin);
+                                Actions.SendENTERoWindow(ProdConfWin);
+                                //Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Product Configuration"), "Install Later");
 
-                        Thread.Sleep(10000);
+                            }
+
+                            else
+                            {
+                                SendKeys.SendWait("%L");
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                             Logger.logMessage(e.ToString());
+
+                        }
+
+                        Thread.Sleep(20000);
                         if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
-                        { SendKeys.SendWait("%L"); }
+                        {
+                            Logger.logMessage("Register window found");
+                            Window registerWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks");
+                        
+                            Logger.logMessage(registerWin.ToString());
+                            Actions.ClickElementByName(registerWin, "Remind Me Later");
 
-                        Thread.Sleep(30000);
+                            //SendKeys.SendWait("%L"); }
 
+                            Thread.Sleep(30000);
+
+
+                        }
 
                     }
-
                 }
             }
 
