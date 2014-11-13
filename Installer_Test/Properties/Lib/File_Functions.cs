@@ -86,7 +86,8 @@ namespace Installer_Test.Lib
                 dic.Add(cellIndex, cellValue);
 
             }
-            return dic;
+
+                return dic;
         }
 
         public static Dictionary<string, string> ReadExcelCellValues(string readpath, string workSheet)
@@ -246,7 +247,6 @@ namespace Installer_Test.Lib
             return installed_QBPath;
         }
 
-
         public static string GetDataPathKey(string OS_Name, string ver, string reg_ver)
         {
             Object dataPath = new Object();
@@ -300,7 +300,6 @@ namespace Installer_Test.Lib
             }
                 return installed_commonPath;
           }
-
        
        }
     }
