@@ -871,8 +871,7 @@ namespace Installer_Test
             {
                 foreach (var pair in dic)
                 {
-<<<<<<< HEAD:Installer_Test/Properties/Lib/Install_Functions.cs
-=======
+
                     if (qbApp.HasExited == true)
                     {
                         qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
@@ -880,7 +879,7 @@ namespace Installer_Test
                     TestStack.White.UIItems.WindowItems.Window qbWindow = null;
                     qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
                     String title = qbWindow.Title;
->>>>>>> origin/master:Installer_Test/Lib/Install_Functions.cs
+
                     if (pair.Value.Equals(title))
                     {
                         continue;
@@ -888,10 +887,8 @@ namespace Installer_Test
 
                     else
                     {
-<<<<<<< HEAD:Installer_Test/Properties/Lib/Install_Functions.cs
-                        qbApp = QuickBooks.Initialize(exe);
-                        SwitchEdition(qbApp, qbWindow, pair.Key, exe);
-=======
+                        
+
                         if (Actions.CheckWindowExists(qbWindow, "QuickBooks Update Service"))
                         {
 
@@ -913,12 +910,18 @@ namespace Installer_Test
                         qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
                         Actions.SelectMenu(qbApp, qbWindow, "Help", "Manage My License", "Change to a Different Industry Edition...");
                         Thread.Sleep(3000);
-                        Logger.logMessage("Inside Try");
+                        
                         Window editionWindow = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
+                       // if (Actions.CheckRadioButtonEnabled(qbApp, editionWindow, pair.Key + " - Currently open  "))
+                        //{
+                            Actions.ClickElementByName(editionWindow, pair.Key);
+                        //}
+                      //  else
+                        //    continue;
                         Thread.Sleep(3000);
 
-                        Actions.ClickElementByName(editionWindow, pair.Key);
-                        Thread.Sleep(1000);
+                        
+                      
                         Actions.ClickElementByName(editionWindow, "Next >");
 
 
@@ -953,24 +956,15 @@ namespace Installer_Test
                         Thread.Sleep(30000);
 
 
->>>>>>> origin/master:Installer_Test/Lib/Install_Functions.cs
+
                     }
 
                 }
             }
-<<<<<<< HEAD:Installer_Test/Properties/Lib/Install_Functions.cs
-            catch
-            {
-=======
-
-
-
-
-
             catch (Exception e)
             {
                 Logger.logMessage("failed" + e.GetBaseException());
->>>>>>> origin/master:Installer_Test/Lib/Install_Functions.cs
+
             }
         }
 
@@ -978,47 +972,9 @@ namespace Installer_Test
         {
             try
             {
-<<<<<<< HEAD:Installer_Test/Properties/Lib/Install_Functions.cs
-                Logger.logMessage("Inside Try");
-                
-                Actions.SelectMenu(qbApp, qbWindow, "Help", "Manage My License", "Change to a Different Industry Edition...");
-                Thread.Sleep(3000);
-                Logger.logMessage("Inside Try");
-                Window editionWindow = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
-                Thread.Sleep(3000);
-                //Actions.ClickButtonByName(editionWindow, "Cancel");
-                Actions.ClickElementByName(editionWindow, edi);
-                Actions.ClickElementByName(editionWindow, "Next >");
 
-                // Actions.ClickElementByAutomationID(editionWindow,"10057");
-                // Actions.ClickElementByAutomationID(editionWindow,"10002");
-                //Actions.ClickButtonByName(editionWindow, "Next>");
-                //Thread.Sleep(300);
+               
 
-                // Actions.WaitForWindow(Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition"),int.Parse(300));
-                //Actions.WaitForElementEnabledOrTransformed(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Next>", "Finish", 3000);
-                Window editionWindow1 = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
-                Thread.Sleep(3000);
-                Actions.ClickElementByAutomationID(editionWindow1, "10004");
-                Thread.Sleep(30000);
-                SendKeys.SendWait("Tab");
-                SendKeys.SendWait("Enter");
-                Thread.Sleep(20000);
-                SendKeys.SendWait("%L");
-                Thread.Sleep(10000);
-                SendKeys.SendWait("%L");
-                Thread.Sleep(30000);
-
-
-
-                //Actions.ClickElementByName(editionWindow, "Finish");
-                // Actions.ClickButtonByName(editionWindow, "Finish");
-                //Actions.WaitForWindow("QuickBooks Enterprise Solution Product Configuration",int.Parse(Sync_Timeout));
-                //Window Confwin = Actions.GetDesktopWindow("QuickBooks Product Configuration");
-                // ("QuickBooks Product Configuration",int.Parse(Sync_Timeout));
-                //Actions.ClickButtonByName(Actions.GetDesktopWindow("QuickBooks Product Configuration"),"No");
-
-=======
                 foreach (var pair in dic)
                 {
                     if (qbApp.HasExited == true)
@@ -1183,7 +1139,7 @@ namespace Installer_Test
 
                     }
                 }
->>>>>>> origin/master:Installer_Test/Lib/Install_Functions.cs
+
             }
 
 
@@ -1725,6 +1681,112 @@ namespace Installer_Test
 
             }
             return dic;
+        }
+
+        public static void PerformMIMO(TestStack.White.Application qbApp, Window qbWindow)
+        {
+            //Setting up the preferences 
+            Actions.SelectMenu(qbApp, qbWindow, "Edit", "Preferences...");
+            Actions.ClickElementByName(qbWindow, "Items & Inverntory");
+            Actions.ClickElementByName(qbWindow, "Inventory and purchase orders are active");
+            Actions.ClickButtonByName(qbWindow, "OK");
+
+            //Open invoice window and enter name and item 
+            Actions.DesktopInstance_ClickElementByName("create Invoices");
+            Actions.SelectMenu(qbApp, qbWindow, " Customers ", "Create Invoices");
+            Actions.WaitForChildWindow(qbWindow, "Create Invoices", 9999);
+
+
+            //if(Actions.SetFocusOnWindow != ))
+
+
+            // Item is not created , create an item
+            Actions.SelectMenu(qbApp, qbWindow, "Lists", "Item List");
+            Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Item"), "New");
+            Actions.SetTextByAutomationID(qbWindow, "902", "Skoda");
+            Actions.SetTextByAutomationID(qbWindow, "915", "2000");
+            Actions.SetTextByAutomationID(qbWindow, "917", "sales");
+            Actions.ClickButtonByName(qbWindow, "OK");
+
+            //Enter the customer name as Alberto decosta
+            Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "CUSTOMER:JOB"), "603", "Alberto Decosta");
+            Actions.SetFocusOnElementByAutomationID(qbWindow, "1");
+            // Actions.SetTextByName(qbApp ,"ITEM" , "Skoda");
+            // Actions.SetFocusOnElementByAutomationID(qbWindow, "14");
+            Actions.SelectListBoxItemByText(qbWindow, "101", "Skoda");
+            Actions.ClickButtonByName(qbWindow, "Save And Close");
+
+            //make payment
+
+            Actions.SelectMenu(qbApp, qbWindow, "Customers", "Recieve Payments");
+            Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "Receive Payments"), "Albert", "5603");
+            Actions.SetTextByAutomationID(qbWindow, "5604", "1000");
+            Actions.ClickButtonByName(qbWindow, "Save && Close");
+
+            //Make a Deposit
+            Actions.SelectMenu(qbApp, qbWindow, "Banking", "Make Deposits");
+
+            if (qbWindow.Title.Equals("Need a Bank Account"))
+            {
+                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Need a Bank Account"), "Yes");
+                Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "Add New Account"), "136", "KTK");
+                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Add New Account"), "Save && close");
+            }
+            else
+                //Create Purhcase orders
+                Actions.SelectMenu(qbApp, qbWindow, "Vendors", " Create Purchase Orders");
+            Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "Create Purchase Orders"), "Armani", "603");
+
+
+            // if Vendor wants to quick add the item
+            if (qbWindow.Title.Equals("Venodr Not Found"))
+            {
+                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Vendor Not Found"), "Quick Add");
+            }
+            else
+                Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "Create Purchase Orders"), "Skoda", "1");
+            Actions.SetTextByAutomationID(qbWindow, "603", "10");
+            Actions.ClickButtonByName(qbWindow, "Save && Close");
+
+
+            Actions.SelectMenu(qbApp, qbWindow, "Vendors", "Receive Items and Enter Bills");
+            Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "Enter Bills"), "309", "Armani");
+
+            if (qbWindow.Title.Equals("Open POs Exist"))
+            {
+                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Open POs Exist"), "Yes");
+
+            }
+
+            if (qbWindow.Title.Equals("Open Purchase Orders"))
+            {
+                //Actions.UIA_SelectCheckBoxByName(window, qbWindow, "header Item");
+                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Open Purchase Orders"), "OK");
+
+
+            }
+
+            else
+                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Enter Bills"), "Save && close");
+
+            //pay bills
+
+            Actions.SelectMenu(qbApp, qbWindow, "vendors", "Pay Bills");
+
+            //Clicking on check box
+
+            Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Pay Bills"), "Pay Selected Bills");
+            Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Assign Check Numbers"), " OK");
+
+            if (qbWindow.Title.Equals("Payement Summary"))
+            {
+                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Payment Summary"), "Done");
+
+            }
+
+
+
+
         }
       
     }

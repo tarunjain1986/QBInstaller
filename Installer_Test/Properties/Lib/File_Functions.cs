@@ -88,14 +88,13 @@ namespace Installer_Test.Lib
                 dic.Add(cellIndex, cellValue);
 
             }
-<<<<<<< HEAD:Installer_Test/Lib/File_Functions.cs
+
             xlWorkBook.Close();
             xlApp.Quit();
             return dic;
-=======
 
-                return dic;
->>>>>>> origin/master:Installer_Test/Properties/Lib/File_Functions.cs
+
+
         }
 
         public static Dictionary<string, string> ReadExcelCellValues(string readpath, string workSheet)

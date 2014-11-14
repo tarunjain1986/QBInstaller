@@ -106,6 +106,29 @@ namespace FrameworkLibraries.ActionLibs.WhiteAPI
                 throw new Exception(sMessage);
             }
         }
+        public static bool CheckRadioButtonEnabled(TestStack.White.Application app, Window win, string level1)
+        {
+            try
+            {
+                Logger.logMessage("Function call @ :" + DateTime.Now);
+                TestStack.White.UIItems.RadioButton status = win.Get<TestStack.White.UIItems.RadioButton>(TestStack.White.UIItems.Finders.SearchCriteria.ByText(level1));
+                if (status.Enabled)
+                    Logger.logMessage("CheckRadioButtonEnabled " + level1 + "->" + " - Enabled");
+                else
+                    Logger.logMessage("CheckRadioButtonEnabled " + level1 + "->" + " - Disabled");
+                return status.Enabled;
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("CheckRadioButtonEnabled " + level1 + "->" + " - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+                String sMessage = e.Message;
+                LastException.SetLastError(sMessage);
+                throw new Exception(sMessage);
+            }
+        }
+
 
 
         //**************************************************************************************************************************************************************
