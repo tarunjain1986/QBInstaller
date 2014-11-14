@@ -1676,11 +1676,13 @@ namespace Installer_Test
 
                 if( Actions.CheckDesktopWindowExists("Select QuickBooks Industry-Specific Edition")==true)
                 {
+                                Actions.SendTABToWindow(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"));
                       if (refkeyvaluepairdic.ContainsKey("IndustryEdition"))
                         {
-                           industryEdition = refkeyvaluepairdic["IndustryEdition"];
-                           Actions.ClickElementByName((Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition")), industryEdition);
-                           Actions.ClickElementByName(((Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"))), "Exit QuickBooks");
+                          industryEdition = refkeyvaluepairdic["IndustryEdition"];
+                          
+                          Actions.ClickElementByName((Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition")), industryEdition);
+                          Actions.ClickElementByName(((Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"))), "Exit QuickBooks");
 
                         }
                 }
