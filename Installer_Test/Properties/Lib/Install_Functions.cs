@@ -45,7 +45,7 @@ namespace Installer_Test
         public static string Sync_Timeout = conf.get("SyncTimeOut");
         public string line;
         public static string custname, vendorname, itemname;
-
+        public static Random _r = new Random();
 
         public static void Install_QB(string targetPath, string workFlow, string CustomOpt, string[] LicenseNo, string[] ProductNo, string UserID, string Passwd, string firstName, string lastName, string installPath)
         {
@@ -1717,6 +1717,8 @@ namespace Installer_Test
             SendKeys.SendWait("%C");
             SendKeys.SendWait("%I");
             Actions.ClickElementByName(PerfWin,"OK");
+
+            Logger.logMessage("Preferences Set Successfully.");
           
 
            
@@ -1733,12 +1735,12 @@ namespace Installer_Test
             SendKeys.SendWait("{ENTER}");
             }
             Window custWin = Actions.GetChildWindow(qbWindow, "New Customer");
-            Random _r = new Random();
             custname = "Cust" + _r.Next(1000).ToString();
             Actions.SetTextByAutomationID(custWin,"1001",custname);
             Actions.ClickElementByName(custWin, "OK");
             Actions.CloseAllChildWindows(qbWindow);
 
+            Logger.logMessage("Customer Created Successfully.");
 
             // Item is not created , create an item
             itemname = "item"+ _r.Next(1000).ToString();
@@ -1762,10 +1764,13 @@ namespace Installer_Test
             Actions.ClickElementByName(itemWin, "OK");
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
 
+            Logger.logMessage("Item Created Successfully.");
+
             //Creating an invoice
             Actions.SelectMenu(qbApp,qbWindow,"Customers","Create Invoices");
             Window invWin = Actions.GetChildWindow(qbWindow, "Create Invoices");
-            Actions.SetTextOnElementByAutomationID(invWin,"603",custname);
+            Actions.ClickElementByName(invWin, "Maximize");
+            Actions.SetTextByAutomationID(invWin,"603",custname);
             Actions.SendTABToWindow(invWin);
             Actions.SendTABToWindow(invWin);
             Actions.SendTABToWindow(invWin);
@@ -1792,80 +1797,251 @@ namespace Installer_Test
             Actions.SendTABToWindow(invWin);
             Actions.ClickElementByName(invWin,"Save && Close");
             Thread.Sleep(1000);
+
+            Logger.logMessage("Invoice created Successfully.");
             
             //Receive Payment
 
-            Actions.SelectMenu(qbApp, qbWindow, "Customers", "Recieve Payments");
-            Window rpayWin = Actions.GetChildWindow(qbWindow, "Recieve Payments");
+            Actions.SelectMenu(qbApp, qbWindow, "Customers", "Receive Payments");
+            Actions.WaitForChildWindow(qbWindow,"Receive Payments",1000);
+            Window rpayWin = Actions.GetChildWindow(qbWindow, "Receive Payments");
             Actions.SetTextOnElementByAutomationID(rpayWin,"5603",custname);
             Actions.SendTABToWindow(rpayWin);
             Actions.SetTextOnElementByAutomationID(rpayWin,"5604","200");
             Actions.SendTABToWindow(rpayWin);
             Actions.SendTABToWindow(rpayWin);
             Actions.ClickElementByName(rpayWin, "CASH");
-            Actions.ClickElementByName(rpayWin, "Auto Apply Payment");
-            Actions.ClickButtonByName(qbWindow, "Save && Close");
+           // Actions.ClickElementByName(rpayWin, "Auto Apply Payment");
+            Actions.ClickElementByName(rpayWin,"Save && Close");
+
+            Logger.logMessage("Payment received Successfully.");
 
             //Make a Deposit
             Actions.SelectMenu(qbApp, qbWindow, "Banking", "Make Deposits");
 
-            if (qbWindow.Title.Equals("Need a Bank Account"))
+            if (Actions.CheckWindowExists(qbWindow,"Need a Bank Account"))
+               
             {
-                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Need a Bank Account"), "Yes");
-                Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "Add New Account"), "136", "KTK");
-                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Add New Account"), "Save && Close");
-            }
-            else
-                //Create Purhcase orders
-                Actions.SelectMenu(qbApp, qbWindow, "Vendors", " Create Purchase Orders");
-            Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "Create Purchase Orders"), "Armani", "603");
 
+                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Need a Bank Account"), "Yes");
+                if (Actions.CheckWindowExists(qbWindow, "Add New Account"))
+                {
+                  Window bankWin =  Actions.GetChildWindow(qbWindow, "Add New Account");
+                  Actions.SetTextByAutomationID(bankWin,"136","HSBC");
+                  Actions.ClickElementByName(bankWin, "Save && Close");
+                }
 
-            // if Vendor wants to quick add the item
-            if (qbWindow.Title.Equals("Venodr Not Found"))
-            {
-                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Vendor Not Found"), "Quick Add");
-            }
-            else
-                Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "Create Purchase Orders"), "Skoda", "1");
-            Actions.SetTextByAutomationID(qbWindow, "603", "10");
-            Actions.ClickButtonByName(qbWindow, "Save && Close");
-
-
-            Actions.SelectMenu(qbApp, qbWindow, "Vendors", "Receive Items and Enter Bills");
-            Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "Enter Bills"), "309", "Armani");
-
-            if (qbWindow.Title.Equals("Open POs Exist"))
-            {
-                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Open POs Exist"), "Yes");
-
+                Logger.logMessage("Bank created Successfully.");
             }
 
-            if (qbWindow.Title.Equals("Open Purchase Orders"))
+            if (Actions.CheckWindowExists(qbWindow, "Payments to Deposit"))
             {
-                //Actions.UIA_SelectCheckBoxByName(window, qbWindow, "header Item");
-                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Open Purchase Orders"), "OK");
+                Window payWin = Actions.GetChildWindow(qbWindow, "Payments to Deposit");
+                Actions.ClickElementByName(payWin,"Select All");
+                Actions.ClickElementByName(payWin,"OK");
+
+            }
+            
+            if(Actions.CheckWindowExists(qbWindow,"Make Deposits"))
+            {
+                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow,"Make Deposits"),"Save && Close");
+            }
+
+            Logger.logMessage("Deposit to bank created Successfully.");
+
+            //Setting a new Vendor
+            Actions.SelectMenu(qbApp, qbWindow, "Vendors", "Vendor Center");
+            Actions.WaitForChildWindow(qbWindow, "Vendor Center", 9999);
+            Window vendcenWin = Actions.GetChildWindow(qbWindow, "Vendor Center");
+            if (vendcenWin.IsCurrentlyActive)
+            {
+                Actions.ClickElementByName(vendcenWin, "New Vendor...");
+
+                SendKeys.SendWait("{DOWN}");
+                SendKeys.SendWait("{ENTER}");
+            }
+            Window venWin = Actions.GetChildWindow(qbWindow, "New Vendor");
+            vendorname = "Vend" + _r.Next(1000).ToString();
+            Actions.SetTextByAutomationID(venWin, "1001", vendorname);
+            Actions.ClickElementByName(venWin, "OK");
+            Actions.CloseAllChildWindows(qbWindow);
+            Logger.logMessage("Vendor created Successfully.");
+    
+            //Create Purhcase orders
+            Actions.SelectMenu(qbApp, qbWindow, "Vendors", "Create Purchase Orders");
+            if (Actions.CheckWindowExists(qbWindow, "Create Purchase Orders"))
+            {
+                Window poWin = Actions.GetChildWindow(qbWindow, "Create Purchase Orders");
+                Actions.ClickElementByName(poWin, "Maximize");
+                Actions.SetTextByAutomationID(poWin, "603", vendorname);
+                Actions.SendTABToWindow(poWin);
+                Actions.SendTABToWindow(poWin);
+                Actions.SendTABToWindow(poWin);
+                Actions.SendTABToWindow(poWin);
+                Actions.SendTABToWindow(poWin);
+                Actions.SendTABToWindow(poWin);
+                Actions.SendTABToWindow(poWin);
+                Actions.SetTextOnElementByAutomationID(poWin,"1",itemname);
+                Actions.SendTABToWindow(poWin);
+                Actions.SendTABToWindow(poWin);
+                Actions.SetTextOnElementByAutomationID(poWin,"10", "1");
+                Actions.SendTABToWindow(poWin);
+                Actions.SendTABToWindow(poWin);
+                Actions.SetTextOnElementByAutomationID(poWin,"25",custname);
+                Actions.SendTABToWindow(poWin);
+                Actions.ClickElementByName(poWin, "Save && Close");
+            }
+
+            Logger.logMessage("PO created Successfully.");
+
+            // Creating a bill
+
+            Actions.SelectMenu(qbApp, qbWindow, "Vendors", "Receive Items and Enter Bill");
+            if (Actions.CheckWindowExists(qbWindow, "Enter Bills"))
+            {
+                Window billWin = Actions.GetChildWindow(qbWindow, "Enter Bills");
+                Actions.ClickElementByName(billWin, "Maximize");
+                Actions.SetTextByAutomationID(billWin, "309", vendorname);
+                Actions.SendTABToWindow(billWin);
+                Actions.WaitForChildWindow(qbWindow, "Open POs Exist", int.Parse(Sync_Timeout));
+
+                if (Actions.CheckWindowExists(qbWindow, "Open POs Exist"))
+                {
+                    Logger.logMessage("POs Window Found");
+                    Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Open POs Exist"), "Yes");
+                    Thread.Sleep(1000);
+                    if (Actions.CheckWindowExists(qbWindow, "Open Purchase Orders"))
+                    {
+                        Window openpoWin = Actions.GetChildWindow(qbWindow, "Open Purchase Orders");
+                        Actions.SendTABToWindow(openpoWin);
+                        Actions.SendSPACEToWindow(openpoWin);
+                        Actions.ClickElementByName(openpoWin, "OK");
+                    }
+
+                    if (Actions.CheckElementExistsByName(billWin, "Save && Close"))
+                    {
+                        Actions.ClickElementByName(billWin, "Save && Close");
+                    }
+
+                    else
+                    {
+                        Actions.ClickElementByName(billWin,"Close");
+                        if(Actions.CheckWindowExists(qbWindow,"Recording Transaction"))
+                        {
+                            Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Recording Transaction"),"Yes");
+                        }
+
+                    }
+                  
+                }
+                else
+                {
+                    Actions.SendTABToWindow(billWin);
+                    Actions.SendTABToWindow(billWin);
+                    Actions.SendTABToWindow(billWin);
+                    Actions.SendTABToWindow(billWin);
+                    Actions.SendTABToWindow(billWin);
+                    Actions.SendTABToWindow(billWin);
+                    Actions.SendTABToWindow(billWin);
+                    Actions.SendKeysToWindow(billWin, itemname);
+                    Actions.SendTABToWindow(billWin);
+                    Actions.SendTABToWindow(billWin);
+                    Actions.SetTextByAutomationID(billWin, "2", "1");
+
+                    if (Actions.CheckElementExistsByName(billWin, "Save && Close"))
+                    {
+                        Actions.ClickElementByName(billWin, "Save && Close");
+                    }
+
+                    else
+                    {
+                        Actions.ClickElementByName(billWin, "Close");
+                        if (Actions.CheckWindowExists(qbWindow, "Recording Transaction"))
+                        {
+                            Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Recording Transaction"), "Yes");
+                        }
+
+                    }
+                    
+                }
 
 
             }
 
-            else
-                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Enter Bills"), "Save && close");
+            Logger.logMessage("Bill created Successfully.");
 
-            //pay bills
+            //Pay Bills
 
-            Actions.SelectMenu(qbApp, qbWindow, "vendors", "Pay Bills");
-
-            //Clicking on check box
-
-            Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Pay Bills"), "Pay Selected Bills");
-            Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Assign Check Numbers"), " OK");
-
-            if (qbWindow.Title.Equals("Payement Summary"))
+            Actions.SelectMenu(qbApp, qbWindow, "Vendors", "Pay Bills");
+            if (Actions.CheckWindowExists(qbWindow, "Pay Bills"))
             {
-                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Payment Summary"), "Done");
+                Window billpayWin = Actions.GetChildWindow(qbWindow, "Pay Bills");
+                Actions.ClickElementByName(billpayWin, "Select All Bills");
+                Actions.WaitForElementEnabled(billpayWin, "Pay Selected Bills", int.Parse(Sync_Timeout));
+                Actions.ClickElementByName(billpayWin, "Pay Selected Bills");
+            }
+            if (Actions.CheckWindowExists(qbWindow, "Payment Summary"))
+            {
+                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow,"Payment Summary"),"Done");
 
             }
+
+            Logger.logMessage("Bills payed Successfully.");
+
+            //Reseting the preferences 
+            Actions.SelectMenu(qbApp, qbWindow, "Edit", "Preferences...");
+           Window PerfWin1 = Actions.GetChildWindow(qbWindow, "Preferences");
+            SendKeys.SendWait("{PGUP}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("%C");
+            SendKeys.SendWait("%I");
+            Actions.ClickElementByName(PerfWin1, "OK");
+
+            Logger.logMessage("Reseted the preferences Successfully.");
+
+
+
+
+
+
+            //if (qbWindow.Title.Equals("Open POs Exist"))
+            //{
+            //    Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Open POs Exist"), "Yes");
+
+            //}
+
+            //if (qbWindow.Title.Equals("Open Purchase Orders"))
+            //{
+            //    //Actions.UIA_SelectCheckBoxByName(window, qbWindow, "header Item");
+            //    Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Open Purchase Orders"), "OK");
+
+
+            //}
+
+            //else
+            //    Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Enter Bills"), "Save && close");
+
+            ////pay bills
+
+            //Actions.SelectMenu(qbApp, qbWindow, "vendors", "Pay Bills");
+
+            ////Clicking on check box
+
+            //Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Pay Bills"), "Pay Selected Bills");
+            //Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Assign Check Numbers"), " OK");
+
+            //if (qbWindow.Title.Equals("Payement Summary"))
+            //{
+            //    Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Payment Summary"), "Done");
+
+            //}
 
 
 
