@@ -64,7 +64,7 @@ namespace VerifyRebuild
         }
 
         [Fact]
-        public void newTest()
+        public void verifyBuild()
         {
             this.BDDfy();
         }

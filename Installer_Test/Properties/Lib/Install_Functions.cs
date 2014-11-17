@@ -28,6 +28,7 @@ using ScreenShotDemo;
 using TestStack.BDDfy;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
+using TestStack.White.InputDevices;
 
 
 namespace Installer_Test
@@ -43,6 +44,7 @@ namespace Installer_Test
         public static Property conf = Property.GetPropertyInstance();
         public static string Sync_Timeout = conf.get("SyncTimeOut");
         public string line;
+        public static string custname, vendorname, itemname;
 
 
         public static void Install_QB(string targetPath, string workFlow, string CustomOpt, string[] LicenseNo, string[] ProductNo, string UserID, string Passwd, string firstName, string lastName, string installPath)
@@ -867,6 +869,7 @@ namespace Installer_Test
 
         public static void SwitchEdition(TestStack.White.Application qbApp, Dictionary<String, String> dic, String exe)
         {
+            String edistr;
             try
             {
                 foreach (var pair in dic)
@@ -912,12 +915,26 @@ namespace Installer_Test
                         Thread.Sleep(3000);
                         
                         Window editionWindow = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
-                       // if (Actions.CheckRadioButtonEnabled(qbApp, editionWindow, pair.Key + " - Currently open  "))
-                        //{
+                        //if (Actions.CheckElementIsEnabled(editionWindow, pair.Key + " - Currently open  "))
+                        if (pair.Key == "Enterprise Solutions General Business")
+                        {
+                            edistr = pair.Key + " - Currently open  ";
+
+                        }
+                        else edistr = pair.Key;
+
+                        if (Actions.CheckElementIsEnabled(editionWindow, edistr))
+                        {
+                            Logger.logMessage(pair.Key + " - Currently open  ");
                             Actions.ClickElementByName(editionWindow, pair.Key);
-                        //}
-                      //  else
-                        //    continue;
+                        }
+                        else
+                        {
+                           // qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+                            Actions.ClickElementByName(editionWindow,"Cancel");
+                            continue;
+                        }
+                    
                         Thread.Sleep(3000);
 
                         
@@ -1687,40 +1704,106 @@ namespace Installer_Test
         {
             //Setting up the preferences 
             Actions.SelectMenu(qbApp, qbWindow, "Edit", "Preferences...");
-            Actions.ClickElementByName(qbWindow, "Items & Inverntory");
-            Actions.ClickElementByName(qbWindow, "Inventory and purchase orders are active");
-            Actions.ClickButtonByName(qbWindow, "OK");
+            Window PerfWin = Actions.GetChildWindow(qbWindow,"Preferences");
+            SendKeys.SendWait("{PGUP}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("%C");
+            SendKeys.SendWait("%I");
+            Actions.ClickElementByName(PerfWin,"OK");
+          
 
-            //Open invoice window and enter name and item 
-            Actions.DesktopInstance_ClickElementByName("create Invoices");
-            Actions.SelectMenu(qbApp, qbWindow, " Customers ", "Create Invoices");
-            Actions.WaitForChildWindow(qbWindow, "Create Invoices", 9999);
-
-
-            //if(Actions.SetFocusOnWindow != ))
+           
+           
+            //Setting a new Customer
+            Actions.SelectMenu(qbApp, qbWindow, "Customers", "Customer Center");
+            Actions.WaitForChildWindow(qbWindow, "Customer Center", 9999);
+            Window custcenWin = Actions.GetChildWindow(qbWindow, "Customer Center");
+            if (custcenWin.IsCurrentlyActive)
+            { 
+            Actions.ClickElementByName(custcenWin, "New Customer && Job");
+          
+            SendKeys.SendWait("{DOWN}");
+            SendKeys.SendWait("{ENTER}");
+            }
+            Window custWin = Actions.GetChildWindow(qbWindow, "New Customer");
+            Random _r = new Random();
+            custname = "Cust" + _r.Next(1000).ToString();
+            Actions.SetTextByAutomationID(custWin,"1001",custname);
+            Actions.ClickElementByName(custWin, "OK");
+            Actions.CloseAllChildWindows(qbWindow);
 
 
             // Item is not created , create an item
-            Actions.SelectMenu(qbApp, qbWindow, "Lists", "Item List");
-            Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Item"), "New");
-            Actions.SetTextByAutomationID(qbWindow, "902", "Skoda");
-            Actions.SetTextByAutomationID(qbWindow, "915", "2000");
-            Actions.SetTextByAutomationID(qbWindow, "917", "sales");
-            Actions.ClickButtonByName(qbWindow, "OK");
+            itemname = "item"+ _r.Next(1000).ToString();
+            Actions.SelectMenu(qbApp, qbWindow, "Lists", "Item List");         
+            Actions.SelectMenu(qbApp, qbWindow, "Edit", "New Item");
+            Window itemWin = Actions.GetChildWindow(qbWindow, "New Item");
+            Actions.SendTABToWindow(itemWin);
+           
+            Actions.SetTextOnElementByAutomationID(itemWin, "902",itemname);
+            Actions.SendTABToWindow(itemWin);
+            if(Actions.CheckElementExistsByName(itemWin,"Enable..."))
+            {
+                Actions.SendTABToWindow(itemWin);
+            }
+            Actions.SendTABToWindow(itemWin);
+            Actions.SendTABToWindow(itemWin);
+            Actions.SendTABToWindow(itemWin);
+            Actions.SetTextOnElementByAutomationID(itemWin, "915", "200");
+            Actions.SendTABToWindow(itemWin);
+            Actions.SetTextOnElementByAutomationID(itemWin, "917", "Rent Expense");
+            Actions.ClickElementByName(itemWin, "OK");
+            Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
 
-            //Enter the customer name as Alberto decosta
-            Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "CUSTOMER:JOB"), "603", "Alberto Decosta");
-            Actions.SetFocusOnElementByAutomationID(qbWindow, "1");
-            // Actions.SetTextByName(qbApp ,"ITEM" , "Skoda");
-            // Actions.SetFocusOnElementByAutomationID(qbWindow, "14");
-            Actions.SelectListBoxItemByText(qbWindow, "101", "Skoda");
-            Actions.ClickButtonByName(qbWindow, "Save And Close");
-
-            //make payment
+            //Creating an invoice
+            Actions.SelectMenu(qbApp,qbWindow,"Customers","Create Invoices");
+            Window invWin = Actions.GetChildWindow(qbWindow, "Create Invoices");
+            Actions.SetTextOnElementByAutomationID(invWin,"603",custname);
+            Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+            Actions.SetTextOnElementByAutomationID(invWin,"10","1");
+            Actions.SendTABToWindow(invWin);
+            Actions.SetTextOnElementByAutomationID(invWin,"1",itemname);
+            Actions.SendTABToWindow(invWin);
+           
+            if(Actions.CheckWindowExists(qbWindow,"Warning"))
+            {
+                Window warWin = Actions.GetChildWindow(qbWindow, "Warning");
+                Actions.ClickElementByName(warWin, "OK");
+            }
+            Actions.SendTABToWindow(invWin);
+            Actions.ClickElementByName(invWin,"Save && Close");
+            Thread.Sleep(1000);
+            
+            //Receive Payment
 
             Actions.SelectMenu(qbApp, qbWindow, "Customers", "Recieve Payments");
-            Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "Receive Payments"), "Albert", "5603");
-            Actions.SetTextByAutomationID(qbWindow, "5604", "1000");
+            Window rpayWin = Actions.GetChildWindow(qbWindow, "Recieve Payments");
+            Actions.SetTextOnElementByAutomationID(rpayWin,"5603",custname);
+            Actions.SendTABToWindow(rpayWin);
+            Actions.SetTextOnElementByAutomationID(rpayWin,"5604","200");
+            Actions.SendTABToWindow(rpayWin);
+            Actions.SendTABToWindow(rpayWin);
+            Actions.ClickElementByName(rpayWin, "CASH");
+            Actions.ClickElementByName(rpayWin, "Auto Apply Payment");
             Actions.ClickButtonByName(qbWindow, "Save && Close");
 
             //Make a Deposit
@@ -1730,7 +1813,7 @@ namespace Installer_Test
             {
                 Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Need a Bank Account"), "Yes");
                 Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "Add New Account"), "136", "KTK");
-                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Add New Account"), "Save && close");
+                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "Add New Account"), "Save && Close");
             }
             else
                 //Create Purhcase orders

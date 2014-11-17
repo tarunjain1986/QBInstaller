@@ -133,6 +133,37 @@ namespace FrameworkLibraries.ActionLibs.WhiteAPI
 
         //**************************************************************************************************************************************************************
 
+
+        public static bool CheckElementIsEnabled(Window win, String name)
+        {
+            Logger.logMessage("Function call @ :" + DateTime.Now);
+            string windowName = null;
+
+            try
+            {
+               
+                windowName = win.Name;
+                AutomationProperty p = AutomationElementIdentifiers.NameProperty;
+                var enabled = win.Get(SearchCriteria.ByNativeProperty(p, name)).AutomationElement.Current.IsEnabled;
+                Logger.logMessage("CheckElementIsEnabled " + windowName + "->" + name + " - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+                Thread.Sleep(int.Parse(Execution_Speed));
+                return enabled;
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("CheckElementIsEnabled " + windowName + "->" + name + " - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+
+                String sMessage = e.Message;
+                LastException.SetLastError(sMessage);
+                throw new Exception(sMessage);
+            }
+
+        }
+
+        //**************************************************************************************************************************************************************
         public static bool SelectMenu(TestStack.White.Application app, Window win, string level1, string level2, string level3)
         {
             try

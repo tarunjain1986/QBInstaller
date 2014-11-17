@@ -92,6 +92,7 @@
     <Compile Include="Tests\NewCompanyFile.cs" />
     <Compile Include="Tests\Toggle.cs" />
     <Compile Include="Tests\MIMO.cs" />
+    <Compile Include="Tests\UnitTest1.cs" />
     <Compile Include="Tests\VerifyRebuild.cs" />
     <Compile Include="Tests\AutoPatch.cs" />
     <Compile Include="Tests\WebPatch.cs" />
