@@ -45,64 +45,25 @@ namespace Installer_Test.Tests
         {
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
             Logger log = new Logger(testName + "_" + timeStamp);
-      
-            //////////////////////////////////////////////////////////////////////////
-            // Following code is for reading from text file
-            //////////////////////////////////////////////////////////////////////////
-            //string readpath = @"C:\Temp\Parameters.txt";
-            //File.WriteAllLines(readpath, File.ReadAllLines(readpath).Where(l => !string.IsNullOrWhiteSpace(l))); // Remove white space from the file
-
-            //string[] lines = File.ReadAllLines(readpath);
-            //var dic = lines.Select(line => line.Split('=')).ToDictionary(keyValue => keyValue[0], bits => bits[1]);
-
-            //targetPath = dic["Target Path"];
-            //wkflow = dic["Workflow"];
-            //customOpt = dic["Installation Type"];
-            //License_No = dic["License No"];
-            //Product_No = dic["Product No"];
-            //UserID = dic["UserID"];
-            //Passwd = dic["Password"];
-            //firstName = dic["First Name"];
-            //lastName = dic["Last Name"];
-
-            //////////////////////////////////////////////////////////////////////////////////////////////
-            // The following code is for reading from an excel file
-            //////////////////////////////////////////////////////////////////////////////////////////////
-
-            //string readpath = "C:\\Temp\\Parameters.xlsx"; // "C:\\Installation\\Sample.txt";
-
-            //Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
-            //Excel.Workbook xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-            //Excel.Worksheet xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item("Path");
-            //Excel.Range xlRng = (Excel.Range)xlWorkSheet.get_Range("B2:B4", Type.Missing);
-
-            //Dictionary<string, string> dic = new Dictionary<string, string>();
-
-            //foreach (Excel.Range cell in xlRng)
-            //{
-
-            //    string cellIndex = cell.get_AddressLocal(false, false, Excel.XlReferenceStyle.xlA1, Type.Missing, Type.Missing);
-
-            //    string cellValue = Convert.ToString(cell.Value2);
-            //    dic.Add(cellIndex, cellValue);
-
-            //}
-
-            string readpath = "C:\\Temp\\Parameters.xlsx"; // "C:\\Installation\\Sample.txt";
+                
+            string readpath = "C:\\Temp\\Parameters.xlsm"; // "C:\\Installation\\Sample.txt";
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic = File_Functions.ReadExcelValues(readpath, "Path", "B2:B10");
+            dic = File_Functions.ReadExcelValues(readpath, "Path", "B2:B27");
                      
-            targetPath = dic["B6"];
-            installPath = dic["B9"];
-            //wkflow = dic["Workflow"];
-            //customOpt = dic["Installation Type"];
-            //License_No = dic["License No"];
-            //Product_No = dic["Product No"];
-            //UserID = dic["UserID"];
-            //Passwd = dic["Password"];
-            //firstName = dic["First Name"];
-            //lastName = dic["Last Name"];
+            targetPath = dic["B11"];
+            targetPath = targetPath + @"QBooks\";
+           
+            customOpt = dic["B16"];
+            wkflow = dic["B17"];
+            License_No = dic["B18"];
+            Product_No = dic["B19"];
+            UserID = dic["B20"];
+            Passwd = dic["B21"];
+            firstName = dic["B22"];
+            lastName = dic["B23"];
+
+            installPath = dic["B26"];
 
             var regex = new Regex(@".{4}");
             string temp = regex.Replace(License_No, "$&" + "\n");
@@ -125,7 +86,6 @@ namespace Installer_Test.Tests
         public void RunInstallQB()
         {
             Install_Functions.Install_QB(targetPath, wkflow, customOpt, LicenseNo, ProductNo, UserID, Passwd, firstName, lastName, installPath);
-        
         }
 
        [Fact]

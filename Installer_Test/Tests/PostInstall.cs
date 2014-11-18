@@ -51,11 +51,11 @@ namespace Installer_Test.Tests
             
             Dictionary<string, string> dic = new Dictionary<string, string>();
            
-            dic = File_Functions.ReadExcelValues(readpath,"Path","B2:B10");
+            dic = File_Functions.ReadExcelValues(readpath,"PostInstall","B2:B4");
 
-            ver = dic["B7"];
-            reg_ver = dic["B8"];
-            expected_ver = dic["B10"];
+            ver = dic["B2"];
+            reg_ver = dic["B3"];
+            expected_ver = dic["B4"];
 
             OS_Name = File_Functions.GetOS();
             installed_version = File_Functions.GetQBVersion(OS_Name,ver,reg_ver);

@@ -57,7 +57,7 @@ namespace QBInstall.Tests
             string readpath = "C:\\Temp\\Parameters.xlsx"; 
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic = File_Functions.ReadExcelValues(readpath, "Path", "B2:B10");
+            dic = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B10");
             ver = dic["B7"];
             reg_ver = dic["B8"];
 

@@ -33,35 +33,51 @@ namespace Installer_Test.Tests
         public static Property conf = Property.GetPropertyInstance();
         public static int Sync_Timeout = int.Parse(conf.get("SyncTimeOut"));
         public static string testName = "PFTW_Comparison";
-        string Build01_Path, Build02_Path, Windiff_Path, Local_B1Path, Local_B2Path, Local_Windiff;
+        string Local_B1Path, Local_B2Path, Local_Windiff;
+        
+        // string Build01_Path, Build02_Path, Windiff_Path;
 
-        [Given(StepTitle = @"The Builds and windiff tool are copied on the local machine")]
+        [Given(StepTitle = @"The Builds and windiff tool are available on the local machine")]
 
         public void Setup()
         {
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
             Logger log = new Logger(testName + "_" + timeStamp);
 
-            //////////////////////////////////////////////////////////////////////////////////////////////
-            // The following code is for reading from an excel file
-            //////////////////////////////////////////////////////////////////////////////////////////////
-
             string readpath = "C:\\Temp\\Parameters.xlsx"; // "C:\\Installation\\Sample.txt";
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
            
-            dic = Installer_Test.Lib.File_Functions.ReadExcelValues(readpath, "PFTW", "B2:B4");
+            dic = Installer_Test.Lib.File_Functions.ReadExcelValues(readpath, "PFTW", "B2:B6");
 
-            Build01_Path = dic["B2"];
-            Build02_Path = dic["B3"];
-            Windiff_Path = dic["B4"];
+            //Build01_Path = dic["B2"];
+            //Build02_Path = dic["B4"];
+            //Windiff_Path = dic["B6"];
+            //Local_B1Path = @"C:\Temp\PFTW\ReleaseCandidate\";
+            //Local_B2Path = @"C:\Temp\PFTW\Web\";
+            //Local_Windiff = @"C:\Temp\PFTW\";
 
-            Local_B1Path = @"C:\Temp\PFTW\ReleaseCandidate\";
-            Local_B2Path = @"C:\Temp\PFTW\Web\";
-            Local_Windiff = @"C:\Temp\PFTW\";
+            Local_B1Path = dic["B2"];
+            Local_B2Path = dic["B4"];
+            Local_Windiff = dic["B6"];
 
-           
+            DirectoryInfo B1 = new DirectoryInfo(Local_B1Path);
+            FileInfo[] F1 = B1.GetFiles();
+            if (F1.Length == 0)
+            {
+                Logger.logMessage("Directory " + Local_B1Path + " is Empty - Failed");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
 
+            DirectoryInfo B2 = new DirectoryInfo(Local_B2Path);
+            FileInfo[] F2 = B2.GetFiles();
+            if (F2.Length == 0)
+            {
+                Logger.logMessage("Directory " + Local_B2Path + " is Empty - Failed");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+                         
             /////////////////////////////////////////////////////////////////////////////////////////////////////
             //if (!Directory.Exists(Local_B1Path))
             //{
