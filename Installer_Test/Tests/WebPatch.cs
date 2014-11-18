@@ -111,10 +111,10 @@ namespace Installer_Test.Tests
             
         }
 
-      [Then(StepTitle = "Then - Invoke QuickBooks installer")]
+        [Then(StepTitle = "Then - Invoke QuickBooks installer")]
         public void InvokeQB()
         {
-           OSOperations.InvokeInstaller(targetPath, "setup.exe");
+            OSOperations.InvokeInstaller(targetPath, "setup.exe");
         }
 
 
@@ -122,16 +122,16 @@ namespace Installer_Test.Tests
         public void RunInstallQB()
         {
             Install_Functions.Install_QB(targetPath, wkflow, customOpt, LicenseNo, ProductNo, UserID, Passwd, firstName, lastName, installPath);
-        
+
         }
 
-      [AndThen(StepTitle = "Then - Kill QuickBooks")]
+        [AndThen(StepTitle = "Then - Kill QuickBooks")]
         public void KillQB()
         {
             OSOperations.KillProcess("setup");
-            
+
         }
-        [AndThen(StepTitle = "Copy the web patch to local")]
+        [Then(StepTitle = "Copy the web patch to local")]
         public void copyPatch()
         {
             Installer_Test.Install_Functions.Copy_WebPatch("BEL",patchpath);
@@ -146,7 +146,7 @@ namespace Installer_Test.Tests
             Thread.Sleep(1000);
             Window patchWin= Actions.GetDesktopWindow("QuickBooks Update,Version");
             Thread.Sleep(1000);
-            Actions.ClickButtonByName(patchWin, "Install Now");
+            Actions.ClickElementByName(patchWin, "Install Now");
             Logger.logMessage("Installing webpatch");
 
         }

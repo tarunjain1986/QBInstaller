@@ -44,7 +44,7 @@ namespace Installer_Test
         public static Property conf = Property.GetPropertyInstance();
         public static string Sync_Timeout = conf.get("SyncTimeOut");
         public string line;
-        public static string custname, vendorname, itemname;
+        public static string custname, vendorname, itemname,backuppath;
         public static Random _r = new Random();
 
         public static void Install_QB(string targetPath, string workFlow, string CustomOpt, string[] LicenseNo, string[] ProductNo, string UserID, string Passwd, string firstName, string lastName, string installPath)
@@ -1211,7 +1211,7 @@ namespace Installer_Test
         public static void Copy_WebPatch(string sku, string wppath)
         {
             string exename;
-            wppath = wppath + sku + "\\qbwebpatch";
+            wppath = wppath + sku + "\\qbwebpatch\\";
             Logger.logMessage("Function call @ :" + DateTime.Now);
 
             if(sku=="BEL")
@@ -2047,7 +2047,108 @@ namespace Installer_Test
 
 
         }
-      
+
+        public static void PerformVerify(TestStack.White.Application qbApp, Window qbWindow)
+        {
+            
+            // Invoking Verify Data from File-> Utility
+            Actions.SelectMenu(qbApp, qbWindow, "File", "Utilities", "Verify Data");
+
+            try
+            {
+                if (Actions.CheckWindowExists(qbWindow, "Verify Data"))
+                {
+                    Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Verify Data"), "OK");
+                    Logger.logMessage("Click on Verify Data Successful.");
+
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage(e.ToString());
+            }
+
+            try
+            {
+                Actions.WaitForChildWindow(qbWindow, "QuickBooks Information", int.Parse(Sync_Timeout));
+                if (Actions.CheckWindowExists(qbWindow, "QuickBooks Information"))
+                {
+                    Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Information"), "OK");
+                    Logger.logMessage("Data Verified Successfully.");
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage(e.ToString());
+            }
+        }
+
+        public static void PerformRebuild(TestStack.White.Application qbApp, Window qbWindow)
+        {
+            backuppath = "C:\\Test\\";
+            
+            Actions.SelectMenu(qbApp, qbWindow, "File", "Utilities", "Rebuild Data");
+
+             try
+            {
+                if (Actions.CheckWindowExists(qbWindow, "QuickBooks Information"))
+                {
+                    Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Information"), "OK");
+                    Logger.logMessage("Warning to take backup before continue.");
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage(e.ToString());
+            }
+             try
+             {
+                 if (Actions.CheckWindowExists(qbWindow, "Create Backup"))
+                 {
+
+                     Window bckupWin = Actions.GetChildWindow(qbWindow, "Create Backup");
+                     Logger.logMessage("New Backup Window");
+                     Actions.ClickElementByName(bckupWin, "Next");
+                     Actions.WaitForChildWindow(qbWindow, "Backup Options", int.Parse(Sync_Timeout));
+                     if (Actions.CheckWindowExists(qbWindow, "Backup Options"))
+                     {
+
+                         Window newbckupWin = Actions.GetChildWindow(qbWindow, "Backup Options");
+                         Logger.logMessage("Backup Window to provide the backup path");
+                         Actions.SetTextByAutomationID(newbckupWin, "2002", backuppath);
+                         Actions.ClickElementByName(newbckupWin, "OK");
+
+                         if (Actions.CheckWindowExists(newbckupWin, "QuickBooks"))
+                         {
+                             Actions.ClickElementByName(Actions.GetChildWindow(newbckupWin, "QuickBooks"), "Use this Location");
+                         }
+
+                         if (Actions.CheckWindowExists(bckupWin,"Save Backup Copy"))
+                         {
+                             Actions.ClickElementByName(Actions.GetChildWindow(bckupWin, "Save Backup Copy"), "Save");
+                             Actions.WaitForChildWindow(qbWindow, "QuickBooks Information", int.Parse(Sync_Timeout));
+                             Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Information"), "OK");
+                         }
+
+
+                     }
+                 }
+
+                 else
+                 {
+                     Window bckupWin1 = Actions.GetChildWindow(qbWindow, "Save Backup Copy");
+                     Actions.ClickElementByName(bckupWin1, "Save");
+                     Actions.WaitForChildWindow(qbWindow, "QuickBooks Information",int.Parse(Sync_Timeout));
+                     Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Information"), "OK");
+                 }
+
+             }
+             catch (Exception e)
+             {
+                 Logger.logMessage(e.ToString());
+             }
+
+        }
     }
 }
 
