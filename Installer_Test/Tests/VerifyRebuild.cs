@@ -16,55 +16,47 @@ using FrameworkLibraries.AppLibs.QBDT;
 using System.IO;
 using System.Reflection;
 
-namespace VerifyRebuild
+namespace Installer_Test.Tests
 {
     
     public class VerifyRebuild
     {
+       public string testName = "VerifyRebuild";
         public TestStack.White.Application qbApp = null;
         public TestStack.White.UIItems.WindowItems.Window qbWindow = null;
         public static Property conf = Property.GetPropertyInstance();
-        public Random rand = new Random();
-        public string testName = "VerifyRebuild";
+        public static string exe = conf.get("QBExePath");
 
         [Given(StepTitle = "Given - QuickBooks App and Window instances are available")]
-        public void Method()
+
+        public void Setup()
         {
-            string exe = conf.get("QBExePath");
-            var qbApp = QuickBooks.Initialize(exe);
-            var qbWindow = QuickBooks.PrepareBaseState(qbApp);
+            var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
+            Logger log = new Logger(testName + "_" + timeStamp);
+            qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
+            qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+            QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+        }
 
+         [Then(StepTitle = "Then - Perform Verify")]  
 
-            Actions.SelectMenu(qbApp, qbWindow, "File", "Utilities", "Verify Data");
-
-            if (qbWindow.Title.Equals("QuicKbooks Informartion"))
-            {
-                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "QuicKbooks Informartion"), "OK");
-
-            }
-            else
-            {
-                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "QuicKbooks Informartion"), "OK");
-            }
-
-            Actions.SelectMenu(qbApp, qbWindow, "File", "Utilities", "Rebuild Data");
-
-            if (qbWindow.Title.Equals("QuicKbooks Informartion"))
-            {
-                Actions.ClickButtonByAutomationID(Actions.GetChildWindow(qbWindow, "Save backup Copy"), "1");
-
-            }
-
-            else
-            {
-                Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "QuicKbooks Informartion"), "OK");
-            }
-
+        public void PerformVerfiy()
+        {
+            
+            Install_Functions.PerformVerify(qbApp,qbWindow);
 
         }
 
-        [Fact]
-        public void verifyBuild()
+         [AndThen(StepTitle = "Then - Perform Rebuild")]
+
+         public void PerformRebuild()
+         {
+
+             Install_Functions.PerformRebuild(qbApp, qbWindow);
+
+         }
+      [Fact]
+        public void Run_verifyBuild()
         {
             this.BDDfy();
         }

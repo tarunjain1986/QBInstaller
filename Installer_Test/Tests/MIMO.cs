@@ -28,7 +28,7 @@ namespace Installer_Test.Tests
             QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
         }
 
-         [Then(StepTitle = "Then - Perform MIMO")]
+         [Then(StepTitle = "Then - Perform MIMO")]  
 
         public void PerformMIMO()
         {
