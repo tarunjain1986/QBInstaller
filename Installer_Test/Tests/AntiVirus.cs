@@ -49,7 +49,7 @@ namespace Installer_Test.Tests
 
             //AVName = dic["AntiVirusSW"];
 
-            string readpath = "C:\\Temp\\Parameters.xlsx"; // "C:\\Installation\\Sample.txt";
+            string readpath = "C:\\Temp\\Parameters.xlsm"; // "C:\\Installation\\Sample.txt";
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic = File_Functions.ReadExcelValues(readpath, "AntiVirus", "B2:B2");
