@@ -5,6 +5,8 @@ using FrameworkLibraries.AppLibs.QBDT;
 using FrameworkLibraries.Utils;
 using TestStack.BDDfy;
 using Xunit;
+using Installer_Test.Lib;
+
 
 namespace Installer_Test.Tests
 {
@@ -32,8 +34,8 @@ namespace Installer_Test.Tests
 
         public void PerformMIMO()
         {
-            
-            Install_Functions.PerformMIMO(qbApp,qbWindow);
+
+            PostInstall_Functions.PerformMIMO(qbApp, qbWindow);
 
         }
             

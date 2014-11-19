@@ -15,6 +15,7 @@ using TestStack.BDDfy;
 using FrameworkLibraries.AppLibs.QBDT;
 using System.IO;
 using System.Reflection;
+using Installer_Test.Lib;
 
 namespace Installer_Test.Tests
 {
@@ -42,8 +43,8 @@ namespace Installer_Test.Tests
 
         public void PerformVerfiy()
         {
-            
-            Install_Functions.PerformVerify(qbApp,qbWindow);
+
+            PostInstall_Functions.PerformVerify(qbApp, qbWindow);
 
         }
 
@@ -52,7 +53,7 @@ namespace Installer_Test.Tests
          public void PerformRebuild()
          {
 
-             Install_Functions.PerformRebuild(qbApp, qbWindow);
+             PostInstall_Functions.PerformRebuild(qbApp, qbWindow);
 
          }
       [Fact]

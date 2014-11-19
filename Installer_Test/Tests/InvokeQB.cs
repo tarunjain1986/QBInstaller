@@ -50,7 +50,7 @@ namespace Installer_Test.Tests
         [Then(StepTitle = "Then - InvokeQB")]
         public void Invoke_QB()
         {
-           Install_Functions.InvokeQB(dic);
+            PostInstall_Functions.InvokeQB(dic);
            
                 
 

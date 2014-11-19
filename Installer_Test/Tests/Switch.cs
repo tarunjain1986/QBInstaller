@@ -35,7 +35,7 @@ namespace Installer_Test.Tests
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
             //QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
             string readpath = "C:\\Temp\\Parameters.xlsx";
-            dic = File_Functions.ReadExcelCellValues(readpath, "Ent-Switch");
+            dic = File_Functions.ReadExcelCellValues(readpath, "Pre-Switch");
         }
 
 
@@ -43,7 +43,7 @@ namespace Installer_Test.Tests
         public void SwitchEdition()
         {
             //Actions.SelectMenu(qbApp, qbWindow, "File", "New Company...");
-            Install_Functions.SwitchEdition(qbApp, dic, exe);
+            PostInstall_Functions.SwitchEdition(qbApp, dic, exe);
 
         }
         [Fact]

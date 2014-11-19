@@ -11,6 +11,7 @@ using Microsoft.Office.Interop.Excel;
 using Installer_Test.Lib;
 using System.Linq;
 using Microsoft.Win32;
+using Installer_Test.Lib;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Installer_Test.Tests
@@ -51,7 +52,7 @@ namespace Installer_Test.Tests
         public void CreateCompanyFile()
         {
 
-           Install_Functions.CreateCompanyFile(keyvaluepairdic);
+            PostInstall_Functions.CreateCompanyFile(keyvaluepairdic);
 
         }
         [Fact]

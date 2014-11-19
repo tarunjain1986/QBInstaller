@@ -81,6 +81,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Properties\Lib\PostInstall_Functions.cs" />
     <Compile Include="Properties\Lib\Install_Functions.cs" />
     <Compile Include="Properties\Lib\ScreenCapture.cs" />
     <Compile Include="Properties\Lib\PFTW.cs" />
