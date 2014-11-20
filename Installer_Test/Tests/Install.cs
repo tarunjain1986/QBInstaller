@@ -25,6 +25,8 @@ using Installer_Test;
 using Installer_Test.Lib;
 
 
+
+
 namespace Installer_Test.Tests
 {
    
@@ -49,7 +51,7 @@ namespace Installer_Test.Tests
             string readpath = "C:\\Temp\\Parameters.xlsm"; // "C:\\Installation\\Sample.txt";
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic = File_Functions.ReadExcelValues(readpath, "Path", "B2:B27");
+            dic = File_Functions.ReadExcelValues(readpath, "Install", "B2:B27");
                      
             targetPath = dic["B11"];
             targetPath = targetPath + @"QBooks\";
@@ -89,6 +91,7 @@ namespace Installer_Test.Tests
         }
 
        [Fact]
+       [Category("P1")]
         public void RunQBInstallTest()
         {
             this.BDDfy();
