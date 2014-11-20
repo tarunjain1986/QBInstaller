@@ -83,6 +83,8 @@
   <ItemGroup>
     <Compile Include="CategoryAttribute.cs" />
     <Compile Include="Properties\Lib\Install_Functions.cs" />
+    <Compile Include="Properties\Lib\PostInstall_Functions.cs" />
+    <Compile Include="Properties\Lib\QB_functions.cs" />
     <Compile Include="Properties\Lib\ScreenCapture.cs" />
     <Compile Include="Properties\Lib\PFTW.cs" />
     <Compile Include="Properties\Lib\Help.cs" />
@@ -91,7 +93,9 @@
     <Compile Include="Tests\Help_About.cs" />
     <Compile Include="Tests\InvokeQB.cs" />
     <Compile Include="Tests\NewCompanyFile.cs" />
-    <Compile Include="Tests\Toggle.cs" />
+    <Compile Include="Tests\Switch_Prem.cs" />
+    <Compile Include="Tests\Toggle_Prem_Acct.cs" />
+    <Compile Include="Tests\Toggle_Ent_Acct.cs" />
     <Compile Include="Tests\MIMO.cs" />
     <Compile Include="Tests\UnitTest1.cs" />
     <Compile Include="Tests\VerifyRebuild.cs" />
@@ -106,7 +110,7 @@
     <Compile Include="Tests\PFTW_Comparison.cs" />
     <Compile Include="Tests\Help_Update.cs" />
     <Compile Include="Tests\CheckF2.cs" />
-    <Compile Include="Tests\Switch.cs" />
+    <Compile Include="Tests\Switch_Ent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

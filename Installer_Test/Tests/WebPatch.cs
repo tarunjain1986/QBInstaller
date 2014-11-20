@@ -23,6 +23,7 @@ using Xunit;
 
 using Installer_Test;
 using FrameworkLibraries.ActionLibs.WhiteAPI;
+using Installer_Test.Lib;
 
 
 namespace Installer_Test.Tests
@@ -33,11 +34,13 @@ namespace Installer_Test.Tests
        // public TestStack.White.Application qbApp = null;
        // public TestStack.White.UIItems.WindowItems.Window qbWindow = null;
         public static Property conf = Property.GetPropertyInstance();
-        public static int Sync_Timeout = int.Parse(conf.get("SyncTimeOut"));
+        public static string Sync_Timeout = conf.get("SyncTimeOut");
         public static string testName = "WebPatch";
         public string targetPath,patchpath, installPath, fileName, wkflow, customOpt, License_No, Product_No, UserID, Passwd, firstName, lastName;
         string [] LicenseNo, ProductNo;
-
+        public string ver, reg_ver, installed_product;
+        string OS_Name = string.Empty;
+        string readpath = "C:\\Temp\\Parameters.xlsm";
 
         [Given(StepTitle = @"The parameters for installation are available at C:\Installation\Parameters.txt")]
 
@@ -45,71 +48,54 @@ namespace Installer_Test.Tests
         {
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
             Logger log = new Logger(testName + "_" + timeStamp);
-      
-            //////////////////////////////////////////////////////////////////////////
-            // Following code is for reading from text file
-            //////////////////////////////////////////////////////////////////////////
-            string readpath = @"C:\Temp\Parameters.txt";
-            File.WriteAllLines(readpath, File.ReadAllLines(readpath).Where(l => !string.IsNullOrWhiteSpace(l))); // Remove white space from the file
-
-            string[] lines = File.ReadAllLines(readpath);
-            var dic = lines.Select(line => line.Split('=')).ToDictionary(keyValue => keyValue[0], bits => bits[1]);
-
-            targetPath = dic["Target Path"];
-            patchpath = dic["Patch Path"];
-            wkflow = dic["Workflow"];
-            customOpt = dic["Installation Type"];
-            License_No = dic["License No"];
-            Product_No = dic["Product No"];
-            UserID = dic["UserID"];
-            Passwd = dic["Password"];
-            firstName = dic["First Name"];
-            lastName = dic["Last Name"];
-
-            //////////////////////////////////////////////////////////////////////////////////////////////
-            // The following code is for reading from an excel file
-            //////////////////////////////////////////////////////////////////////////////////////////////
-
-           /* string readpath = "C:\\Temp\\Parameters.xlsx"; // "C:\\Installation\\Sample.txt";
-
-            Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
-            Excel.Workbook xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-            Excel.Worksheet xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item("Path");
-            Excel.Range xlRng = (Excel.Range)xlWorkSheet.get_Range("B2:B4", Type.Missing);
-
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-
-            foreach (Excel.Range cell in xlRng)
-            {
-
-                string cellIndex = cell.get_AddressLocal(false, false, Excel.XlReferenceStyle.xlA1, Type.Missing, Type.Missing);
-
-                string cellValue = Convert.ToString(cell.Value2);
-                dic.Add(cellIndex, cellValue);
-
-            }
-            
-            targetPath = dic["B2"];
-            installPath = dic["B9"];
-            //wkflow = dic["Workflow"];
-            //customOpt = dic["Installation Type"];
-            //License_No = dic["License No"];
-            //Product_No = dic["Product No"];
-            //UserID = dic["UserID"];
-            //Passwd = dic["Password"];
-            //firstName = dic["First Name"];
-            //lastName = dic["Last Name"];
-            */
-
-            var regex = new Regex(@".{4}");
-            string temp = regex.Replace(License_No, "$&" + "\n");
-            LicenseNo = temp.Split('\n');
-
-            regex = new Regex(@".{3}");
-            temp = regex.Replace(Product_No, "$&" + "\n");
-            ProductNo = temp.Split('\n');
+ 
             
         }
+
+        [Then(StepTitle = "Then - Get the Product Info from the excel")]
+
+        public void Get_Product_info()
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B10");
+            ver = dic["B7"];
+            reg_ver = dic["B8"];
+
+            OS_Name = File_Functions.GetOS();
+            installed_product = Installer_Test.Lib.File_Functions.GetProduct(OS_Name, ver, reg_ver);
+
+        }    
+
+        [AndThen(StepTitle = "Then - Check if the product is installed or not")]
+        public void Check_Product_Installed()
+        {
+            try
+            {
+                FrameworkLibraries.Utils.OSOperations.CommandLineExecute("control appwiz.cpl");
+
+                try
+                {
+                    Logger.logMessage("---------------Try-Catch Block------------------------");
+                    Actions.WaitForWindow("Programs and Features", int.Parse(Sync_Timeout));
+                }
+                catch { }
+
+                var controlPanelWindow = Actions.GetDesktopWindow("Programs and Features");
+                var uiaWindow = Actions.UIA_GetAppWindow("Programs and Features");
+
+                Actions.UIA_SetTextByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), "Search Box", installed_product);
+
+                try
+                {
+                    Logger.logMessage("---------------Try-Catch Block------------------------");
+                    Actions.WaitForElementEnabled(Actions.GetDesktopWindow("Programs and Features"), installed_product, int.Parse(Sync_Timeout));
+                }
+                catch { }
+            }
+            catch { }
+        }
+       
+
 
         [Then(StepTitle = "Then - Invoke QuickBooks installer")]
         public void InvokeQB()

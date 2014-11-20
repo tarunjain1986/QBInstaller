@@ -15,15 +15,17 @@ using Installer_Test.Lib;
 namespace Installer_Test.Tests
 {
 
-    public class Toggle
+    public class Toggle_Prem_Acct
     {
 
-        public string testName = "Toggle";
+        public string testName = "Toggle_Prem_Acct";
+        public static string Bizname;
         public TestStack.White.Application qbApp = null;
         public TestStack.White.UIItems.WindowItems.Window qbWindow = null;
         public static Property conf = Property.GetPropertyInstance();
         public static string exe = conf.get("QBExePath");
         Dictionary<String, String> dic = new Dictionary<string, string>();
+
 
 
         [Given(StepTitle = "Given - QuickBooks App and Window instances are available")]
@@ -36,6 +38,7 @@ namespace Installer_Test.Tests
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
             //QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
             string readpath = "C:\\Temp\\Parameters.xlsm";
+            Bizname = File_Functions.ReadExcelBizName(readpath);
             dic = File_Functions.ReadExcelCellValues(readpath, "Ent-Toggle");
         }
 
@@ -44,11 +47,11 @@ namespace Installer_Test.Tests
         public void ToggleEdition()
         {
 
-            PostInstall_Functions.ToggleEdition(qbApp, dic, exe);
+            PostInstall_Functions.ToggleEdition(qbApp, dic, exe,Bizname);
 
         }
         [Fact]
-        public void Run_Toggle()
+        public void Run_Toggle_Prem_Acct()
         {
             this.BDDfy();
         }

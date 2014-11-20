@@ -77,9 +77,9 @@ namespace Installer_Test.Lib
             }
         }
 
-        public static void SwitchEdition(TestStack.White.Application qbApp, Dictionary<String, String> dic, String exe)
+        public static void SwitchEdition(TestStack.White.Application qbApp, Dictionary<String, String> dic, String exe, String Bizname, String SearchText)
         {
-            String edistr, bizname;
+            String edistr;
             try
             {
                 foreach (var pair in dic)
@@ -93,8 +93,9 @@ namespace Installer_Test.Lib
                     qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
                     String title = qbWindow.Title;
 
-                    if (pair.Value.Equals(title))
+                    if ((Bizname + pair.Value).Equals(title))
                     {
+                        
                         continue;
                     }
 
@@ -112,10 +113,7 @@ namespace Installer_Test.Lib
                             Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
                         }
 
-                        //if (Actions.DesktopInstance_CheckElementExistsByName("QuickBooks Update Service") == true)
-                        //{ SendKeys.SendWait("%L"); }
-                        // if (Actions.CheckWindowExists(Actions.GetDesktopWindow("Desktop"), "QuickBooks Update Service") == true)
-                        // { SendKeys.SendWait("%L"); }
+                      
                         Thread.Sleep(1000);
                         if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
                         { SendKeys.SendWait("%L"); }
@@ -159,17 +157,17 @@ namespace Installer_Test.Lib
                         Thread.Sleep(500);
                         try
                         {
-                            bizname = "Test Prem";
-
-                            var x = Actions.GetDesktopWindow(bizname + "  - QuickBooks");
+                           
+                            var x = Actions.GetDesktopWindow(Bizname + SearchText);
                             var t = x.ModalWindows();
 
 
                             if (Actions.CheckWindowExists(x, "Automatic Backup"))
                             {
                                 Actions.ClickElementByName(Actions.GetChildWindow(x, "Automatic Backup"), "No");
-                                //SendKeys.SendWait("%N");
+                                SendKeys.SendWait("%N");
                             }
+                            
                         }
                         catch (Exception e)
                         {
@@ -211,7 +209,7 @@ namespace Installer_Test.Lib
             }
         }
 
-        public static void ToggleEdition(TestStack.White.Application qbApp, Dictionary<String, String> dic, String exe)
+        public static void ToggleEdition(TestStack.White.Application qbApp, Dictionary<String, String> dic, String exe, String Bizname)
         {
             try
             {
@@ -225,7 +223,7 @@ namespace Installer_Test.Lib
                     TestStack.White.UIItems.WindowItems.Window qbWindow = null;
                     qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
                     String title = qbWindow.Title;
-                    if (pair.Value.Equals(title))
+                    if ((Bizname + pair.Value).Equals(title))
                     {
                         continue;
                     }
@@ -522,7 +520,7 @@ namespace Installer_Test.Lib
             else
 
                 Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btnCreateCompany");
-            Actions.SelectMenu(qbApp, qbWindow, "Windows", "Close");
+            Actions.SelectMenu(qbApp, qbWindow, "Windows", "Close All");
 
 
             String Title = qbWindow.Title;

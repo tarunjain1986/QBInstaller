@@ -112,7 +112,7 @@ namespace Installer_Test.Lib
             // object misValue = System.Reflection.Missing.Value;
 
             xlApp = new Excel.Application();
-            xlWorkBook = xlApp.Workbooks.Open("C:\\temp\\Parameters.xlsx", 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+            xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
 
 
             xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(workSheet);
@@ -131,6 +131,34 @@ namespace Installer_Test.Lib
             xlWorkBook.Close();
             xlApp.Quit();
             return dic;
+
+        }
+
+        public static string ReadExcelBizName(String readpath)
+        {
+            Excel.Application xlApp;
+            Excel.Workbook xlWorkBook;
+            Excel.Worksheet xlWorkSheet;
+            Excel.Range range;
+           
+
+            string Bizname;
+
+
+
+            xlApp = new Excel.Application();
+            xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+
+
+            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item("CompanyFile");
+
+            range = xlWorkSheet.UsedRange;
+
+            Bizname = (string)(xlWorkSheet.Cells[2,1] as Excel.Range).Value;
+            
+            xlWorkBook.Close();
+            xlApp.Quit();
+            return Bizname;
 
         }
 
