@@ -2506,7 +2506,7 @@ namespace FrameworkLibraries.ActionLibs.WhiteAPI
                 foreach (Window w in allChildWindows)
 
                 {
-                    Logger.logMessage(w.ToString());
+
                     if (w.Name.Equals(childWindowName) || w.Name.Contains(childWindowName))
                     {
                         window = true;

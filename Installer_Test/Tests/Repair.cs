@@ -64,7 +64,7 @@ namespace QBInstall.Tests
             //ver = dic["Version"];
             //reg_ver = dic["Registry Folder"];
 
-            string readpath = "C:\\Temp\\Parameters.xlsx";
+            string readpath = "C:\\Temp\\Parameters.xlsm";
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");

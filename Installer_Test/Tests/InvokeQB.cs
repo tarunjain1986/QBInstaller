@@ -37,7 +37,7 @@ namespace Installer_Test.Tests
         {
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
             Logger log = new Logger(testName + "_" + timeStamp);
-            string readpath = "C:\\Temp\\Parameters.xlsx";
+            string readpath = "C:\\Temp\\Parameters.xlsm";
             List<string> listHeader = new List<string>();
             List<string> ListValue = new List<string>();
             dic = new Dictionary<string, string>();
@@ -50,7 +50,7 @@ namespace Installer_Test.Tests
         [Then(StepTitle = "Then - InvokeQB")]
         public void Invoke_QB()
         {
-           Install_Functions.InvokeQB(dic);
+            PostInstall_Functions.InvokeQB(dic);
            
                 
 

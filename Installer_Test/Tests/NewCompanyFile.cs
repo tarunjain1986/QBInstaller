@@ -11,6 +11,7 @@ using Microsoft.Office.Interop.Excel;
 using Installer_Test.Lib;
 using System.Linq;
 using Microsoft.Win32;
+
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Installer_Test.Tests
@@ -36,7 +37,7 @@ namespace Installer_Test.Tests
             qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
             QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
-            string readpath = "C:\\Temp\\Parameters.xlsx";
+            string readpath = "C:\\Temp\\Parameters.xlsm";
             List<string> listHeader = new List<string>();
             List<string> ListValue = new List<string>();
             keyvaluepairdic = new Dictionary<string, string>();
@@ -51,7 +52,7 @@ namespace Installer_Test.Tests
         public void CreateCompanyFile()
         {
 
-           Install_Functions.CreateCompanyFile(keyvaluepairdic);
+            PostInstall_Functions.CreateCompanyFile(keyvaluepairdic);
 
         }
         [Fact]

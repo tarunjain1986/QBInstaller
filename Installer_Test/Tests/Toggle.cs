@@ -35,16 +35,16 @@ namespace Installer_Test.Tests
             qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
             //QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
-            string readpath = "C:\\Temp\\Parameters.xlsx";
-            dic = File_Functions.ReadExcelCellValues(readpath, "Pre-Switch");
+            string readpath = "C:\\Temp\\Parameters.xlsm";
+            dic = File_Functions.ReadExcelCellValues(readpath, "Ent-Toggle");
         }
 
 
         [Then(StepTitle = "Then - Toggle Edition")]
         public void ToggleEdition()
         {
-            
-            Install_Functions.ToggleEdition(qbApp, dic, exe);
+
+            PostInstall_Functions.ToggleEdition(qbApp, dic, exe);
 
         }
         [Fact]

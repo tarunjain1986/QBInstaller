@@ -6,6 +6,7 @@ using TestStack.BDDfy;
 using FrameworkLibraries.Utils;
 using FrameworkLibraries.AppLibs.QBDT;
 using FrameworkLibraries.ActionLibs.WhiteAPI;
+using Installer_Test.Lib;
 
 namespace Installer_Test.Tests
 {
@@ -36,7 +37,7 @@ namespace Installer_Test.Tests
         public void CheckF2value()
         {
             //Actions.SelectMenu(qbApp, qbWindow, "File", "New Company...");
-            Install_Functions.CheckF2value(qbApp, qbWindow);
+            PostInstall_Functions.CheckF2value(qbApp, qbWindow);
 
         }
         [Fact]
