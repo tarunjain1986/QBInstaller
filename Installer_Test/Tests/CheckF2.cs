@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Xunit;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestStack.BDDfy;
 using FrameworkLibraries.Utils;
 using FrameworkLibraries.AppLibs.QBDT;
@@ -10,7 +10,7 @@ using Installer_Test.Lib;
 
 namespace Installer_Test.Tests
 {
-    [TestClass]
+    //[TestClass]
     public class CheckF2
     {
 

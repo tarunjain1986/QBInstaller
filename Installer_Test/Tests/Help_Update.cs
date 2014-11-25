@@ -18,7 +18,7 @@ using Xunit;
 
 using Installer_Test;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
 namespace Installer_Test.Tests

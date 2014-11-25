@@ -21,7 +21,7 @@ using TestStack.White.UIItems.WindowItems;
 
 using Excel = Microsoft.Office.Interop.Excel;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using ScreenShotDemo;
 

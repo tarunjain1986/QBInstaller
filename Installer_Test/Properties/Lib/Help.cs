@@ -16,7 +16,7 @@ using FrameworkLibraries.Utils;
 using FrameworkLibraries.AppLibs.QBDT;
 using FrameworkLibraries.ActionLibs.WhiteAPI;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using ScreenShotDemo;
 using TestStack.BDDfy;
 using TestStack.White.UIItems;
