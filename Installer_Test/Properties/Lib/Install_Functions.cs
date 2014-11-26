@@ -47,7 +47,7 @@ namespace Installer_Test
         public static string custname, vendorname, itemname,backuppath;
         public static Random _r = new Random();
 
-        public static void Install_QB(string targetPath, string workFlow, string CustomOpt, string[] LicenseNo, string[] ProductNo, string UserID, string Passwd, string firstName, string lastName, string installPath)
+        public static void Install_QB(string country, string SKU, string installType, string targetPath, string workFlow, string CustomOpt, string[] LicenseNo, string[] ProductNo, string UserID, string Passwd, string firstName, string lastName, string installPath)
         {
 
             Logger.logMessage("Function call @ :" + DateTime.Now);
@@ -104,7 +104,14 @@ namespace Installer_Test
                     // License Agreement Page
                     try
                     {
-                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "I accept the terms of the license agreement");
+                        if (country == "UK")
+                        {
+                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "I accept the terms of the licence agreement");
+                        }
+                        else
+                        {
+                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "I accept the terms of the license agreement");
+                        }
                         pointer = GetForegroundWindow();
                         sc.CaptureWindowToFile(pointer, resultsPath + "02_License_Agreement.png", ImageFormat.Png);
                         Logger.logMessage("License agreement accepted - Successful");
@@ -165,10 +172,21 @@ namespace Installer_Test
                         Logger.logMessage("------------------------------------------------------------------------------");
                     }
 
-                    //if (SKU == "CD_SPRO")
-                    //{
-
-                    //}
+                    if (SKU == "Pro")
+                    {
+                        try
+                        {
+                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Explain these options in detail");
+                            Logger.logMessage("Click on Explain these options in detail - Successful");
+                            Logger.logMessage("------------------------------------------------------------------------------");
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.logMessage("Click on Explain these options in detail - Failed");
+                            Logger.logMessage(e.Message);
+                            Logger.logMessage("------------------------------------------------------------------------------");
+                        }
+                    }
 
                     // Click on "Explain these options in detail
                     try

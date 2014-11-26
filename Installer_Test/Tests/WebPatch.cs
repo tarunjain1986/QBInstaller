@@ -107,7 +107,7 @@ namespace Installer_Test.Tests
         [AndThen(StepTitle = "Then - Install QuickBooks")]
         public void RunInstallQB()
         {
-            Install_Functions.Install_QB(targetPath, wkflow, customOpt, LicenseNo, ProductNo, UserID, Passwd, firstName, lastName, installPath);
+           // Install_Functions.Install_QB(targetPath, wkflow, customOpt, LicenseNo, ProductNo, UserID, Passwd, firstName, lastName, installPath);
 
         }
 

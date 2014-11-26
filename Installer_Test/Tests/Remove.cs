@@ -57,9 +57,9 @@ namespace QBInstall.Tests
             string readpath = "C:\\Temp\\Parameters.xlsm"; 
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B10");
-            ver = dic["B7"];
-            reg_ver = dic["B8"];
+            dic = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
+            ver = dic["B2"];
+            reg_ver = dic["B3"];
 
             OS_Name = File_Functions.GetOS();
             installed_product = Installer_Test.Lib.File_Functions.GetProduct(OS_Name, ver, reg_ver);

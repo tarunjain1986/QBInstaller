@@ -69,7 +69,7 @@ namespace Installer_Test
             try
             {
 
-                DateTime DateTime1;
+                // DateTime DateTime1;
                 //DateTime1 = System.IO.File.GetLastWriteTime(filePath2 + file);
 
                 // Open the package.
