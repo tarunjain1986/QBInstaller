@@ -539,30 +539,106 @@ namespace Installer_Test.Lib
 
         //------Code by Sunder Raj for Invoke QB-------------------------------------------
 
-        public static void InvokeQB(Dictionary<string, string> refkeyvaluepairdic)
+        public static void InvokeQB()
         {
-            string qbwin = "Intuit QuickBooks Installer";
-            string industryEdition = null;
-            //if (Actions.CheckDesktopWindowExists(qbwin))
-            //{
-            //    Actions.ClickElementByName(Actions.GetDesktopWindow(qbwin), "Open QuickBooks");
+          
+           
 
-            if (Actions.CheckDesktopWindowExists("Select QuickBooks Industry-Specific Edition") == true)
+            Window qb_install = Actions.GetDesktopWindow("QuickBooks Installation");
+
+            TestStack.White.UIItems.Panel Pane1 = Actions.GetPaneByName(qb_install, "Intuit QuickBooks Installer");
+            try
             {
-                Actions.SendTABToWindow(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"));
-                if (refkeyvaluepairdic.ContainsKey("IndustryEdition"))
-                {
-                    industryEdition = refkeyvaluepairdic["IndustryEdition"];
-
-                    Actions.ClickElementByName((Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition")), industryEdition);
-                    Actions.ClickElementByName(((Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"))), "Exit QuickBooks");
-
-                }
+                Actions.ClickButtonInsidePanelByName(qb_install, Pane1, "Finish");
+                Thread.Sleep(200);
             }
+            catch (Exception e)
+            {
+                Logger.logMessage(e.ToString());
+            }
+            //Actions.WaitForTextVisibleInsidePane(qb_install, Pane1, "Open QuickBooks", int.Parse(Sync_Timeout));
+           
+            Window qb_install1 = Actions.GetDesktopWindow("QuickBooks Installation");
 
-            //}
-            //else
-            //    Logger.logMessage("Unable to Open QuickBooks");
+            TestStack.White.UIItems.Panel Pane2 = Actions.GetPaneByName(qb_install1, "Intuit QuickBooks Installer");
+            try
+            {
+                Actions.ClickButtonInsidePanelByName(qb_install1, Pane2, "Open QuickBooks");
+               
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage(e.ToString());
+            }
+           
+        }
+
+        public static void SelectEdition(Dictionary<string, string> refkeyvaluepairdic)
+        {
+            try
+            {
+                string industryEdition = null;
+
+                String winname = "Select QuickBooks Industry-Specific Edition";
+                Actions.WaitForAppWindow("winname",int.Parse(Sync_Timeout));
+                Actions.WaitForAppWindow("winname", int.Parse(Sync_Timeout));
+                Actions.WaitForAppWindow("winname", int.Parse(Sync_Timeout));
+                if (Actions.CheckDesktopWindowExists(winname) == true)
+                {
+
+
+                    if (refkeyvaluepairdic.ContainsKey("IndustryEdition"))
+                    {
+                        industryEdition = refkeyvaluepairdic["IndustryEdition"];
+
+                        Actions.ClickElementByName((Actions.GetDesktopWindow(winname)), industryEdition);
+                        Actions.ClickElementByName(((Actions.GetDesktopWindow(winname))), "Next >");
+                        Actions.WaitForAppWindow(winname, int.Parse(Sync_Timeout));
+                        Actions.ClickElementByName(((Actions.GetDesktopWindow(winname))), "Finish");
+
+                    }
+                }
+                try
+                {
+                    Actions.WaitForWindow("Product Configuration", int.Parse(Sync_Timeout));
+                    Window win1 = Actions.GetDesktopWindow("Product Configuration");
+                    Thread.Sleep(1000);
+                    Actions.ClickElementByName(Actions.GetChildWindow(win1, "QuickBooks Product Configuration"), "No");
+                }
+                catch (Exception e)
+                {
+                    Logger.logMessage(e.ToString());
+                }
+
+                try
+                {
+                    Actions.WaitForWindow("QuickBooks Update Service", int.Parse(Sync_Timeout));
+                    if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
+                    {
+                        SendKeys.SendWait("%L");
+                        // Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.logMessage(e.ToString());
+                }
+                try
+                {
+                    Actions.WaitForWindow("QuickBooks", int.Parse(Sync_Timeout));
+                    if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
+                    { SendKeys.SendWait("%L"); }
+                }
+                catch (Exception e)
+                {
+                    Logger.logMessage(e.ToString());
+                }
+
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage(e.ToString());
+            }
         }
 
         //------Code by SUnder Raj for Invoke QB-------------------------------------------  

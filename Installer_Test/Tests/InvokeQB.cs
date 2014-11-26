@@ -50,11 +50,18 @@ namespace Installer_Test.Tests
         [Then(StepTitle = "Then - InvokeQB")]
         public void Invoke_QB()
         {
-            PostInstall_Functions.InvokeQB(dic);
-           
-                
+            PostInstall_Functions.InvokeQB();
 
         }
+
+        [Then(StepTitle = "Then - Select Edition to Launch QB")]
+        public void Select_QB()
+        {
+            PostInstall_Functions.SelectEdition(dic);
+
+        }
+
+
         [Fact]
         public void Run_InvokeQB()
         {
