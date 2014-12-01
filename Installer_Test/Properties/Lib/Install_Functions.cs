@@ -18,6 +18,7 @@ using FrameworkLibraries.ActionLibs;
 using FrameworkLibraries.ActionLibs.WhiteAPI;
 using FrameworkLibraries.AppLibs.QBDT;
 using TestStack.White.UIItems.WindowItems;
+using Installer_Test.Lib;
 
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -29,6 +30,7 @@ using TestStack.BDDfy;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.InputDevices;
+using Installer_Test.Lib;
 
 
 namespace Installer_Test
@@ -55,7 +57,7 @@ namespace Installer_Test
             Logger.logMessage("License Number: " + LicenseNo);
             Logger.logMessage("Product Number " + ProductNo);
 
-            ScreenCapture sc = new ScreenCapture();
+            Installer_Test.Lib.ScreenCapture sc = new Installer_Test.Lib.ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
             IntPtr pointer = GetForegroundWindow();
             string resultsPath = @"C:\Temp\Results\Install_" + CustomOpt + "_" + workFlow + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "\\";
@@ -896,58 +898,7 @@ namespace Installer_Test
             }
         }
 
-        public static void Copy_WebPatch(string sku, string wppath)
-        {
-            string exename;
-            wppath = wppath + sku + "\\qbwebpatch\\";
-            Logger.logMessage("Function call @ :" + DateTime.Now);
-
-            if(sku=="BEL")
-            {
-                exename = "en_qbwebpatch.exe";
-                
-            }
-            else
-            {
-                exename = "qbwebpatch.exe";
-
-            }
-            
-            Logger.logMessage("Copy" + sku + " WebPatch- Started..");
-
-            string targetPath = @"C:\Temp\WebPatch\";
-
-            if (!Directory.Exists(targetPath))
-            {
-                try
-                {
-                    Directory.CreateDirectory(targetPath);
-                    Logger.logMessage("Directory " + targetPath + " created - Successful");
-                    Logger.logMessage("------------------------------------------------------------------------------");
-                }
-                catch (Exception e)
-                {
-                    Logger.logMessage("Directory " + targetPath + " could not be created - Failed");
-                    Logger.logMessage(e.Message);
-                    Logger.logMessage("------------------------------------------------------------------------------");
-                }
-            }
-            if (!File.Exists(targetPath + exename))
-            {
-                try
-                {
-                    File.Copy(wppath + exename, targetPath + exename);
-                    Logger.logMessage("File " + exename + " copied to " + targetPath + " - Successful");
-                    Logger.logMessage("------------------------------------------------------------------------------");
-                }
-                catch (Exception e)
-                {
-                    Logger.logMessage("File " + exename + " could not be copied to " + targetPath + " - Failed");
-                    Logger.logMessage(e.Message);
-                    Logger.logMessage("------------------------------------------------------------------------------");
-                }
-            }
-        }
+        
 
         public static void Install_AVSoftware(string SWName)
         {
