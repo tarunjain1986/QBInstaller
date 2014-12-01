@@ -61,19 +61,19 @@ namespace Installer_Test.Tests
         [Then(StepTitle = @"Then - Copy the AntiVirus Software(s) to C:\Temp\AntiVirus\")]
         public void Copy_AntiVirus()
         {
-             Install_Functions.Copy_AVSoftware(AVName); 
+             AntiVirus_Functions.Copy_AVSoftware(AVName); 
         }
 
         [AndThen(StepTitle = "And Then - Install the selected AntiVirus software.")]
         public void Install_AntiVirus()
         {
-            Install_Functions.Install_AVSoftware(AVName);
+            AntiVirus_Functions.Install_AVSoftware(AVName);
         }
 
         [AndThen(StepTitle = "And Then - Scan the QuickBooks Installer with the installed antivirus software.")]
         public void Scan_AntiVirus()
         {
-            Install_Functions.Scan_AVSoftware(AVName);
+            AntiVirus_Functions.Scan_AVSoftware(AVName);
         }
 
         [Fact]
