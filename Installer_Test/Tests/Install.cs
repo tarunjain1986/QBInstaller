@@ -37,7 +37,7 @@ namespace Installer_Test.Tests
         public static Property conf = Property.GetPropertyInstance();
         public static int Sync_Timeout = int.Parse(conf.get("SyncTimeOut"));
         public static string testName = "Install";
-        public string targetPath;
+        public string country, targetPath;
 
 
         [Given(StepTitle = @"The parameters for installation are available at C:\Installation\Parameters.txt")]
@@ -50,7 +50,9 @@ namespace Installer_Test.Tests
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B2:B27");
+            country = dic["B5"];
             targetPath = dic["B12"];
+            targetPath = targetPath + @"QBooks\";
         }
 
         [Then(StepTitle = "Then - Invoke QuickBooks installer")]
@@ -63,7 +65,20 @@ namespace Installer_Test.Tests
         [AndThen(StepTitle = "Then - Install QuickBooks")]
         public void RunInstallQB()
         {
-            Install_Functions.Install_UK();
+            switch (country)
+            {
+                case "US":
+                Install_Functions.Install_US();
+                break;
+
+                case "UK":
+                Install_Functions.Install_UK();
+                break;
+
+                case "CA":
+                //Install_Functions.Install_CA();
+                break;
+            }
         }
 
        [Fact]

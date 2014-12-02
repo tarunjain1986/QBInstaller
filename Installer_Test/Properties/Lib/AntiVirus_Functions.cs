@@ -28,7 +28,7 @@ using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.InputDevices;
 
-namespace Installer_Test.Properties.Lib
+namespace Installer_Test
 {
     public class AntiVirus_Functions
     {

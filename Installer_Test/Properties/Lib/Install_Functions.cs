@@ -137,14 +137,7 @@ namespace Installer_Test
                 // License Agreement Page
                 try
                 {
-                    if (country == "UK")
-                    {
-                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "I accept the terms of the licence agreement");
-                    }
-                    else
-                    {
-                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "I accept the terms of the license agreement");
-                    }
+                    Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "I accept the terms of the license agreement");
                     pointer = GetForegroundWindow();
                     sc.CaptureWindowToFile(pointer, resultsPath + "02_License_Agreement.png", ImageFormat.Png);
                     Logger.logMessage("License agreement accepted - Successful");
@@ -207,507 +200,101 @@ namespace Installer_Test
 
                 if (SKU == "Pro")
                 {
-                    try
-                    {
-                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Explain these choices in detail");
-                        Logger.logMessage("Click on Explain these choices in detail - Successful");
-                        Logger.logMessage("------------------------------------------------------------------------------");
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.logMessage("Click on Explain these options/choices in detail - Failed");
-                        Logger.logMessage(e.Message);
-                        Logger.logMessage("------------------------------------------------------------------------------");
-                    }
-
-                    switch (installType)
-                    {
-                        case "Express":
-                            try
-                            {
-                                // Select the first radio button
-                                Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "");
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_Express.png", ImageFormat.Png);
-                                Logger.logMessage("Click on Express option - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Express option - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            break;
-
-                        case "Custom and Network Options":
-                            try
-                            {
-                                // Select the second radio button
-                                Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "");
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_CustomAndNetworkOptions.png", ImageFormat.Png);
-                                Logger.logMessage("Click on Custom and Network option - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Custom and Network option - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            break;
-                    }
-
-                    try
-                    {
-                        // Click on Next
-                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
-
-                        // pointer = GetForegroundWindow();
-                        // sc.CaptureWindowToFile(pointer, resultsPath + "06_ReadyToInstall.png", ImageFormat.Png);
-                        // Logger.logMessage("Click on Next - Successful");
-                        // Logger.logMessage("------------------------------------------------------------------------------");
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.logMessage("Click on Next - Failed");
-                        Logger.logMessage(e.Message);
-                        Logger.logMessage("------------------------------------------------------------------------------");
-                    }
-
-
+                   Select_InstallType(installType, customOpt, targetPath);
+                   if (installType == "Express")
+                   {
+                       customOpt = "";
+                       Enter_License(LicenseNo, ProductNo);
+                       Install_QB();
+                   }
                 }
 
-                if (customOpt == "Server")
+                else
                 {
-                    // If the workflow option is 'Server', there is an entry to be made in
-                    AddEntry(targetPath, @"[Languages]");
-
-                    // Complete the Server Flow
-                    Server_Flow();
-
+                    Select_Option(customOpt, targetPath);
                 }
+
                 if (customOpt == "Local" | customOpt == "Shared")
                 {
 
-                    switch (customOpt)
-                    {
-
-                        case "Local":
-                            try
-                            {
-                                // Select the first radio button to install QB on "this" machine
-                                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "I'll be using QuickBooks on this computer."); // 1016
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_Local.png", ImageFormat.Png);
-                                Logger.logMessage("Click on I'll be using QuickBooks on this computer - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on I'll be using QuickBooks on this computer - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            break;
-
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////// 
-                        case "Shared":
-                            try
-                            {
-                                // Select the second radio button for a shared installation of QB
-                                Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1018"); // Select the second radio button
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_Shared.png", ImageFormat.Png);
-                                Logger.logMessage("Click on Shared option - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Shared option - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            break;
-                    }
-
-                    try
-                    {
-                        // Click on Next
-                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
-                        Logger.logMessage("Click on Next - Successful");
-                        Logger.logMessage("------------------------------------------------------------------------------");
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.logMessage("Click on Next - Failed");
-                        Logger.logMessage(e.Message);
-                        Logger.logMessage("------------------------------------------------------------------------------");
-                    }
-
-                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // Click on Use Your User ID instead
-                    if (country == "US" && wkflow == "Signin")
+                    if (wkflow == "Signin")
                     {
-                        try
-                        {
-                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Use your user ID instead");
-                            pointer = GetForegroundWindow();
-                            sc.CaptureWindowToFile(pointer, resultsPath + "05_Sign_In_User_ID.png", ImageFormat.Png);
-
-                            Logger.logMessage("Click on Skip this - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Click on Skip this - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-
-                        try
-                        {
-                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Need sign in help?");
-                            Logger.logMessage("Click on Need sign in help? - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Click on Need sign in help? - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-
-                        try
-                        {
-                            Actions.SetTextByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1136", UserID);
-                            Actions.SetTextByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1138", Passwd);
-
-                            pointer = GetForegroundWindow();
-                            sc.CaptureWindowToFile(pointer, resultsPath + "05_SignIn_UserID_Password.png", ImageFormat.Png);
-                            Logger.logMessage("Enter User ID / Password - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Enter User ID / Password - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-
+                        SignIn_Flow(UserID, Passwd);
                     }
-
-
 
                     else // If wkflow != "Signin"
                     {
 
-                        Enter_License(LicenseNo, ProductNo);
+                      Enter_License(LicenseNo, ProductNo);
 
-                        // Click on Explain these options in detail
-                        try
-                        {
-                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Explain these options in detail");
-                            Logger.logMessage("Click on Explain these options in detail - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Click on Explain these options in detail - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
+                      // Click on Explain these options in detail
+                      try
+                      {
+                          Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Explain these options in detail");
+                          Logger.logMessage("Click on Explain these options in detail - Successful");
+                          Logger.logMessage("------------------------------------------------------------------------------");
+                      }
+                      catch (Exception e)
+                      {
+                          Logger.logMessage("Click on Explain these options in detail - Failed");
+                          Logger.logMessage(e.Message);
+                          Logger.logMessage("------------------------------------------------------------------------------");
+                      }
 
-                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // Change Install Location
-                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+                      ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+                      // Change Install Location
+                      ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                        if (installPath != "")
-                        {
-                            try
-                            {
-                                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Browse");
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "08_Browse_Installation_Location.png", ImageFormat.Png);
-                                Logger.logMessage("Click on Browse - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Browse - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
+                      if (installPath != "")
+                      {
+                          Change_Install_Location(installPath);
+                      }
+                      ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+                      // Click on Next
+                      try
+                      {
+                          Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
+                          pointer = GetForegroundWindow();
+                          sc.CaptureWindowToFile(pointer, resultsPath + "08_Ready_to_Install.png", ImageFormat.Png);
+                          Logger.logMessage("Click on Next - Successful");
+                          Logger.logMessage("------------------------------------------------------------------------------");
+                      }
+                      catch (Exception e)
+                      {
+                          Logger.logMessage("Click on Next - Failed");
+                          Logger.logMessage(e.Message);
+                          Logger.logMessage("------------------------------------------------------------------------------");
+                      }
 
-                            try
-                            {
-                                Actions.SetTextByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1021", installPath);
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "09_Edit_Installation_Location.png", ImageFormat.Png);
-                                Logger.logMessage("Click on Browse - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Browse - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            try
-                            {
-                                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "OK");
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "10_Installation_Location.png", ImageFormat.Png);
-                                Logger.logMessage("Click on OK - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on OK - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                        }
-                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // Click on Next
-                        try
-                        {
-                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
-                            pointer = GetForegroundWindow();
-                            sc.CaptureWindowToFile(pointer, resultsPath + "08_Ready_to_Install.png", ImageFormat.Png);
-                            Logger.logMessage("Click on Next - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Click on Next - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
+                      Install_QB();
 
 
-                        // Click on Ready to Install -> Print
-                        try
-                        {
-                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Print");
-                            pointer = GetForegroundWindow();
-                            sc.CaptureWindowToFile(pointer, resultsPath + "09_Ready_to_Install_Print.png", ImageFormat.Png);
-                            Logger.logMessage("Click on Print - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Click on Print - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
+                      if (wkflow == "Skip")
+                      {
+                          // Click on Skip this
+                          try
+                          {
+                              Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Skip this");
+                              pointer = GetForegroundWindow();
+                              sc.CaptureWindowToFile(pointer, resultsPath + "11_Installation_Progress_after_Skip.png", ImageFormat.Png);
+                              Logger.logMessage("Click on Skip this - Successful");
+                              Logger.logMessage("------------------------------------------------------------------------------");
+                          }
+                          catch (Exception e)
+                          {
+                              Logger.logMessage("Click on Skip this - Failed");
+                              Logger.logMessage(e.Message);
+                              Logger.logMessage("------------------------------------------------------------------------------");
+                          }
+                      }
 
-                        // Click on Ready to Install -> Print -> No
-                        try
-                        {
-                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "No");
-                            Logger.logMessage("Click on No - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Click on No - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-
-                        // Click on Install
-                        try
-                        {
-                            Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1"); // Click on Install
-                            pointer = GetForegroundWindow();
-                            sc.CaptureWindowToFile(pointer, resultsPath + "10_Installation_Progress_01.png", ImageFormat.Png);
-                            Logger.logMessage("Click on Install - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Click on Install - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-
-
-                        if (wkflow == "Skip")
-                        {
-                            // Click on Skip this
-                            try
-                            {
-                                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Skip this");
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "11_Installation_Progress_after_Skip.png", ImageFormat.Png);
-
-                                Logger.logMessage("Click on Skip this - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Skip this - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                        }
-
-                        if (wkflow == "Signup")
-                        {
-                            // Enter User ID for Signup
-                            try
-                            {
-                                Actions.SetTextByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1135", UserID);
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "12_Signup_UserID.png", ImageFormat.Png);
-                                Logger.logMessage("Enter User ID - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Enter User ID - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-
-                            // Click on Validate
-                            try
-                            {
-                                Actions.ClickButtonByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Validate");
-                                Logger.logMessage("Click on Validate - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Validate - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-
-                            // Click on Validate
-                            try
-                            {
-                                Actions.WaitForElementVisible(Actions.GetDesktopWindow("QuickBooks Installation"), "Create Account", int.Parse(Sync_Timeout));
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "13_Signup_after_Validate.png", ImageFormat.Png);
-                                Logger.logMessage("Click on Create Account - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Create Account - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-
-
-                            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            // Signup
-                            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            // Enter Password
-                            try
-                            {
-                                Actions.SetTextOnElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1137", Passwd);
-                                Logger.logMessage("Enter Password - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Enter Password - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-
-                            // Re-enter Password
-                            try
-                            {
-                                Actions.SetTextOnElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1140", Passwd);
-                                Logger.logMessage("Re-enter Password - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Re-enter Password - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-
-                            // Enter First Name
-                            try
-                            {
-                                Actions.SetTextOnElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1141", firstName);
-                                Logger.logMessage("Enter FirstName - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Enter FirstName - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-
-                            // Enter Last Name
-                            try
-                            {
-                                Actions.SetTextOnElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1142", lastName);
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "14_Signup_Details.png", ImageFormat.Png);
-                                Logger.logMessage("Enter LastName - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Enter LastName - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-
-                            // Click on Privacy
-                            try
-                            {
-                                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Privacy");
-                                Logger.logMessage("Click on Privacy - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Privacy - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-
-                            // Click on Need sign in help?
-                            try
-                            {
-                                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Need sign in help?");
-                                Logger.logMessage("Click on Need sign in help? - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Need sign in help? - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-
-                            // Click on Create Account
-                            try
-                            {
-                                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Create Account");
-                                Logger.logMessage("Click on Create Account - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Create Account - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                        }
+                      if (wkflow == "Signup")
+                      {
+                          SignUp_Flow(UserID, Passwd, firstName, lastName);
+                      }
                     }
-
+                }
                     Actions.WaitForElementVisible(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks", int.Parse(Sync_Timeout));
                     pointer = GetForegroundWindow();
                     sc.CaptureWindowToFile(pointer, resultsPath + "15_Open_QuickBooks.png", ImageFormat.Png);
@@ -728,7 +315,6 @@ namespace Installer_Test
                     Logger.logMessage("InstallQB " + targetPath + " - Successful");
                     Logger.logMessage("------------------------------------------------------------------------------");
                     Logger.logMessage("------------------------------------------------------------------------------");
-                }
             }
 
             catch (Exception e)
@@ -739,7 +325,7 @@ namespace Installer_Test
                 Logger.logMessage("------------------------------------------------------------------------------");
 
             }
-            
+           
         
         }
 
@@ -895,240 +481,81 @@ namespace Installer_Test
 
                 if (SKU == "Pro")
                 {
-                    try
-                    {
-                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Explain these choices in detail");
-                        Logger.logMessage("Click on Explain these choices in detail - Successful");
-                        Logger.logMessage("------------------------------------------------------------------------------");
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.logMessage("Click on Explain these choices in detail - Failed");
-                        Logger.logMessage(e.Message);
-                        Logger.logMessage("------------------------------------------------------------------------------");
-                    }
 
-                    switch (installType)
-                    {
-                        case "Express":
-                            try
-                            {
-                                // Select the first radio button
-                                Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "504");
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_Express.png", ImageFormat.Png);
-                                Logger.logMessage("Click on Express option - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Express option - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            break;
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Select Install Type: Express OR Custom
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                        case "Custom and Network Options":
-                            try
-                            {
-                                // Select the second radio button
-                                Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1006");
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_CustomAndNetworkOptions.png", ImageFormat.Png);
-                                Logger.logMessage("Click on Custom and Network option - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Custom and Network option - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            break;
-                    }
+                    Select_InstallType(installType, customOpt , targetPath);
 
-                    try
-                    {
-                        // Click on Next
-                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Enter the License and Product Numbers
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                        // pointer = GetForegroundWindow();
-                        // sc.CaptureWindowToFile(pointer, resultsPath + "06_ReadyToInstall.png", ImageFormat.Png);
-                        // Logger.logMessage("Click on Next - Successful");
-                        // Logger.logMessage("------------------------------------------------------------------------------");
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.logMessage("Click on Next - Failed");
-                        Logger.logMessage(e.Message);
-                        Logger.logMessage("------------------------------------------------------------------------------");
-                    }
-
-
-                }
-
-                if (customOpt == "Server")
-                {
-                    // If the workflow option is 'Server', there is an entry to be made in
-                    AddEntry(targetPath, @"[Languages]");
-
-                    // Complete the Server Flow
-                    Server_Flow();
-
-                }
-                if (customOpt == "Local" | customOpt == "Shared")
-                {
-
-                    switch (customOpt)
-                    {
-
-                        case "Local":
-                            try
-                            {
-                                // Select the first radio button to install QB on "this" machine
-                                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "I'll be using QuickBooks on this computer."); // 1016
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_Local.png", ImageFormat.Png);
-                                Logger.logMessage("Click on I'll be using QuickBooks on this computer - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on I'll be using QuickBooks on this computer - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            break;
-
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////// 
-                        case "Shared":
-                            try
-                            {
-                                // Select the second radio button for a shared installation of QB
-                                Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1018"); // Select the second radio button
-                                pointer = GetForegroundWindow();
-                                sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_Shared.png", ImageFormat.Png);
-                                Logger.logMessage("Click on Shared option - Successful");
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.logMessage("Click on Shared option - Failed");
-                                Logger.logMessage(e.Message);
-                                Logger.logMessage("------------------------------------------------------------------------------");
-                            }
-                            break;
-                    }
-
-                    try
-                    {
-                        // Click on Next
-                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
-                        Logger.logMessage("Click on Next - Successful");
-                        Logger.logMessage("------------------------------------------------------------------------------");
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.logMessage("Click on Next - Failed");
-                        Logger.logMessage(e.Message);
-                        Logger.logMessage("------------------------------------------------------------------------------");
-                    }
-                   
                     Enter_License(LicenseNo, ProductNo);
 
-                        // Click on Explain these options in detail
-                        try
-                        {
-                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Explain these options in detail");
-                            Logger.logMessage("Click on Explain these options in detail - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Click on Explain these options in detail - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Change Install Location
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // Change Install Location
-                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    if (installPath != "")
+                    {
+                        Change_Install_Location(installPath);
+                    }
+                        
 
-                        if (installPath != "")
-                        {
-                            Change_Install_Location();
-                        }
-                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // Click on Next
-                        try
-                        {
-                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
-                            pointer = GetForegroundWindow();
-                            sc.CaptureWindowToFile(pointer, resultsPath + "08_Ready_to_Install.png", ImageFormat.Png);
-                            Logger.logMessage("Click on Next - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Click on Next - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
+                    // Click on Ready to Install -> Print
+                    try
+                    {
+                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Print");
+                        pointer = GetForegroundWindow();
+                        sc.CaptureWindowToFile(pointer, resultsPath + "09_Ready_to_Install_Print.png", ImageFormat.Png);
+                        Logger.logMessage("Click on Print - Successful");
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.logMessage("Click on Print - Failed");
+                        Logger.logMessage(e.Message);
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
 
-
-                        // Click on Ready to Install -> Print
-                        try
-                        {
-                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Print");
-                            pointer = GetForegroundWindow();
-                            sc.CaptureWindowToFile(pointer, resultsPath + "09_Ready_to_Install_Print.png", ImageFormat.Png);
-                            Logger.logMessage("Click on Print - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Click on Print - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-
-                        // Click on Ready to Install -> Print -> No
-                        try
-                        {
-                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "No");
-                            Logger.logMessage("Click on No - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Click on No - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
+                    // Click on Ready to Install -> Print -> No
+                    try
+                    {
+                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "No");
+                        Logger.logMessage("Click on No - Successful");
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.logMessage("Click on No - Failed");
+                        Logger.logMessage(e.Message);
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // ADD SERVICE AND SUPPORT SHORTCUTS????
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-                        // Click on Install
-                        try
-                        {
-                            Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1"); // Click on Install
-                            pointer = GetForegroundWindow();
-                            sc.CaptureWindowToFile(pointer, resultsPath + "10_Installation_Progress_01.png", ImageFormat.Png);
-                            Logger.logMessage("Click on Install - Successful");
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("Click on Install - Failed");
-                            Logger.logMessage(e.Message);
-                            Logger.logMessage("------------------------------------------------------------------------------");
-                        }
-
-                        
+                    // Click on Install
+                    try
+                    {
+                        Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1"); // Click on Install
+                        pointer = GetForegroundWindow();
+                        sc.CaptureWindowToFile(pointer, resultsPath + "10_Installation_Progress_01.png", ImageFormat.Png);
+                        Logger.logMessage("Click on Install - Successful");
+                        Logger.logMessage("------------------------------------------------------------------------------");
                     }
+                    catch (Exception e)
+                    {
+                        Logger.logMessage("Click on Install - Failed");
+                        Logger.logMessage(e.Message);
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
+                                            
+                 }
 
                     Actions.WaitForElementVisible(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks", int.Parse(Sync_Timeout));
                     pointer = GetForegroundWindow();
@@ -1162,7 +589,219 @@ namespace Installer_Test
 
             }
 
+        }
 
+        public static void Install_QB ()
+        {
+            ScreenCapture sc = new ScreenCapture();
+            System.Drawing.Image img = sc.CaptureScreen();
+            IntPtr pointer = GetForegroundWindow();
+
+            // Click on Ready to Install -> Print
+            try
+            {
+                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Print");
+                pointer = GetForegroundWindow();
+                sc.CaptureWindowToFile(pointer, resultsPath + "09_Ready_to_Install_Print.png", ImageFormat.Png);
+                Logger.logMessage("Click on Print - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Click on Print - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            // Click on Ready to Install -> Print -> No
+            try
+            {
+                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "No");
+                Logger.logMessage("Click on No - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Click on No - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            // Click on Install
+            try
+            {
+                Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1"); // Click on Install
+                pointer = GetForegroundWindow();
+                sc.CaptureWindowToFile(pointer, resultsPath + "10_Installation_Progress_01.png", ImageFormat.Png);
+                Logger.logMessage("Click on Install - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Click on Install - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+        }
+
+        public static void Select_InstallType(string installType, string customOpt, string targetPath)
+        {
+
+            ScreenCapture sc = new ScreenCapture();
+            System.Drawing.Image img = sc.CaptureScreen();
+            IntPtr pointer = GetForegroundWindow();
+
+            try
+            {
+                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Explain these choices in detail");
+                Logger.logMessage("Click on Explain these choices in detail - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Click on Explain these choices in detail - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            switch (installType)
+            {
+                case "Express":
+                    try
+                    {
+                        // Select the first radio button
+                        Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "504");
+                        pointer = GetForegroundWindow();
+                        sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_Express.png", ImageFormat.Png);
+                        Logger.logMessage("Click on Express option - Successful");
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.logMessage("Click on Express option - Failed");
+                        Logger.logMessage(e.Message);
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
+
+                    try
+                    {
+                        // Click on Next
+                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.logMessage("Click on Next - Failed");
+                        Logger.logMessage(e.Message);
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
+                    break;
+
+                case "Custom and Network Options":
+                    try
+                    {
+                        // Select the second radio button
+                        Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1006");
+                        pointer = GetForegroundWindow();
+                        sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_CustomAndNetworkOptions.png", ImageFormat.Png);
+                        Logger.logMessage("Click on Custom and Network option - Successful");
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.logMessage("Click on Custom and Network option - Failed");
+                        Logger.logMessage(e.Message);
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
+                    try
+                    {
+                        // Click on Next
+                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.logMessage("Click on Next - Failed");
+                        Logger.logMessage(e.Message);
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
+
+                    // Select Custom Option: Local, Shared or Server
+                    Select_Option(customOpt, targetPath);
+                    break;
+            }
+        }
+
+        public static void Select_Option (string customOpt, string targetPath)
+        {
+            ScreenCapture sc = new ScreenCapture();
+            System.Drawing.Image img = sc.CaptureScreen();
+            IntPtr pointer = GetForegroundWindow();
+
+            if (customOpt == "Server")
+                {
+                    // If the workflow option is 'Server', there is an entry to be made in
+                    AddEntry(targetPath, @"[Languages]");
+
+                    // Complete the Server Flow
+                    Server_Flow();
+
+                }
+            if (customOpt == "Local" | customOpt == "Shared")
+            {
+                switch (customOpt)
+                {
+
+                    case "Local":
+                        try
+                        {
+                            // Select the first radio button to install QB on "this" machine
+                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "I'll be using QuickBooks on this computer."); // 1016
+                            pointer = GetForegroundWindow();
+                            sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_Local.png", ImageFormat.Png);
+                            Logger.logMessage("Click on I'll be using QuickBooks on this computer - Successful");
+                            Logger.logMessage("------------------------------------------------------------------------------");
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.logMessage("Click on I'll be using QuickBooks on this computer - Failed");
+                            Logger.logMessage(e.Message);
+                            Logger.logMessage("------------------------------------------------------------------------------");
+                        }
+                        break;
+
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////// 
+                    case "Shared":
+                        try
+                        {
+                            // Select the second radio button for a shared installation of QB
+                            Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1018"); // Select the second radio button
+                            pointer = GetForegroundWindow();
+                            sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_Shared.png", ImageFormat.Png);
+                            Logger.logMessage("Click on Shared option - Successful");
+                            Logger.logMessage("------------------------------------------------------------------------------");
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.logMessage("Click on Shared option - Failed");
+                            Logger.logMessage(e.Message);
+                            Logger.logMessage("------------------------------------------------------------------------------");
+                        }
+                        break;
+                }
+            }
+                    
+                    try
+                    {
+                        // Click on Next
+                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
+                        Logger.logMessage("Click on Next - Successful");
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.logMessage("Click on Next - Failed");
+                        Logger.logMessage(e.Message);
+                        Logger.logMessage("------------------------------------------------------------------------------");
+                    }
         }
 
         public static void Enter_License (string [] LicenseNo, string [] ProductNo)
@@ -1222,8 +861,6 @@ namespace Installer_Test
                             Logger.logMessage(e.Message);
                             Logger.logMessage("------------------------------------------------------------------------------");
                         }
-
-                    
 
                         // Click on Next
                         try
@@ -1427,9 +1064,180 @@ namespace Installer_Test
                Logger.logMessage(e.Message);
                Logger.logMessage("------------------------------------------------------------------------------");
             }
+            try
+            {
+                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
+                pointer = GetForegroundWindow();
+                sc.CaptureWindowToFile(pointer, resultsPath + "07_Default_Installation_Location.png", ImageFormat.Png);
+                Logger.logMessage("Click on Next - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Click on Next - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
         }
 
-        public static void Change_Install_Location ()
+        public static void SignUp_Flow (string UserID, string Passwd, string firstName, string lastName)
+        {
+            ScreenCapture sc = new ScreenCapture();
+            System.Drawing.Image img = sc.CaptureScreen();
+            IntPtr pointer = GetForegroundWindow();
+                        
+            // Enter User ID for Signup
+            try
+            {
+                Actions.SetTextByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1135", UserID);
+                pointer = GetForegroundWindow();
+                sc.CaptureWindowToFile(pointer, resultsPath + "12_Signup_UserID.png", ImageFormat.Png);
+                Logger.logMessage("Enter User ID - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Enter User ID - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            // Click on Validate
+            try
+            {
+                Actions.ClickButtonByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Validate");
+                Logger.logMessage("Click on Validate - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Click on Validate - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            // Click on Validate
+            try
+            {
+                Actions.WaitForElementVisible(Actions.GetDesktopWindow("QuickBooks Installation"), "Create Account", int.Parse(Sync_Timeout));
+                pointer = GetForegroundWindow();
+                sc.CaptureWindowToFile(pointer, resultsPath + "13_Signup_after_Validate.png", ImageFormat.Png);
+                Logger.logMessage("Click on Create Account - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Click on Create Account - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Signup
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Enter Password
+            try
+            {
+                Actions.SetTextOnElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1137", Passwd);
+                Logger.logMessage("Enter Password - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Enter Password - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            // Re-enter Password
+            try
+            {
+                Actions.SetTextOnElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1140", Passwd);
+                Logger.logMessage("Re-enter Password - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Re-enter Password - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            // Enter First Name
+            try
+            {
+                Actions.SetTextOnElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1141", firstName);
+                Logger.logMessage("Enter FirstName - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Enter FirstName - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            // Enter Last Name
+            try
+            {
+                Actions.SetTextOnElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1142", lastName);
+                pointer = GetForegroundWindow();
+                sc.CaptureWindowToFile(pointer, resultsPath + "14_Signup_Details.png", ImageFormat.Png);
+                Logger.logMessage("Enter LastName - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Enter LastName - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            // Click on Privacy
+            try
+            {
+                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Privacy");
+                Logger.logMessage("Click on Privacy - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Click on Privacy - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            // Click on Need sign in help?
+            try
+            {
+                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Need sign in help?");
+                Logger.logMessage("Click on Need sign in help? - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Click on Need sign in help? - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            // Click on Create Account
+            try
+            {
+                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Create Account");
+                Logger.logMessage("Click on Create Account - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Click on Create Account - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+        }
+
+        public static void Change_Install_Location (string installPath)
         {
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
