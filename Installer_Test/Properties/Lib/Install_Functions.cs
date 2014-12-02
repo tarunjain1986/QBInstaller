@@ -18,6 +18,7 @@ using FrameworkLibraries.ActionLibs;
 using FrameworkLibraries.ActionLibs.WhiteAPI;
 using FrameworkLibraries.AppLibs.QBDT;
 using TestStack.White.UIItems.WindowItems;
+using Installer_Test.Lib;
 
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -28,6 +29,7 @@ using TestStack.BDDfy;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.InputDevices;
+using Installer_Test.Lib;
 
 
 namespace Installer_Test
@@ -55,7 +57,7 @@ namespace Installer_Test
             Logger.logMessage("Function call @ :" + DateTime.Now);
 
 
-            ScreenCapture sc = new ScreenCapture();
+            Installer_Test.Lib.ScreenCapture sc = new Installer_Test.Lib.ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
             IntPtr pointer = GetForegroundWindow();
   
@@ -415,6 +417,9 @@ namespace Installer_Test
                     Logger.logMessage("------------------------------------------------------------------------------");
                 }
 
+<<<<<<< HEAD
+        
+=======
                 // License Agreement Page
                 try
                 {
@@ -803,6 +808,7 @@ namespace Installer_Test
                         Logger.logMessage("------------------------------------------------------------------------------");
                     }
         }
+>>>>>>> origin/master
 
         public static void Enter_License (string [] LicenseNo, string [] ProductNo)
         {
