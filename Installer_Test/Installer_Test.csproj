@@ -111,6 +111,7 @@
     <Compile Include="Tests\Switch_Ent.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Excel\Parameters.xlsm" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
