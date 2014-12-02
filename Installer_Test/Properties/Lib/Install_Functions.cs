@@ -20,16 +20,17 @@ using FrameworkLibraries.AppLibs.QBDT;
 using TestStack.White.UIItems.WindowItems;
 using Installer_Test.Lib;
 
+
 using Excel = Microsoft.Office.Interop.Excel;
 
-using ScreenShotDemo;
+
 using Installer_Test.Properties.Lib;
 
 using TestStack.BDDfy;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.InputDevices;
-using Installer_Test.Lib;
+
 
 
 namespace Installer_Test
@@ -417,9 +418,6 @@ namespace Installer_Test
                     Logger.logMessage("------------------------------------------------------------------------------");
                 }
 
-<<<<<<< HEAD
-        
-=======
                 // License Agreement Page
                 try
                 {
@@ -741,10 +739,33 @@ namespace Installer_Test
             System.Drawing.Image img = sc.CaptureScreen();
             IntPtr pointer = GetForegroundWindow();
 
+<<<<<<< HEAD
             if (customOpt == "Server")
                 {
                     // If the workflow option is 'Server', there is an entry to be made in
                     AddEntry(targetPath, @"[Languages]");
+=======
+                        if (installPath != "")
+                        {
+                            Change_Install_Location(installPath);
+                        }
+                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // Click on Next
+                        try
+                        {
+                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
+                            pointer = GetForegroundWindow();
+                            sc.CaptureWindowToFile(pointer, resultsPath + "08_Ready_to_Install.png", ImageFormat.Png);
+                            Logger.logMessage("Click on Next - Successful");
+                            Logger.logMessage("------------------------------------------------------------------------------");
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.logMessage("Click on Next - Failed");
+                            Logger.logMessage(e.Message);
+                            Logger.logMessage("------------------------------------------------------------------------------");
+                        }
+>>>>>>> b831e99c3f6876e4fdb839a1fe73a5f9da21ffa1
 
                     // Complete the Server Flow
                     Server_Flow();
@@ -808,7 +829,7 @@ namespace Installer_Test
                         Logger.logMessage("------------------------------------------------------------------------------");
                     }
         }
->>>>>>> origin/master
+
 
         public static void Enter_License (string [] LicenseNo, string [] ProductNo)
         {
@@ -1243,7 +1264,11 @@ namespace Installer_Test
             }
         }
 
+<<<<<<< HEAD
         public static void Change_Install_Location (string installPath)
+=======
+        public static void Change_Install_Location (String installPath)
+>>>>>>> b831e99c3f6876e4fdb839a1fe73a5f9da21ffa1
         {
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();

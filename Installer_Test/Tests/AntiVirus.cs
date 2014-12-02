@@ -20,6 +20,7 @@ using Xunit;
 
 using Installer_Test;
 using Installer_Test.Lib;
+using Installer_Test.Properties.Lib;
 
 namespace Installer_Test.Tests
 {
