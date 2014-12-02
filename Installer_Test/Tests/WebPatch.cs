@@ -61,11 +61,11 @@ namespace Installer_Test.Tests
         [Then(StepTitle = "Copy the web patch to local")]
         public void copyPatch()
         {
-<<<<<<< HEAD
+
             // Installer_Test.Install_Functions.Copy_WebPatch("BEL",patchpath);
-=======
+
             File_Functions.Copy_WebPatch();
->>>>>>> origin/master
+
         }
 
         [AndThen(StepTitle = "Then - Invoke Web Patch installer")]

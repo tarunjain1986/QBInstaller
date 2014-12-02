@@ -203,7 +203,7 @@ namespace Installer_Test
 
                 if (SKU == "Pro")
                 {
-                   Select_InstallType(installType, customOpt, targetPath);
+                   Select_InstallType(installType, customOpt, targetPath, installPath);
                    if (installType == "Express")
                    {
                        customOpt = "";
@@ -214,7 +214,7 @@ namespace Installer_Test
 
                 else
                 {
-                    Select_Option(customOpt, targetPath);
+                    Select_Option(customOpt, targetPath, installPath);
                 }
 
                 if (customOpt == "Local" | customOpt == "Shared")
@@ -489,7 +489,7 @@ namespace Installer_Test
                     // Select Install Type: Express OR Custom
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                    Select_InstallType(installType, customOpt , targetPath);
+                    Select_InstallType(installType, customOpt , targetPath, installPath);
 
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // Enter the License and Product Numbers
@@ -647,7 +647,7 @@ namespace Installer_Test
             }
         }
 
-        public static void Select_InstallType(string installType, string customOpt, string targetPath)
+        public static void Select_InstallType(string installType, string customOpt, string targetPath, string installPath)
         {
 
             ScreenCapture sc = new ScreenCapture();
@@ -728,23 +728,23 @@ namespace Installer_Test
                     }
 
                     // Select Custom Option: Local, Shared or Server
-                    Select_Option(customOpt, targetPath);
+                    Select_Option(customOpt, targetPath,installPath);
                     break;
             }
         }
 
-        public static void Select_Option (string customOpt, string targetPath)
+        public static void Select_Option (string customOpt, string targetPath, string installPath)
         {
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
             IntPtr pointer = GetForegroundWindow();
 
-<<<<<<< HEAD
+
             if (customOpt == "Server")
                 {
                     // If the workflow option is 'Server', there is an entry to be made in
                     AddEntry(targetPath, @"[Languages]");
-=======
+
                         if (installPath != "")
                         {
                             Change_Install_Location(installPath);
@@ -765,7 +765,7 @@ namespace Installer_Test
                             Logger.logMessage(e.Message);
                             Logger.logMessage("------------------------------------------------------------------------------");
                         }
->>>>>>> b831e99c3f6876e4fdb839a1fe73a5f9da21ffa1
+
 
                     // Complete the Server Flow
                     Server_Flow();
@@ -829,7 +829,6 @@ namespace Installer_Test
                         Logger.logMessage("------------------------------------------------------------------------------");
                     }
         }
-
 
         public static void Enter_License (string [] LicenseNo, string [] ProductNo)
         {
@@ -1263,12 +1262,10 @@ namespace Installer_Test
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
         }
+  
 
-<<<<<<< HEAD
-        public static void Change_Install_Location (string installPath)
-=======
         public static void Change_Install_Location (String installPath)
->>>>>>> b831e99c3f6876e4fdb839a1fe73a5f9da21ffa1
+
         {
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
