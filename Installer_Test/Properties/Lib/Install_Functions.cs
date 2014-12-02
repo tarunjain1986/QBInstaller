@@ -20,16 +20,17 @@ using FrameworkLibraries.AppLibs.QBDT;
 using TestStack.White.UIItems.WindowItems;
 using Installer_Test.Lib;
 
+
 using Excel = Microsoft.Office.Interop.Excel;
 
-using ScreenShotDemo;
+
 using Installer_Test.Properties.Lib;
 
 using TestStack.BDDfy;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.InputDevices;
-using Installer_Test.Lib;
+
 
 
 namespace Installer_Test
@@ -831,9 +832,6 @@ namespace Installer_Test
                     Logger.logMessage("------------------------------------------------------------------------------");
                 }
 
-<<<<<<< HEAD
-        
-=======
                 // License Agreement Page
                 try
                 {
@@ -1061,7 +1059,7 @@ namespace Installer_Test
 
                         if (installPath != "")
                         {
-                            Change_Install_Location();
+                            Change_Install_Location(installPath);
                         }
                         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // Click on Next
@@ -1169,7 +1167,7 @@ namespace Installer_Test
 
 
         }
->>>>>>> origin/master
+
 
         public static void Enter_License (string [] LicenseNo, string [] ProductNo)
         {
@@ -1435,7 +1433,7 @@ namespace Installer_Test
             }
         }
 
-        public static void Change_Install_Location ()
+        public static void Change_Install_Location (String installPath)
         {
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
