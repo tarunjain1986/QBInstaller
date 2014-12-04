@@ -76,7 +76,7 @@ namespace Installer_Test.Tests
                 break;
 
                 case "CA":
-                //Install_Functions.Install_CA();
+                Install_Functions.Install_CA();
                 break;
             }
         }
