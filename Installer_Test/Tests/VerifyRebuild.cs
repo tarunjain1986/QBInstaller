@@ -39,7 +39,7 @@ namespace Installer_Test.Tests
             QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
         }
 
-         [Then(StepTitle = "Then - Perform Verify")]  
+        [Then(StepTitle = "Then - Perform Verify")]
 
         public void PerformVerfiy()
         {

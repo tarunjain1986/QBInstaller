@@ -67,7 +67,9 @@ namespace Installer_Test.Properties.Lib
              Window invWin = Actions.GetChildWindow(qbWindow, "Create Invoices");
              Actions.ClickElementByName(invWin, "Maximize");
              Actions.SetTextByAutomationID(invWin, "603", Customer);
-             Actions.SendTABToWindow(invWin);
+            Actions.SendTABToWindow(invWin);
+             Actions.SetTextByAutomationID(invWin, "696", "Intuit Product Invoice");
+           //Thread.Sleep(200);
              Actions.SendTABToWindow(invWin);
              Actions.SendTABToWindow(invWin);
              Actions.SendTABToWindow(invWin);

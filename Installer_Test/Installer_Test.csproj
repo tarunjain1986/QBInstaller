@@ -96,6 +96,8 @@
     <Compile Include="Tests\Toggle_Ent_Acct.cs" />
     <Compile Include="Tests\MIMO.cs" />
     <Compile Include="Tests\UnitTest1.cs" />
+    <Compile Include="Tests\UnitTest2.cs" />
+    <Compile Include="Tests\UnitTest3.cs" />
     <Compile Include="Tests\VerifyRebuild.cs" />
     <Compile Include="Tests\AutoPatch.cs" />
     <Compile Include="Tests\WebPatch.cs" />
