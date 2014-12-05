@@ -406,15 +406,16 @@ namespace Installer_Test.Lib
             var qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
             string bizName = null, industryList = null, industryType = null, businessType = null, address1 = null, address2 = null, state = null, city = null, country = null, taxid = null, phone = null, zip = null;
-
+            string emailid = null, existpassword = null, newpwd = null, confirmpass = null, fname = null, lname = null;
+  
             Actions.SelectMenu(qbApp, qbWindow, "File", "New Company...");
 
             Actions.WaitForChildWindow(qbWindow, "QuickBooks Setup", 999999);
 
-            if ((Actions.CheckElementExistsByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btnExpressStart")) == true)
+            if ((Actions.CheckElementExistsByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Express Start")) == true)
             {
                 Logger.logMessage("Express Start button found and hence creating company file for Older version of QB");
-                Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btnExpressStart");
+                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Express Start");
             }
             else
             {
@@ -422,6 +423,76 @@ namespace Installer_Test.Lib
                 Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Start Setup");
             }
 
+            //Enter Email & password and perform a sign in 
+
+            if ((Actions.CheckElementExistsByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txt_LoginEmail")) == true)
+            {
+                if (refkeyvaluepairdic.ContainsKey("EmailID"))
+                {
+                    emailid = refkeyvaluepairdic["EmailID"];
+                    Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txt_LoginEmail", emailid);
+                }
+                Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btn_Next");
+            }
+            if ((Actions.CheckElementExistsByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "lbl_forgetPwd")) == true)
+            {
+                if (refkeyvaluepairdic.ContainsKey("ExistPass"))
+                {
+                    existpassword = refkeyvaluepairdic["ExistPass"];
+                    Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "pwd_extUsrPwd", existpassword);
+                    if (Actions.CheckElementExistsByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btn_Continue") == true)
+                    {
+                        Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btn_Continue");
+                    }
+                    else
+                    {
+                        Actions.SendTABToWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
+                        Actions.SendTABToWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
+                        Actions.SendENTERoWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
+                        Thread.Sleep(500);
+                    }
+                }
+            }
+           //Enter Email & Sign Up with New email and password
+            if ((Actions.CheckElementExistsByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "pwd_NewPwd")) == true)
+                {
+                    if (refkeyvaluepairdic.ContainsKey("NewPass"))
+                    {
+                        newpwd = refkeyvaluepairdic["NewPass"];
+                        Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "pwd_NewPwd", newpwd);
+
+                    }
+                    if (refkeyvaluepairdic.ContainsKey("ConfirmPass"))
+                    {
+                        confirmpass = refkeyvaluepairdic["ConfirmPass"];
+                        Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "pwd_NewConfirm", confirmpass);
+                    }
+                    if (refkeyvaluepairdic.ContainsKey("FirstName"))
+                    {
+                        fname = refkeyvaluepairdic["FirstName"];
+                        Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txt_FirstName", fname);
+                    }
+                    if (refkeyvaluepairdic.ContainsKey("LastName"))
+                    {
+                        lname = refkeyvaluepairdic["LastName"];
+                        Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txt_LastName", lname);
+                        //Actions.WaitForElementEnabled(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Continue", 1000);
+                       // Actions.ClickButtonByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Continue");
+                        if (Actions.CheckElementExistsByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btn_Continue") == true)
+                        {
+                            Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btn_Continue");
+                        }
+                        else
+                        {
+                            Actions.SendTABToWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
+                            Actions.SendTABToWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
+                            Actions.SendENTERoWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
+                            Thread.Sleep(500);
+                        }
+                    }
+
+                }
+            
             //Enter Business Name
             if (refkeyvaluepairdic.ContainsKey("CompanyName"))
             {
@@ -454,7 +525,7 @@ namespace Installer_Test.Lib
                 Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txtBox_TaxID", taxid);
             }
             // Find if the company file consists of single page or 2 pages
-            if ((Actions.CheckElementExistsByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btn_Continue")) == true)
+            if ((Actions.CheckElementExistsByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"),"Continue")) == true)
             {
                 Logger.logMessage("Continue button found and hence creating company file for Older version of QB");
                 Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btn_Continue");
@@ -503,26 +574,10 @@ namespace Installer_Test.Lib
                 phone = refkeyvaluepairdic["PhoneNo"];
                 Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txtBoxPhone", phone);
             }
-
-            Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btnCreateCompany");
-
-            //Wait for the Marketing Page window
-            qbWindow = Actions.GetAppWindow(qbApp, "QuickBooks");
-            Actions.WaitForChildWindow(qbWindow, "QuickBooks Setup", 1000);
-            var qbchild = Actions.GetChildWindow(qbWindow, "QuickBooks Setup");
-
-            // Close the Marketing page window
-            if ((Actions.CheckElementExistsByAutomationID(Actions.GetChildWindow(qbchild, "QuickBooks Setup"), "btnCreateCompany")) == true)
-            {
-                Actions.ClickElementByAutomationID(qbchild, "btnCreateCompany");
-
-            }
+            if (Actions.CheckElementExistsByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Create Company")==true)
+                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Create Company");
             else
-
                 Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btnCreateCompany");
-            Actions.SelectMenu(qbApp, qbWindow, "Windows", "Close All");
-
-
             String Title = qbWindow.Title;
 
             if (Title.Contains(bizName) == true)
@@ -534,7 +589,32 @@ namespace Installer_Test.Lib
             else
                 Logger.logMessage("Company file creation failed");
 
+            //Wait for the Marketing Page window
+            qbWindow = Actions.GetAppWindow(qbApp, "QuickBooks");
+            Actions.WaitForChildWindow(qbWindow, "QuickBooks Setup", 10000);
+           var qbchild = Actions.GetChildWindow(qbWindow, "QuickBooks Setup");
+
+            // Close the Marketing page window
+            if ((Actions.CheckElementExistsByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btnCreateCompany")) == true)
+            {
+                Actions.ClickElementByName(qbchild, "Start Working");
+
+                Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
+                Actions.SendENTERoWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
+                
+
+            }
+            else
+            {
+                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Start Working");
+                Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
+                Actions.SendENTERoWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
+            }
+
+           
+
         }
+          
         //------------------------End of code for creating company file -----------------------------------------------------------------------------------------------------------
 
         //------Code by Sunder Raj for Invoke QB-------------------------------------------
