@@ -36,7 +36,7 @@ namespace Installer_Test.Tests
        // public TestStack.White.UIItems.WindowItems.Window qbWindow = null;
         public static Property conf = Property.GetPropertyInstance();
         public static int Sync_Timeout = int.Parse(conf.get("SyncTimeOut"));
-        public static string testName = "Install";
+        
         public string country, targetPath;
 
 
@@ -44,8 +44,7 @@ namespace Installer_Test.Tests
 
         public void Setup()
         {
-            var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
-            Logger log = new Logger(testName + "_" + timeStamp);
+            
             string readpath = "C:\\Temp\\Parameters.xlsm"; // "C:\\Installation\\Sample.txt";
 
             Dictionary<string, string> dic = new Dictionary<string, string>();

@@ -65,7 +65,7 @@ namespace QBInstall.Tests
             installed_product = Installer_Test.Lib.File_Functions.GetProduct(OS_Name, ver, reg_ver);
                         
             
-            //Repair
+            //Remove
             QuickBooks.RepairOrUnInstallQB(installed_product, false, true);
         }
 

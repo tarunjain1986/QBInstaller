@@ -48,16 +48,15 @@ namespace Installer_Test
         public string line;
         public static string custname, vendorname, itemname,backuppath;
         public static Random _r = new Random();
-        public static string resultsPath;
-        
+        public static string resultsPath, LogFilePath;
+
+        public static string testName = "Installer Test Suite";
 
         public static void Install_US()
         {
             string country, SKU, installType, targetPath, installPath, wkflow, customOpt, License_No, Product_No, UserID, Passwd, firstName, lastName;
             string[] LicenseNo, ProductNo;
-            Logger.logMessage("Function call @ :" + DateTime.Now);
-
-
+ 
             Installer_Test.Lib.ScreenCapture sc = new Installer_Test.Lib.ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
             IntPtr pointer = GetForegroundWindow();
@@ -91,13 +90,25 @@ namespace Installer_Test
             regex = new Regex(@".{3}");
             temp = regex.Replace(Product_No, "$&" + "\n");
             ProductNo = temp.Split('\n');
+                       
+            resultsPath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + @"\Screenshots\";
+            LogFilePath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + @"\Logs\";
+            Add_Log_Automation_Properties(LogFilePath);
+            //if (!Directory.Exists(LogFilePath))
+            //{
+            //    Directory.CreateDirectory(LogFilePath);
+            //}
+
+            var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
+            Logger log = new Logger(testName + "_" + timeStamp);
 
             Logger.logMessage("InstallQB " + targetPath + " - Started..");
             Logger.logMessage("License Number: " + License_No);
             Logger.logMessage("Product Number " + Product_No);
-            resultsPath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "\\";
 
-           // Create a folder to save the Results
+            Logger.logMessage("Function call @ :" + DateTime.Now);
+
+           // Create a folder to save the Screenshots
             Create_Dir(resultsPath);
             
             try
@@ -167,8 +178,10 @@ namespace Installer_Test
                     }
                 }
    
-               Open_QB(targetPath);    
+               Open_QB(targetPath);
 
+               // Update the Automation.Properties with the new properties
+               File_Functions.Update_Automation_Properties();
             }
 
             catch (Exception e)
@@ -439,14 +452,51 @@ namespace Installer_Test
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
             IntPtr pointer = GetForegroundWindow();
-            
-            Actions.WaitForElementVisible(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks", int.Parse(Sync_Timeout));
-            pointer = GetForegroundWindow();
-            sc.CaptureWindowToFile(pointer, resultsPath + "15_Open_QuickBooks.png", ImageFormat.Png);
+
+            Boolean flag = false;
+            try
+            {
+                while (flag == false)
+                {
+                    flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Finish");
+                }
+
+                pointer = GetForegroundWindow();
+                sc.CaptureWindowToFile(pointer, resultsPath + "15_Finish_QuickBooks.png", ImageFormat.Png);
+                Logger.logMessage("Finish button enabled - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            catch (Exception e)
+            {
+                Logger.logMessage("Finish button not enabled - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            // Click on Finish
+            try
+            {
+                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Finish"); // Click on Finish
+                Logger.logMessage("Click on Finish - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Click on Finish - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
 
             // Click on Open QuickBooks
             try
             {
+                flag = false;
+                while (flag == false)
+                {
+                    flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks");
+                }
                 Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks"); // Launch QuickBooks
                 Logger.logMessage("Click on Open QuickBooks - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
@@ -1369,6 +1419,23 @@ namespace Installer_Test
                 Logger.logMessage(e.Message);
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
+        }
+
+        public static void Add_Log_Automation_Properties(string LogFilePath)
+        {
+            string curr_dir, aut_file;
+            curr_dir = Directory.GetCurrentDirectory();
+            aut_file = curr_dir + @"\Automation.Properties";
+            List<string> prop_value = new List<string>(File.ReadAllLines(aut_file));
+                       
+
+            int lineIndex = prop_value.FindIndex(line => line.StartsWith("LogDirectory="));
+            if (lineIndex != -1)
+            {
+                prop_value[lineIndex] = "LogDirectory=" + LogFilePath;
+                File.WriteAllLines(aut_file, prop_value);
+            }
+
         }
     }
 }

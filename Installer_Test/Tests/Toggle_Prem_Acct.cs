@@ -39,7 +39,7 @@ namespace Installer_Test.Tests
             //QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
             string readpath = "C:\\Temp\\Parameters.xlsm";
             Bizname = File_Functions.ReadExcelBizName(readpath);
-            dic = File_Functions.ReadExcelCellValues(readpath, "Ent-Toggle");
+            dic = File_Functions.ReadExcelCellValues(readpath, "Prem-Toggle");
         }
 
 

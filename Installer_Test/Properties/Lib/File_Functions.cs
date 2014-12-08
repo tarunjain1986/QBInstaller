@@ -219,13 +219,26 @@ namespace Installer_Test.Lib
             return OS_Name;
         }
 
-        public static string GetQBVersion (string OS_Name, string ver, string reg_ver)
+        public static string GetRegPath ()
+        {
+            string regPath;
+            if (Environment.Is64BitOperatingSystem)
+            {
+                regPath = "Software\\Wow6432Node\\Intuit\\QuickBooks\\";
+            }
+            else
+            {
+                regPath = "Software\\Intuit\\QuickBooks\\";
+            }
+
+            return regPath;
+        }
+
+        public static string GetQBVersion(string regPath, string ver, string reg_ver)
         {
             Object QBVer;
             string installed_version = string.Empty;
-            RegistryKey key = Registry.LocalMachine.OpenSubKey("Software\\Wow6432Node\\Intuit\\QuickBooks\\" + ver + "\\" + reg_ver);
-            if (OS_Name.Contains("Windows 7"))
-            {
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath + ver + "\\" + reg_ver);
                 if (key != null)
                 {
                     QBVer = key.GetValue("QBVersion");
@@ -241,144 +254,121 @@ namespace Installer_Test.Lib
                     // Install_QB?
                      
                 }
-                   
-            }
-            return installed_version; 
+           return installed_version; 
           }
-  
-        public static string GetProduct (string OS_Name, string ver, string reg_ver)
+
+        public static string GetProduct(string regPath, string ver, string reg_ver)
         {
             Object product;
             string installed_product = string.Empty;
-            RegistryKey key = Registry.LocalMachine.OpenSubKey("Software\\Wow6432Node\\Intuit\\QuickBooks\\" + ver + "\\" + reg_ver);
-            if (OS_Name.Contains("Windows 7"))
+
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath + ver + "\\" + reg_ver);
+            if (key != null)
             {
-                if (key != null)
-                {
-                     product = key.GetValue("Product");
-                    if (product != null)
-                    {
-                        installed_product = product as string;
-                    }
-                }
+               product = key.GetValue("Product");
+               if (product != null)
+               {
+                  installed_product = product as string;
+               }
+            }
 
                
-                 if (key == null)
-                {
-                    // Install_QB?
-                     
-                }
-
-            }
-                return installed_product;
+            if (key == null)
+            {
+               // Install_QB?
+             }
+          
+            return installed_product;
           }
 
-        public static string GetDataPath (string OS_Name, string ver, string reg_ver)
+        public static string GetDataPath(string regPath, string ver, string reg_ver)
         {
             Object dataPath;
             string installed_dataPath = string.Empty;
-            RegistryKey key = Registry.LocalMachine.OpenSubKey("Software\\Wow6432Node\\Intuit\\QuickBooks\\" + ver + "\\" + reg_ver);
-            if (OS_Name.Contains("Windows 7"))
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath + ver + "\\" + reg_ver);
+
+            if (key != null)
             {
-                if (key != null)
-                {
-                     dataPath = key.GetValue("DataPath");
-                    if (dataPath != null)
-                    {
-                        installed_dataPath = dataPath as string;
-                    }
-                }
-
-               
-                 if (key == null)
-                {
-                    // Install_QB?
-                     
-                }
-
+                 dataPath = key.GetValue("DataPath");
+                 if (dataPath != null)
+                 {
+                    installed_dataPath = dataPath as string;
+                 }
             }
-                return installed_dataPath;
+                    
+            if (key == null)
+            {
+                 // Install_QB?
+            }
+           
+             return installed_dataPath;
           }
 
-        public static string GetPath(string OS_Name, string ver, string reg_ver)
+        public static string GetPath(string regPath, string ver, string reg_ver)
         {
             Object QBPath;
             string installed_QBPath = string.Empty;
-            RegistryKey key = Registry.LocalMachine.OpenSubKey("Software\\Wow6432Node\\Intuit\\QuickBooks\\" + ver + "\\" + reg_ver);
-            if (OS_Name.Contains("Windows 7"))
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath + ver + "\\" + reg_ver);
+
+            if (key != null)
             {
-                if (key != null)
-                {
-                    QBPath = key.GetValue("Path");
-                    if (QBPath != null)
-                    {
-                        installed_QBPath = QBPath as string;
-                    }
-                }
-
-
-                if (key == null)
-                {
-                    // Install_QB?
-
-                }
-
+              QBPath = key.GetValue("Path");
+              if (QBPath != null)
+              {
+                 installed_QBPath = QBPath as string;
+              }
             }
+
+
+            if (key == null)
+            {
+               // Install_QB?
+            }
+            
             return installed_QBPath;
         }
 
-        public static string GetDataPathKey(string OS_Name, string ver, string reg_ver)
+        public static string GetDataPathKey(string regPath, string ver, string reg_ver)
         {
             Object dataPath = new Object();
             string dataPath_key = string.Empty;
-            RegistryKey key = Registry.LocalMachine.OpenSubKey("Software\\Wow6432Node\\Intuit\\QuickBooks\\" + ver + "\\" + reg_ver);
-            if (OS_Name.Contains("Windows 7"))
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath + ver + "\\" + reg_ver);
+            if (key != null)
             {
-                if (key != null)
-                {
-                    dataPath = key.GetValue("DataPath");
-                    if (dataPath != null)
-                    {
-                        dataPath_key = dataPath as string;
-                    }
-                    
-                }
-
-                if (key == null)
-                {
-                    // Install_QB?
-
-                }
-
+               dataPath = key.GetValue("DataPath");
+               if (dataPath != null)
+               {
+                    dataPath_key = dataPath as string;
+               }
             }
+
+            if (key == null)
+            {
+                 // Install_QB?
+            }
+          
             return dataPath_key;
         }
 
-        public static string GetCommonFilesPath (string OS_Name, string ver, string reg_ver)
+        public static string GetCommonFilesPath(string regPath, string ver, string reg_ver)
         {
             Object commonFilesPath;
             string installed_commonPath = string.Empty;
-            RegistryKey key = Registry.LocalMachine.OpenSubKey("Software\\Wow6432Node\\Intuit\\QuickBooks\\" + ver + "\\" + reg_ver);
-            if (OS_Name.Contains("Windows 7"))
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath + ver + "\\" + reg_ver);
+            if (key != null)
             {
-                if (key != null)
-                {
-                    commonFilesPath = key.GetValue("CommonFilesPath");
-                    if (commonFilesPath != null)
-                    {
-                         installed_commonPath = commonFilesPath as string;
-                    }
-                }
+               commonFilesPath = key.GetValue("CommonFilesPath");
+               if (commonFilesPath != null)
+               {
+                  installed_commonPath = commonFilesPath as string;
+               }
+             }
 
-               
-                 if (key == null)
-                {
-                    // Install_QB?
-                     
-                }
-
+            if (key == null)
+            {
+               // Install_QB?
             }
-                return installed_commonPath;
+             return installed_commonPath;
           }
 
         public static void Copy_WebPatch()
@@ -443,6 +433,56 @@ namespace Installer_Test.Lib
                 }
             }
         }
-       
+
+        public static void Update_Automation_Properties ()
+        {
+            string readpath = "C:\\Temp\\Parameters.xlsm";
+            Dictionary<string, string> dic_QBDetails = new Dictionary<string, string>();
+            string ver, reg_ver, data_path, installed_product, installed_path, installed_dir, regPath;
+
+
+            dic_QBDetails = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
+            ver = dic_QBDetails["B2"];
+            reg_ver = dic_QBDetails["B3"];
+
+            //OS_Name = File_Functions.GetOS();
+
+            regPath = File_Functions.GetRegPath();
+            installed_product = File_Functions.GetProduct(regPath, ver, reg_ver);
+            installed_path = File_Functions.GetPath(regPath, ver, reg_ver);
+            data_path = File_Functions.GetDataPath(regPath, ver, reg_ver);
+            installed_dir = Path.GetDirectoryName(installed_path); // Get the path (without the exe name)
+
+
+            string curr_dir, aut_file;
+            curr_dir = Directory.GetCurrentDirectory();
+            aut_file = curr_dir + @"\Automation.Properties";
+
+
+
+            List<string> prop_value = new List<string>(File.ReadAllLines(aut_file));
+            int lineIndex = prop_value.FindIndex(line => line.StartsWith("QBExePath="));
+            if (lineIndex != -1)
+            {
+                prop_value[lineIndex] = "QBExePath=" + installed_path;
+                File.WriteAllLines(aut_file, prop_value);
+            }
+
+            lineIndex = prop_value.FindIndex(line => line.StartsWith("QBW.ini="));
+            if (lineIndex != -1)
+            {
+                prop_value[lineIndex] = "QBW.ini=" + data_path + "qbw.ini";
+                File.WriteAllLines(aut_file, prop_value);
+            }
+
+            lineIndex = prop_value.FindIndex(line => line.StartsWith("LogDirectory="));
+            if (lineIndex != -1)
+            {
+                prop_value[lineIndex] = "LogDirectory=";
+                File.WriteAllLines(aut_file, prop_value);
+            }
+           
+        }
+
        }
     }
