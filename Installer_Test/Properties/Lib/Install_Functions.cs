@@ -91,15 +91,13 @@ namespace Installer_Test
             temp = regex.Replace(Product_No, "$&" + "\n");
             ProductNo = temp.Split('\n');
                        
-            resultsPath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + @"\Screenshots\";
-            LogFilePath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + @"\Logs\";
+            resultsPath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + @"\Screenshots\";
+            LogFilePath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + @"\Logs\";
             Add_Log_Automation_Properties(LogFilePath);
-            //if (!Directory.Exists(LogFilePath))
-            //{
-            //    Directory.CreateDirectory(LogFilePath);
-            //}
+            Thread.Sleep(3000); // Wait for the entry to be added in the Automation.Properties file
 
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
+
             Logger log = new Logger(testName + "_" + timeStamp);
 
             Logger.logMessage("InstallQB " + targetPath + " - Started..");
@@ -180,8 +178,12 @@ namespace Installer_Test
    
                Open_QB(targetPath);
 
+               Shell32.Shell shell = new Shell32.Shell();
+               shell.MinimizeAll();
+
                // Update the Automation.Properties with the new properties
                File_Functions.Update_Automation_Properties();
+               Launch_QB();
             }
 
             catch (Exception e)
@@ -454,39 +456,39 @@ namespace Installer_Test
             IntPtr pointer = GetForegroundWindow();
 
             Boolean flag = false;
-            try
-            {
-                while (flag == false)
-                {
-                    flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Finish");
-                }
+            //try
+            //{
+            //    while (flag == false)
+            //    {
+            //        flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Finish");
+            //    }
 
-                pointer = GetForegroundWindow();
-                sc.CaptureWindowToFile(pointer, resultsPath + "15_Finish_QuickBooks.png", ImageFormat.Png);
-                Logger.logMessage("Finish button enabled - Successful");
-                Logger.logMessage("------------------------------------------------------------------------------");
-            }
+            //    pointer = GetForegroundWindow();
+            //    sc.CaptureWindowToFile(pointer, resultsPath + "15_Finish_QuickBooks.png", ImageFormat.Png);
+            //    Logger.logMessage("Finish button enabled - Successful");
+            //    Logger.logMessage("------------------------------------------------------------------------------");
+            //}
 
-            catch (Exception e)
-            {
-                Logger.logMessage("Finish button not enabled - Failed");
-                Logger.logMessage(e.Message);
-                Logger.logMessage("------------------------------------------------------------------------------");
-            }
+            //catch (Exception e)
+            //{
+            //    Logger.logMessage("Finish button not enabled - Failed");
+            //    Logger.logMessage(e.Message);
+            //    Logger.logMessage("------------------------------------------------------------------------------");
+            //}
 
-            // Click on Finish
-            try
-            {
-                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Finish"); // Click on Finish
-                Logger.logMessage("Click on Finish - Successful");
-                Logger.logMessage("------------------------------------------------------------------------------");
-            }
-            catch (Exception e)
-            {
-                Logger.logMessage("Click on Finish - Failed");
-                Logger.logMessage(e.Message);
-                Logger.logMessage("------------------------------------------------------------------------------");
-            }
+            //// Click on Finish
+            //try
+            //{
+            //    Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Finish"); // Click on Finish
+            //    Logger.logMessage("Click on Finish - Successful");
+            //    Logger.logMessage("------------------------------------------------------------------------------");
+            //}
+            //catch (Exception e)
+            //{
+            //    Logger.logMessage("Click on Finish - Failed");
+            //    Logger.logMessage(e.Message);
+            //    Logger.logMessage("------------------------------------------------------------------------------");
+            //}
 
 
             // Click on Open QuickBooks
@@ -507,6 +509,7 @@ namespace Installer_Test
                 Logger.logMessage(e.Message);
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
+  
             Logger.logMessage("InstallQB " + targetPath + " - Successful");
             Logger.logMessage("------------------------------------------------------------------------------");
             Logger.logMessage("------------------------------------------------------------------------------");
@@ -1435,6 +1438,60 @@ namespace Installer_Test
                 prop_value[lineIndex] = "LogDirectory=" + LogFilePath;
                 File.WriteAllLines(aut_file, prop_value);
             }
+
+        }
+
+        public static void Launch_QB ()
+        {
+            // Boolean flag = false;
+
+            string industryEdition = "Enterprise Solutions General Business";
+            try
+            {
+
+                Actions.WaitForWindow("Select QuickBooks Industry-Specific Edition", 8000000);    
+                Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), industryEdition);
+                Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Next >");
+                Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Finish");
+            
+               
+                //Logger.logMessage(win1.ToString());
+                //Thread.Sleep(30000);
+                ////
+
+                //
+                //Thread.Sleep(1000);
+                //
+
+                Actions.WaitForWindow("QuickBooks Enterprise Solutions Product Configuration", 8000000);
+                Window win1 = Actions.GetDesktopWindow("QuickBooks Enterprise Solutions Product Configuration");
+                Actions.WaitForChildWindow(win1, "QuickBooks Product Configuration", 60000);
+                //Actions.WaitForChildWindow(Actions.GetDesktopWindow("QuickBooks Enterprise Solutions Product Configuration"), "QuickBooks Product Configuration", 8000000);
+                
+                
+               // Actions.ClickElementByName (Actions.GetChildWindow (Actions.GetDesktopWindow("QuickBooks Enterprise Solutions Product Configuration"), "QuickBooks Product Configuration"), "No");
+               // Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Product Configuration"), "No");
+
+                Window win2 = Actions.GetChildWindow(win1, "QuickBooks Product Configuration");
+                Actions.ClickElementByName(win2, "No");
+
+                Actions.WaitForWindow("QuickBooks Update Service", 8000000);    
+                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
+
+                Actions.WaitForWindow("QuickBooks", int.Parse(Sync_Timeout));
+                if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
+
+                Actions.ClickElementByName((Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks")), "Remind Me Later");
+
+              
+            }
+            catch (Exception e)
+            {
+               // Logger.logMessage("Click on Open QuickBooks - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
 
         }
     }

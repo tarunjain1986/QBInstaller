@@ -93,7 +93,7 @@ namespace Installer_Test.Tests
         {
 
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
-            Logger log = new Logger(testName + "_" + timeStamp);
+           // Logger log = new Logger(testName + "_" + timeStamp);
       
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Invoke Installer and Install QB
@@ -120,8 +120,8 @@ namespace Installer_Test.Tests
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Check F2
             ///////////////////////////////////////////////////////////////////////////////////////////////////
-            qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
-            qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+            //qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
+            //qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Create Company File
@@ -140,7 +140,7 @@ namespace Installer_Test.Tests
             dic_Switch_Enterprise = File_Functions.ReadExcelCellValues(readpath, "Ent-Switch");
             dic_Switch_Premier = File_Functions.ReadExcelCellValues(readpath, "Pre-Switch");
             dic_Toggle_Enterprise = File_Functions.ReadExcelCellValues(readpath, "Ent-Toggle");
-            dic_Toggle_Premier = File_Functions.ReadExcelCellValues(readpath, "Prem-Toggle");
+            dic_Toggle_Premier = File_Functions.ReadExcelCellValues(readpath, "Pre-Toggle");
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Repair / Uninstall
@@ -148,13 +148,8 @@ namespace Installer_Test.Tests
 
             dic_Repair = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
             ver = dic["B2"];
-            reg_ver = dic["B4"];
-
-            OS_Name = File_Functions.GetOS();
-            installed_product = File_Functions.GetProduct(OS_Name, ver, reg_ver);
-            installed_path = File_Functions.GetPath(OS_Name, ver, reg_ver);
-            installed_dir = Path.GetDirectoryName(installed_path); // Get the path (without the exe name)
-
+            reg_ver = dic["B3"];
+ 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
@@ -183,23 +178,25 @@ namespace Installer_Test.Tests
             }
         }
 
-        [AndThen(StepTitle = "Then - Invoke QuickBooks")]
-        public void Invoke_QB()
-        {
-            File_Functions.Update_Automation_Properties();
-            PostInstall_Functions.InvokeQB();
+        //[AndThen(StepTitle = "Then - Invoke QuickBooks")]
+        //public void Invoke_QB()
+        //{
+        //    File_Functions.Update_Automation_Properties();
+        //    PostInstall_Functions.InvokeQB();
 
-        }
+        //}
 
-        [AndThen(StepTitle = "Then - Select Edition to Launch QuickBooks")]
-        public void Select_QB()
-        {
-            PostInstall_Functions.SelectEdition(dic_InvokeQB);
-        }
+        //[AndThen(StepTitle = "Then - Select Edition to Launch QuickBooks")]
+        //public void Select_QB()
+        //{
+        //    PostInstall_Functions.SelectEdition(dic_InvokeQB);
+        //}
 
         [AndThen(StepTitle = "Then - Open F2")]
         public void CheckF2value()
         {
+            qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
+            qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
             QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
             PostInstall_Functions.CheckF2value(qbApp, qbWindow);
         }
@@ -279,6 +276,11 @@ namespace Installer_Test.Tests
         [AndThen(StepTitle = "Repair QuickBooks")]
         public void RepairQB()
         {
+            OS_Name = File_Functions.GetOS();
+            installed_product = File_Functions.GetProduct(OS_Name, ver, reg_ver);
+            installed_path = File_Functions.GetPath(OS_Name, ver, reg_ver);
+            installed_dir = Path.GetDirectoryName(installed_path); // Get the path (without the exe name)
+            
             // Delete DLLs
             Install_Functions.Delete_QBDLLs(installed_dir);
 
