@@ -2032,6 +2032,84 @@ namespace FrameworkLibraries.ActionLibs.WhiteAPI
 
         //**************************************************************************************************************************************************************
 
+        public static bool WaitForChildWindow_Install(Window mainWindow, string childWindowName, long timeOut)
+        {
+            //var qbApp = QuickBooks.GetApp("QuickBooks");
+            //var qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+ 
+            Logger.logMessage("Function call @ :" + DateTime.Now);
+            Logger.logMessage("                 WaitForChildWindow " + mainWindow + "->" + childWindowName + " - Begin Sync");
+            bool windowFound = false;
+            long elapsedTime = 0;
+            var stopwatch = Stopwatch.StartNew();
+ 
+            try
+            {
+                do
+                {
+                    //if (Actions.CheckDesktopWindowExists("Alert"))
+                    //    Actions.CheckForAlertAndClose("Alert");
+ 
+                    //try { Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Warning"), "OK"); }
+                    //catch (Exception) { }
+ 
+                    //Crash handler
+                    if (Actions.CheckDesktopWindowExists("QuickBooks - Unrecoverable Error"))
+                    {
+                        Actions.QBCrashHandler();
+                        break;
+                    }
+ 
+                    if (windowFound)
+                        break;
+ 
+                    elapsedTime = stopwatch.ElapsedMilliseconds;
+ 
+                    List<Window> allChildWindows = mainWindow.ModalWindows();
+ 
+                    foreach (Window w in allChildWindows)
+                    {
+ 
+                        //if (Actions.CheckDesktopWindowExists("Alert"))
+                        //    Actions.CheckForAlertAndClose("Alert");
+ 
+                        //try { Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Warning"), "OK"); }
+                        //catch (Exception) { }
+ 
+                        //Crash handler
+                        if (Actions.CheckDesktopWindowExists("QuickBooks - Unrecoverable Error"))
+                        {
+                            Actions.QBCrashHandler();
+                            break;
+                        }
+ 
+ 
+                        if (w.Name.Equals(childWindowName) || w.Name.Contains(childWindowName))
+                        {
+                            windowFound = true;
+                            Logger.logMessage(childWindowName + " Found..");
+                            w.WaitWhileBusy();
+                            break;
+                        }
+                    }
+                }
+                while (elapsedTime <= timeOut);
+                Logger.logMessage("                 WaitForChildWindow " + mainWindow + "->" + childWindowName + " - End Sync");
+                Logger.logMessage("------------------------------------------------------------------------------");
+                return windowFound;
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("WaitForChildWindow " + mainWindow + "->" + childWindowName + " - Terminated");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+                String sMessage = e.Message;
+                LastException.SetLastError(sMessage);
+                throw new Exception(sMessage);
+            }
+ 
+        }
+ //**************************************************************************************************************************************************************
         public static bool WaitForElementEnabledOrTransformed(Window window, string elementName, string transformName, long timeOut)
         {
 
