@@ -371,68 +371,7 @@ namespace Installer_Test.Lib
              return installed_commonPath;
           }
 
-        public static void Copy_WebPatch()
-        {
-            string sku,wppath;
-           
-            string readpath = "C:\\Temp\\Parameters.xlsm";
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic = File_Functions.ReadExcelValues(readpath, "Install", "B2:B30");
-            sku = dic["B7"];
-            wppath = dic["27"];
-           
-            string exename;
-            
-            Logger.logMessage("Function call @ :" + DateTime.Now);
-
-            if (sku == "Enterprise" || sku == "Enterprise Accountant")
-            {
-                wppath = wppath + "BEL" + "\\qbwebpatch\\";
-                exename = "en_qbwebpatch.exe";
-
-            }
-            else
-            {
-                wppath = wppath + "STD" + "\\qbwebpatch\\";
-                exename = "qbwebpatch.exe";
-
-            }
-
-            Logger.logMessage("Copy" + sku + " WebPatch- Started..");
-
-            string targetPath = @"C:\Temp\WebPatch\";
-
-            if (!Directory.Exists(targetPath))
-            {
-                try
-                {
-                    Directory.CreateDirectory(targetPath);
-                    Logger.logMessage("Directory " + targetPath + " created - Successful");
-                    Logger.logMessage("------------------------------------------------------------------------------");
-                }
-                catch (Exception e)
-                {
-                    Logger.logMessage("Directory " + targetPath + " could not be created - Failed");
-                    Logger.logMessage(e.Message);
-                    Logger.logMessage("------------------------------------------------------------------------------");
-                }
-            }
-            if (!File.Exists(targetPath + exename))
-            {
-                try
-                {
-                    File.Copy(wppath + exename, targetPath + exename);
-                    Logger.logMessage("File " + exename + " copied to " + targetPath + " - Successful");
-                    Logger.logMessage("------------------------------------------------------------------------------");
-                }
-                catch (Exception e)
-                {
-                    Logger.logMessage("File " + exename + " could not be copied to " + targetPath + " - Failed");
-                    Logger.logMessage(e.Message);
-                    Logger.logMessage("------------------------------------------------------------------------------");
-                }
-            }
-        }
+       
 
         public static void Update_Automation_Properties ()
         {
