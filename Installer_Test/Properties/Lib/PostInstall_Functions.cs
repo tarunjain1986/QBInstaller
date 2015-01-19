@@ -72,8 +72,8 @@ namespace Installer_Test.Lib
                 }
                 pointer = GetForegroundWindow();
                 sc.CaptureWindowToFile(pointer, resultsPath + "01_CheckF2.png", ImageFormat.Png);
-
-
+                
+                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Product Information"), "OK");
             }
         }
 

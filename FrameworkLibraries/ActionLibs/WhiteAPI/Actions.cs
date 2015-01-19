@@ -2094,13 +2094,13 @@ namespace FrameworkLibraries.ActionLibs.WhiteAPI
                     }
                 }
                 while (elapsedTime <= timeOut);
-                Logger.logMessage("                 WaitForChildWindow " + mainWindow + "->" + childWindowName + " - End Sync");
+                Logger.logMessage("                 WaitForChildWindow_Install " + mainWindow + "->" + childWindowName + " - End Sync");
                 Logger.logMessage("------------------------------------------------------------------------------");
                 return windowFound;
             }
             catch (Exception e)
             {
-                Logger.logMessage("WaitForChildWindow " + mainWindow + "->" + childWindowName + " - Terminated");
+                Logger.logMessage("WaitForChildWindow_Install " + mainWindow + "->" + childWindowName + " - Terminated");
                 Logger.logMessage(e.Message);
                 Logger.logMessage("------------------------------------------------------------------------------");
                 String sMessage = e.Message;

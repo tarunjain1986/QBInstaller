@@ -93,7 +93,7 @@ namespace Installer_Test.Tests
         {
 
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
-           // Logger log = new Logger(testName + "_" + timeStamp);
+          //  Logger log = new Logger(testName + "_" + timeStamp);
       
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Invoke Installer and Install QB
@@ -176,7 +176,12 @@ namespace Installer_Test.Tests
                     Install_Functions.Install_CA();
                     break;
             }
+            qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
+            qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+
+            qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.MaximizeQB(qbApp);
         }
+
 
         //[AndThen(StepTitle = "Then - Invoke QuickBooks")]
         //public void Invoke_QB()
@@ -201,12 +206,12 @@ namespace Installer_Test.Tests
             PostInstall_Functions.CheckF2value(qbApp, qbWindow);
         }
 
-        [AndThen(StepTitle = "Then - Click on Help -> About")]
-        public void HelpUpdate()
-        {
-            QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
-            Help.ClickHelpAbout(qbApp, qbWindow);
-        }
+        //[andthen(steptitle = "then - click on help -> about")]
+        //public void helpupdate()
+        //{
+        //    quickbooks.resetqbwindows(qbapp, qbwindow, false);
+        //    help.clickhelpabout(qbapp, qbwindow);
+        //}
 
         [AndThen(StepTitle = "Then - Create Company File")]
         public void CreateCompanyFile()

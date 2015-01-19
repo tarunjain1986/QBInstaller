@@ -162,6 +162,44 @@ namespace FrameworkLibraries.AppLibs.QBDT
             }
         }
 
+        //**************************************************************************************************************************************************************
+
+        public static Window MaximizeQB(TestStack.White.Application app)
+        {
+            Window qbWin = null;
+
+            try
+            {
+                List<Window> windows = app.GetWindows();
+                foreach (Window item in windows)
+                {
+                    if (item.Name.Contains("QuickBooks"))
+                    {
+                        qbWin = item;
+                        qbWin.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+                        Thread.Sleep(int.Parse(Execution_Speed));
+                        break;
+                    }
+                }
+
+                Logger.logMessage("Maximized " + app + " - Sucessful");
+                Logger.logMessage(qbWin.Title);
+                Logger.logMessage("------------------------------------------------------------------------------");
+
+                return qbWin;
+
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Maximized " + app + " - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+
+                String sMessage = e.Message;
+                LastException.SetLastError(sMessage);
+                throw new Exception(sMessage);
+            }
+        }
 
         //**************************************************************************************************************************************************************
 
