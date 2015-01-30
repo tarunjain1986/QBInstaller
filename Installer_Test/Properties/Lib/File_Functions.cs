@@ -234,10 +234,13 @@ namespace Installer_Test.Lib
             return regPath;
         }
 
-        public static string GetQBVersion(string regPath, string ver, string reg_ver)
+        public static string GetQBVersion(string ver, string reg_ver)
         {
             Object QBVer;
             string installed_version = string.Empty;
+
+            string regPath = GetRegPath();
+
             RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath + ver + "\\" + reg_ver);
                 if (key != null)
                 {
@@ -257,10 +260,12 @@ namespace Installer_Test.Lib
            return installed_version; 
           }
 
-        public static string GetProduct(string regPath, string ver, string reg_ver)
+        public static string GetProduct(string ver, string reg_ver)
         {
             Object product;
             string installed_product = string.Empty;
+
+            string regPath = GetRegPath();
 
             RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath + ver + "\\" + reg_ver);
             if (key != null)
@@ -281,10 +286,12 @@ namespace Installer_Test.Lib
             return installed_product;
           }
 
-        public static string GetDataPath(string regPath, string ver, string reg_ver)
+        public static string GetDataPath(string ver, string reg_ver)
         {
             Object dataPath;
             string installed_dataPath = string.Empty;
+            
+            string regPath = GetRegPath();
             RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath + ver + "\\" + reg_ver);
 
             if (key != null)
@@ -304,10 +311,13 @@ namespace Installer_Test.Lib
              return installed_dataPath;
           }
 
-        public static string GetPath(string regPath, string ver, string reg_ver)
+        public static string GetPath(string ver, string reg_ver)
         {
             Object QBPath;
             string installed_QBPath = string.Empty;
+            
+            string regPath = GetRegPath();
+
             RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath + ver + "\\" + reg_ver);
 
             if (key != null)
@@ -328,10 +338,13 @@ namespace Installer_Test.Lib
             return installed_QBPath;
         }
 
-        public static string GetDataPathKey(string regPath, string ver, string reg_ver)
+        public static string GetDataPathKey(string ver, string reg_ver)
         {
             Object dataPath = new Object();
             string dataPath_key = string.Empty;
+
+            string regPath = GetRegPath();
+
             RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath + ver + "\\" + reg_ver);
             if (key != null)
             {
@@ -350,10 +363,13 @@ namespace Installer_Test.Lib
             return dataPath_key;
         }
 
-        public static string GetCommonFilesPath(string regPath, string ver, string reg_ver)
+        public static string GetCommonFilesPath(string ver, string reg_ver)
         {
             Object commonFilesPath;
             string installed_commonPath = string.Empty;
+
+            string regPath = GetRegPath();
+
             RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath + ver + "\\" + reg_ver);
             if (key != null)
             {
@@ -387,9 +403,9 @@ namespace Installer_Test.Lib
             //OS_Name = File_Functions.GetOS();
 
             regPath = File_Functions.GetRegPath();
-            installed_product = File_Functions.GetProduct(regPath, ver, reg_ver);
-            installed_path = File_Functions.GetPath(regPath, ver, reg_ver);
-            data_path = File_Functions.GetDataPath(regPath, ver, reg_ver);
+            installed_product = File_Functions.GetProduct(ver, reg_ver);
+            installed_path = File_Functions.GetPath(ver, reg_ver);
+            data_path = File_Functions.GetDataPath(ver, reg_ver);
             installed_dir = Path.GetDirectoryName(installed_path); // Get the path (without the exe name)
 
 

@@ -38,7 +38,7 @@ namespace Installer_Test.Tests
         public static Property conf = Property.GetPropertyInstance();
         public static int Sync_Timeout = int.Parse(conf.get("SyncTimeOut"));
         public string readpath = "C:\\Temp\\Parameters.xlsm";
-
+        public static string resultsPath;
 
         //public static Property conf = Property.GetPropertyInstance();
         //public static int Sync_Timeout = int.Parse(conf.get("SyncTimeOut"));
@@ -165,7 +165,7 @@ namespace Installer_Test.Tests
             switch (country)
             {
                 case "US":
-                    Install_Functions.Install_US();
+                    resultsPath = Install_Functions.Install_US();
                     break;
 
                 case "UK":
@@ -182,36 +182,21 @@ namespace Installer_Test.Tests
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.MaximizeQB(qbApp);
         }
 
-
-        //[AndThen(StepTitle = "Then - Invoke QuickBooks")]
-        //public void Invoke_QB()
-        //{
-        //    File_Functions.Update_Automation_Properties();
-        //    PostInstall_Functions.InvokeQB();
-
-        //}
-
-        //[AndThen(StepTitle = "Then - Select Edition to Launch QuickBooks")]
-        //public void Select_QB()
-        //{
-        //    PostInstall_Functions.SelectEdition(dic_InvokeQB);
-        //}
-
         [AndThen(StepTitle = "Then - Open F2")]
         public void CheckF2value()
         {
             qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
             QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
-            PostInstall_Functions.CheckF2value(qbApp, qbWindow);
+            PostInstall_Functions.CheckF2value(qbApp, qbWindow, resultsPath);
         }
 
-        //[andthen(steptitle = "then - click on help -> about")]
-        //public void helpupdate()
-        //{
-        //    quickbooks.resetqbwindows(qbapp, qbwindow, false);
-        //    help.clickhelpabout(qbapp, qbwindow);
-        //}
+        [AndThen(StepTitle = "Then - Click on Help -> About")]
+        public void HelpAbout()
+        {
+           Help.ClickHelpAbout(qbApp, qbWindow, resultsPath);
+        }
+
 
         [AndThen(StepTitle = "Then - Create Company File")]
         public void CreateCompanyFile()
@@ -282,8 +267,8 @@ namespace Installer_Test.Tests
         public void RepairQB()
         {
             OS_Name = File_Functions.GetOS();
-            installed_product = File_Functions.GetProduct(OS_Name, ver, reg_ver);
-            installed_path = File_Functions.GetPath(OS_Name, ver, reg_ver);
+            installed_product = File_Functions.GetProduct(ver, reg_ver);
+            installed_path = File_Functions.GetPath(ver, reg_ver);
             installed_dir = Path.GetDirectoryName(installed_path); // Get the path (without the exe name)
             
             // Delete DLLs
@@ -303,6 +288,7 @@ namespace Installer_Test.Tests
         public void UninstallQB()
         {
             QuickBooks.RepairOrUnInstallQB(installed_product, false, true);
+            Install_Functions.CleanUp();
         }
         
        [Fact]

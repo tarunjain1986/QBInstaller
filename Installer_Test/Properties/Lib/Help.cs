@@ -132,7 +132,7 @@ namespace Installer_Test
 
         }
 
-        public static void ClickHelpAbout(TestStack.White.Application qbApp, Window qbWindow)
+        public static void ClickHelpAbout(TestStack.White.Application qbApp, Window qbWindow, string resultsPath)
         {
             Logger.logMessage("Function call @ :" + DateTime.Now);
             Logger.logMessage("Click Help -> About" + " - Started..");
@@ -140,33 +140,17 @@ namespace Installer_Test
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
             IntPtr pointer = GetForegroundWindow();
-            string resultsPath = @"C:\Temp\Results\Help_About_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "\\";
 
-            if (!Directory.Exists(resultsPath))
-            {
-                try
-                {
-                    Directory.CreateDirectory(resultsPath);
-                    Logger.logMessage("Directory " + resultsPath + " created - Successful");
-                    Logger.logMessage("------------------------------------------------------------------------------");
-                }
-                catch (Exception e)
-                {
-                    Logger.logMessage("Directory " + resultsPath + " could not be created - Failed");
-                    Logger.logMessage(e.Message);
-                    Logger.logMessage("------------------------------------------------------------------------------");
-                }
-            }
             try
             {
                 string OS_Name = Installer_Test.Lib.File_Functions.GetOS();
                 Dictionary<string, string> dic = new Dictionary<string, string>();
 
-                dic = Installer_Test.Lib.File_Functions.ReadExcelValues("C:\\Temp\\Parameters.xlsx", "Path", "B2:B10");
+                dic = Installer_Test.Lib.File_Functions.ReadExcelValues("C:\\Temp\\Parameters.xlsm", "PostInstall", "B2:B3");
 
-                string ver = dic["B7"];
-                string reg_ver = dic["B8"];
-                string product = Installer_Test.Lib.File_Functions.GetProduct(OS_Name, ver, reg_ver);
+                string ver = dic["B2"];
+                string reg_ver = dic["B3"];
+                string product = Installer_Test.Lib.File_Functions.GetProduct(ver, reg_ver);
                 string menu = "About Intuit " + product + "...";
                 Actions.SelectMenu(qbApp, qbWindow, "Help", menu );
                 pointer = GetForegroundWindow();

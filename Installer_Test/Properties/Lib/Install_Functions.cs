@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
+
 using FrameworkLibraries;
 using FrameworkLibraries.Utils;
 using FrameworkLibraries.ActionLibs;
@@ -19,6 +20,8 @@ using FrameworkLibraries.ActionLibs.WhiteAPI;
 using FrameworkLibraries.AppLibs.QBDT;
 using TestStack.White.UIItems.WindowItems;
 using Installer_Test.Lib;
+
+using Microsoft.Win32;
 
 
 using Excel = Microsoft.Office.Interop.Excel;
@@ -52,7 +55,7 @@ namespace Installer_Test
 
         public static string testName = "Installer Test Suite";
 
-        public static void Install_US()
+        public static string Install_US()
         {
             string country, SKU, installType, targetPath, installPath, wkflow, customOpt, License_No, Product_No, UserID, Passwd, firstName, lastName;
             string[] LicenseNo, ProductNo;
@@ -184,9 +187,7 @@ namespace Installer_Test
                // Update the Automation.Properties with the new properties
                File_Functions.Update_Automation_Properties();
                Launch_QB();
-
-               // shell.UndoMinimizeALL();
-              
+        
             }
 
             catch (Exception e)
@@ -197,7 +198,7 @@ namespace Installer_Test
                 Logger.logMessage("------------------------------------------------------------------------------");
 
             }
-     
+            return resultsPath;
         }
 
         public static void Install_UK()
@@ -1419,12 +1420,12 @@ namespace Installer_Test
             try
             {
 
-                Actions.WaitForWindow("Select QuickBooks Industry-Specific Edition", 8000000);    
+                Actions.WaitForWindow("Select QuickBooks Industry-Specific Edition", 180000);    
                 Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), industryEdition);
                 Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Next >");
                 Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Finish");
- 
-                Actions.WaitForWindow("QuickBooks Enterprise Solutions Product Configuration", 8000000);
+
+                Actions.WaitForWindow("QuickBooks Enterprise Solutions Product Configuration", 120000);
                 
                 // Actions.WaitForChildWindow_Install(Actions.GetDesktopWindow("QuickBooks Enterprise Solutions Product Configuration"), "QuickBooks Product Configuration", 60000);
                 Window win1 = Actions.GetDesktopWindow("QuickBooks Enterprise Solutions Product Configuration");
@@ -1439,15 +1440,31 @@ namespace Installer_Test
                 Window win2 = Actions.GetChildWindow(win1, "QuickBooks Product Configuration");
                 Actions.ClickElementByName(win2, "No");
 
-                Actions.WaitForWindow("QuickBooks Update Service", 8000000);
-                Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Update Service"));
-                SendKeys.SendWait("%l");
+                Actions.WaitForWindow("QuickBooks Update Service", 120000);
+                flag = false;
+                flag = Actions.CheckDesktopWindowExists("QuickBooks Update Service");
+                if (flag == true)
+                {
+                    Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Update Service"));
+                    SendKeys.SendWait("%l");
+                }
 
 
-                Actions.WaitForWindow("QuickBooks", int.Parse(Sync_Timeout));
-                if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
-                Actions.ClickElementByName((Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks")), "Remind Me Later");
-              
+                string readpath = "C:\\Temp\\Parameters.xlsm";
+                Dictionary<string, string> dic_QBDetails = new Dictionary<string, string>();
+                string ver, reg_ver, installed_product;
+
+                dic_QBDetails = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
+                ver = dic_QBDetails["B2"];
+                reg_ver = dic_QBDetails["B3"];
+
+                installed_product = File_Functions.GetProduct(ver, reg_ver);
+
+                Actions.WaitForWindow("Register " + installed_product, 120000);
+
+                if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register " + installed_product) == true)
+                    Actions.ClickElementByName((Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Register " + installed_product)), "Remind Me Later");
+
             }
 
             catch (Exception e)
@@ -1459,6 +1476,93 @@ namespace Installer_Test
 
 
         }
+
+        public static void CleanUp ()
+        {
+            string dir = @"C:\ProgramData\Intuit\";
+            if (Directory.Exists (dir))
+            {
+                DirectoryInfo del_dir = new DirectoryInfo(dir);
+                del_dir.Delete(true);
+            }
+
+            dir = @"C:\ProgramData\COMMON FILES\Intuit\";
+            if (Directory.Exists(dir))
+            {
+                DirectoryInfo del_dir = new DirectoryInfo(dir);
+                del_dir.Delete(true);
+            }
+
+            dir = @"C:\Program Files (x86)\Intuit\";
+            if (Directory.Exists(dir))
+            {
+                DirectoryInfo del_dir = new DirectoryInfo(dir);
+                del_dir.Delete(true);
+            }
+
+            dir = @"C:\Program Files (x86)\Common Files\Intuit\";
+            if (Directory.Exists(dir))
+            {
+                DirectoryInfo del_dir = new DirectoryInfo(dir);
+                del_dir.Delete(true);
+            }
+
+            dir = @"C:\Program Files\Intuit\";
+            if (Directory.Exists(dir))
+            {
+                DirectoryInfo del_dir = new DirectoryInfo(dir);
+                del_dir.Delete(true);
+            }
+
+            dir = @"C:\Program Files\Common Files\Intuit\";
+            if (Directory.Exists(dir))
+            {
+                DirectoryInfo del_dir = new DirectoryInfo(dir);
+                del_dir.Delete(true);
+            }
+
+            // Delete Company Files
+            dir = @"C:\Users\Public\Documents\Intuit\";
+            if (Directory.Exists(dir))
+            {
+                DirectoryInfo del_dir = new DirectoryInfo(dir);
+                foreach (var file in del_dir.GetFiles("*", SearchOption.AllDirectories))
+                {
+                    file.Attributes &= ~FileAttributes.ReadOnly;
+                    file.Delete();
+                }
+               // del_dir.Delete(true);
+
+                foreach (System.IO.DirectoryInfo subDirectory in del_dir.GetDirectories()) 
+                del_dir.Delete(true);
+            }
+
+            string regPath;
+            if (Environment.Is64BitOperatingSystem)
+            {
+                regPath = @"Software\Wow6432Node\";
+            }
+            else
+            {
+                regPath = @"Software\";
+            }
+
+            RegistryKey regKey = Registry.LocalMachine.OpenSubKey(regPath, true);
+
+            if (regKey != null)
+            {
+                regKey.DeleteSubKeyTree("Intuit");
+            }
+            regPath = @"Software\";
+            regKey = Registry.LocalMachine.OpenSubKey(regPath, true);
+
+            if (regKey != null)
+            {
+                regKey.DeleteSubKeyTree("Intuit");
+            }
+        }
+
+
     }
 }
 

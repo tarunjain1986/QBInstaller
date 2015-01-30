@@ -46,7 +46,7 @@ namespace Installer_Test.Tests
         [Then(StepTitle = "Then - click on Help -> About")]
         public void HelpUpdate()
         {
-            Help.ClickHelpAbout(qbApp, qbWindow);
+           // Help.ClickHelpAbout(qbApp, qbWindow, resultsPath);
         }
         
         //[AndThen(StepTitle = "AndThen - Perform tear down activities to ensure that there are no on-screen exceptions")]

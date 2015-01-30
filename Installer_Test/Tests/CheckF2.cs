@@ -37,7 +37,7 @@ namespace Installer_Test.Tests
         public void CheckF2value()
         {
             //Actions.SelectMenu(qbApp, qbWindow, "File", "New Company...");
-            PostInstall_Functions.CheckF2value(qbApp, qbWindow);
+            // PostInstall_Functions.CheckF2value(qbApp, qbWindow,resultsPath);
 
         }
         [Fact]

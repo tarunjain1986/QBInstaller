@@ -62,7 +62,7 @@ namespace QBInstall.Tests
             reg_ver = dic["B3"];
 
             OS_Name = File_Functions.GetOS();
-            installed_product = Installer_Test.Lib.File_Functions.GetProduct(OS_Name, ver, reg_ver);
+            installed_product = Installer_Test.Lib.File_Functions.GetProduct(ver, reg_ver);
                         
             
             //Remove

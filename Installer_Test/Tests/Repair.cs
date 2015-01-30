@@ -53,7 +53,10 @@ namespace QBInstall.Tests
         public void Setup()
         {
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
-            Logger log = new Logger(testName + "_" + timeStamp);
+          //  Logger log = new Logger(testName + "_" + timeStamp);
+
+            Install_Functions.CleanUp();
+
 
             //string readpath = @"C:\Temp\Parameters.txt";
             //File.WriteAllLines(readpath, File.ReadAllLines(readpath).Where(l => !string.IsNullOrWhiteSpace(l))); // Remove white space from the file
@@ -72,8 +75,8 @@ namespace QBInstall.Tests
             reg_ver = dic["B4"];
 
             OS_Name = File_Functions.GetOS();
-            installed_product = File_Functions.GetProduct(OS_Name, ver, reg_ver);
-            installed_path = File_Functions.GetPath(OS_Name, ver, reg_ver);         
+            installed_product = File_Functions.GetProduct(ver, reg_ver);
+            installed_path = File_Functions.GetPath(ver, reg_ver);         
             installed_dir = Path.GetDirectoryName(installed_path); // Get the path (without the exe name)
         }
 

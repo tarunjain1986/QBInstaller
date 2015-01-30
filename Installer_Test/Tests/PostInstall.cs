@@ -58,11 +58,11 @@ namespace Installer_Test.Tests
             expected_ver = dic["B4"];
 
             OS_Name = File_Functions.GetOS();
-            installed_version = File_Functions.GetQBVersion(OS_Name,ver,reg_ver);
-            installed_product = File_Functions.GetProduct(OS_Name, ver, reg_ver);
-            installed_dataPath = File_Functions.GetDataPath(OS_Name, ver, reg_ver);
-            installed_commonPath = File_Functions.GetCommonFilesPath(OS_Name, ver, reg_ver);
-            dataPath = File_Functions.GetDataPathKey(OS_Name, ver, reg_ver);
+            installed_version = File_Functions.GetQBVersion(ver,reg_ver);
+            installed_product = File_Functions.GetProduct(ver, reg_ver);
+            installed_dataPath = File_Functions.GetDataPath(ver, reg_ver);
+            installed_commonPath = File_Functions.GetCommonFilesPath(ver, reg_ver);
+            dataPath = File_Functions.GetDataPathKey(ver, reg_ver);
             userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             userName = userName.Remove(0, 5);
 

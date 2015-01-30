@@ -48,33 +48,16 @@ namespace Installer_Test.Lib
         public static string custname, vendorname, itemname, backuppath;
         public static Random _r = new Random();
 
-        public static void CheckF2value(TestStack.White.Application qbApp, Window qbWindow)
+        public static void CheckF2value(TestStack.White.Application qbApp, Window qbWindow, string resultsPath)
         {
-            //Actions.SelectMenu(qbApp, qbWindow, "File", "New Company...");
             Actions.SendF2ToWindow(qbWindow);
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
             IntPtr pointer = GetForegroundWindow();
-            string resultsPath = @"C:\Temp\Results\CheckF2_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "\\";
-            if (!Directory.Exists(resultsPath))
-            {
-                try
-                {
-                    Directory.CreateDirectory(resultsPath);
-                    Logger.logMessage("Directory " + resultsPath + " created - Successful");
-                    Logger.logMessage("------------------------------------------------------------------------------");
-                }
-                catch (Exception e)
-                {
-                    Logger.logMessage("Directory " + resultsPath + " could not be created - Failed");
-                    Logger.logMessage(e.Message);
-                    Logger.logMessage("------------------------------------------------------------------------------");
-                }
-                pointer = GetForegroundWindow();
-                sc.CaptureWindowToFile(pointer, resultsPath + "01_CheckF2.png", ImageFormat.Png);
-                
-                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Product Information"), "OK");
-            }
+            pointer = GetForegroundWindow();
+            sc.CaptureWindowToFile(pointer, resultsPath + "CheckF2.png", ImageFormat.Png);
+            Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Product Information"), "OK");
+            
         }
 
         public static void SwitchEdition(TestStack.White.Application qbApp, Dictionary<String, String> dic, String exe, String Bizname, String SearchText)
@@ -579,6 +562,11 @@ namespace Installer_Test.Lib
             else
                 Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btnCreateCompany");
             String Title = qbWindow.Title;
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickSetup"), "1");
+
+            //Actions.ClickButtonByAutomationID(Actions.GetChildWindow(qbWindow, "Confirm Save As"), "CommandButton_6");
 
             if (Title.Contains(bizName) == true)
             {
