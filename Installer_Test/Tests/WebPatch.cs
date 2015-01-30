@@ -19,11 +19,14 @@ using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.WindowItems;
 
+
 using Xunit;
 
 using Installer_Test;
 using FrameworkLibraries.ActionLibs.WhiteAPI;
 using Installer_Test.Lib;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 
 namespace Installer_Test.Tests
@@ -35,6 +38,8 @@ namespace Installer_Test.Tests
         public static Property conf = Property.GetPropertyInstance();
         public static string Sync_Timeout = conf.get("SyncTimeOut");
         public static string testName = "WebPatch";
+        private static extern IntPtr GetForegroundWindow();
+        String resultsPath = @"C:\Temp\Results\WebPatch_" + DateTime.Now.ToString("yyyyMMddHHmm") + @"\Screenshots\";
         
         string readpath = "C:\\Temp\\Parameters.xlsm";
         string targetPath, sku;
@@ -75,16 +80,47 @@ namespace Installer_Test.Tests
             OSOperations.InvokeInstaller(targetPath, "en_qbwebpatch.exe");
             else
             OSOperations.InvokeInstaller(targetPath, "qbwebpatch.exe");
-            Actions.WaitForWindow("QuickBooks Update,Version",30000);
-               
-            Window patchWin= Actions.GetDesktopWindow("QuickBooks Update,Version");
-            Actions.WaitForElementEnabled(patchWin, "Install Now", 30000);
-            Actions.ClickElementByName(patchWin, "Install Now");
-            Logger.logMessage("Installing webpatch");
-            Actions.WaitForWindow("QuickBooks Update,Version", 30000);
-            Window patchWin1 = Actions.GetDesktopWindow("QuickBooks Update,Version");
-            Window updatecomp = Actions.GetChildWindow(patchWin1, "Update complete");
-            Actions.ClickElementByName(updatecomp, "OK");
+            
+
+            try
+            {
+                Actions.WaitForWindow("QuickBooks Update", 10000);
+                if(Actions.CheckDesktopWindowExists("QuickBooks Update"))
+                {
+                    ScreenCapture sc = new ScreenCapture();
+                    System.Drawing.Image img = sc.CaptureScreen();
+                    IntPtr pointer = GetForegroundWindow();
+                    pointer = GetForegroundWindow();
+                    sc.CaptureWindowToFile(pointer, resultsPath + "Wrong_WebPatch_Error.png", ImageFormat.Png);
+                    Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update"), "OK");
+                }
+
+            }
+            catch(Exception e)
+            {
+                Logger.logMessage("Wrong Patch" + e.ToString());
+            }
+            try
+            {
+                Actions.WaitForWindow("QuickBooks Update,Version", 60000);
+                Window patchWin = Actions.GetDesktopWindow("QuickBooks Update,Version");
+                Actions.WaitForElementEnabled(patchWin, "Install Now", 60000);
+                Actions.ClickElementByName(patchWin, "Install Now");
+                Logger.logMessage("Installing webpatch");
+                Actions.WaitForWindow("QuickBooks Update,Version", 60000);
+                Window patchWin1 = Actions.GetDesktopWindow("QuickBooks Update,Version");
+                Window updatecomp = Actions.GetChildWindow(patchWin1, "Update complete");
+                Actions.ClickElementByName(updatecomp, "OK");
+
+            }
+            catch(Exception e)
+            {
+                Logger.logMessage("Patch Failed" + e.ToString());
+
+            }
+
+
+           
 
         }
       
