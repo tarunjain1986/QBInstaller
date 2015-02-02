@@ -98,6 +98,7 @@
     <Compile Include="Tests\UnitTest1.cs" />
     <Compile Include="Tests\UnitTest2.cs" />
     <Compile Include="Tests\UnitTest3.cs" />
+    <Compile Include="Tests\UnitTest4.cs" />
     <Compile Include="Tests\WebPatch.cs" />
     <Compile Include="Tests\VerifyRebuild.cs" />
     <Compile Include="Tests\AutoPatch.cs" />
