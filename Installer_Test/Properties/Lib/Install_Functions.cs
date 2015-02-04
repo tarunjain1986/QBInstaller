@@ -12,7 +12,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-
 using FrameworkLibraries;
 using FrameworkLibraries.Utils;
 using FrameworkLibraries.ActionLibs;
@@ -23,9 +22,7 @@ using Installer_Test.Lib;
 
 using Microsoft.Win32;
 
-
 using Excel = Microsoft.Office.Interop.Excel;
-
 
 using Installer_Test.Properties.Lib;
 
@@ -34,7 +31,7 @@ using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.InputDevices;
 
-
+using Xunit;
 
 namespace Installer_Test
 {
@@ -51,9 +48,15 @@ namespace Installer_Test
         public string line;
         public static string custname, vendorname, itemname,backuppath;
         public static Random _r = new Random();
-        public static string resultsPath, LogFilePath;
+        public static string resultsPath, LogFilePath, industryEdition;;
 
-        public static string testName = "Installer Test Suite";
+        public static string ver, reg_ver, expected_ver, installed_version, installed_dataPath, dataPath;
+
+        public static string testName = "Installer Test Suite", regPath;
+
+        public static TestStack.White.Application qbApp = null;
+        public static TestStack.White.UIItems.WindowItems.Window qbWindow = null;
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public static string Install_US()
         {
@@ -101,17 +104,19 @@ namespace Installer_Test
 
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
 
+            // Create a folder to save the Screenshots
+            Create_Dir(resultsPath);
+            Thread.Sleep(2000); // Wait for folder to be created
+
             Logger log = new Logger(testName + "_" + timeStamp);
 
-            Logger.logMessage("InstallQB " + targetPath + " - Started..");
-            Logger.logMessage("License Number: " + License_No);
-            Logger.logMessage("Product Number " + Product_No);
+            Logger.logMessage ("----------------------------------------------------------------------");
+            Logger.logMessage ("Installation of QuickBooks at " + targetPath + " - Started");
+            Logger.logMessage ("License Number: " + License_No);
+            Logger.logMessage ("Product Number " + Product_No);
 
             Logger.logMessage("Function call @ :" + DateTime.Now);
-
-           // Create a folder to save the Screenshots
-            Create_Dir(resultsPath);
-            
+           
             try
             {
                 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,16 +191,24 @@ namespace Installer_Test
 
                // Update the Automation.Properties with the new properties
                File_Functions.Update_Automation_Properties();
-               Launch_QB();
+               Launch_QB(SKU);
         
+               Logger.logMessage ("**********************************************************************");
+               Logger.logMessage ("**********************************************************************");
+               Logger.logMessage ("QuickBooks installation and Launch - Successful");
+               Logger.logMessage ("**********************************************************************");
+               Logger.logMessage ("**********************************************************************");
+
             }
 
             catch (Exception e)
             {
-                Logger.logMessage("InstallQB " + targetPath + " - Failed");
-                Logger.logMessage(e.Message);
-                Logger.logMessage("------------------------------------------------------------------------------");
-                Logger.logMessage("------------------------------------------------------------------------------");
+              Logger.logMessage ("**********************************************************************");
+              Logger.logMessage ("**********************************************************************");
+              Logger.logMessage ("Installation of QuickBooks at " + targetPath + " - Failed");
+              Logger.logMessage (e.Message);
+              Logger.logMessage ("**********************************************************************");
+              Logger.logMessage ("**********************************************************************");
 
             }
             return resultsPath;
@@ -480,10 +493,9 @@ namespace Installer_Test
                 Logger.logMessage(e.Message);
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
-  
-            Logger.logMessage("InstallQB " + targetPath + " - Successful");
-            Logger.logMessage("------------------------------------------------------------------------------");
-            Logger.logMessage("------------------------------------------------------------------------------");
+
+            Logger.logMessage("Installation of Quickbooks " + targetPath + " - Successful");
+            Logger.logMessage("----------------------------------------------------------------------");
         }
 
         public static void Select_InstallType(string installType, string customOpt, string targetPath, string installPath)
@@ -1218,10 +1230,23 @@ namespace Installer_Test
         {
             string[] dlls = { "abmapi.DLL", "Accountant.DLL", "AccountRegistersUI.DLL", "ACE.DLL", "ACM.DLL", "ADR.DLL", "acXMLParser.dll", "QBADRHelper.dll" };
 
+            try
+            {
             foreach (string dll in dlls)
             {
                 if (File.Exists (installed_path + "\\" + dll))
                 File.Delete(installed_path + "\\" + dll);
+            }
+
+                Logger.logMessage ("QuickBooks dlls have been deleted");
+                Logger.logMessage ("-------------------------------------------------------");
+            }
+
+            catch (Exception e)
+            {
+                Logger.logMessage ("Error in deleting QuickBooks dlls");
+                Logger.logMessage (e.Message);
+                Logger.logMessage ("-------------------------------------------------------");
             }
 
         }
@@ -1412,11 +1437,22 @@ namespace Installer_Test
 
         }
 
-        public static void Launch_QB ()
+        public static void Launch_QB (string SKU)
         {
-            // Boolean flag = false;
+            
+            switch (SKU)
+            {
+                case "Enterprise":
+                case "Enterprise Accountant":
+                    industryEdition = "Enterprise Solutions General Business";
+                    break;
 
-            string industryEdition = "Enterprise Solutions General Business";
+                case "Premier":
+                case "Premier Plus":
+                case "Premier Accountant":
+                    industryEdition = "Premier Edition (General Business)";
+                    break;
+            }
             try
             {
 
@@ -1425,9 +1461,34 @@ namespace Installer_Test
                 Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Next >");
                 Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Finish");
 
-                Actions.WaitForWindow("QuickBooks Enterprise Solutions Product Configuration", 120000);
+                Select_Edition(industryEdition);
+
+                string exe = conf.get("QBExePath");
+                qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
+                qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
                 
-                // Actions.WaitForChildWindow_Install(Actions.GetDesktopWindow("QuickBooks Enterprise Solutions Product Configuration"), "QuickBooks Product Configuration", 60000);
+                QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+                Thread.Sleep(20000);
+                
+            }
+
+            catch (Exception e)
+            {
+                Logger.logMessage("Launch QuickBooks - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+
+        }
+
+        public static void Select_Edition(string industryEdition)
+        {
+
+            try
+            {
+                Actions.WaitForWindow("QuickBooks Enterprise Solutions Product Configuration", 30000);
+
                 Window win1 = Actions.GetDesktopWindow("QuickBooks Enterprise Solutions Product Configuration");
 
                 Boolean flag = false;
@@ -1440,15 +1501,16 @@ namespace Installer_Test
                 Window win2 = Actions.GetChildWindow(win1, "QuickBooks Product Configuration");
                 Actions.ClickElementByName(win2, "No");
 
-                Actions.WaitForWindow("QuickBooks Update Service", 120000);
+                Thread.Sleep(45000);
+
                 flag = false;
+               
                 flag = Actions.CheckDesktopWindowExists("QuickBooks Update Service");
                 if (flag == true)
                 {
                     Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Update Service"));
                     SendKeys.SendWait("%l");
                 }
-
 
                 string readpath = "C:\\Temp\\Parameters.xlsm";
                 Dictionary<string, string> dic_QBDetails = new Dictionary<string, string>();
@@ -1459,96 +1521,229 @@ namespace Installer_Test
                 reg_ver = dic_QBDetails["B3"];
 
                 installed_product = File_Functions.GetProduct(ver, reg_ver);
+                Thread.Sleep(5000);
+               
+                var MainWindow = Actions.GetDesktopWindow("Intuit QuickBooks");
 
-                Actions.WaitForWindow("Register " + installed_product, 120000);
+                if (Actions.CheckWindowExists(MainWindow, "Register "))
+                {
+                    Actions.ClickElementByName(Actions.GetChildWindow(MainWindow, "Register "), "Remind Me Later");
+                    Logger.logMessage ("Register QuickBooks window found.");
+                    Logger.logMessage ("-----------------------------------------------------------------");
+                }
 
-                if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register " + installed_product) == true)
-                    Actions.ClickElementByName((Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Register " + installed_product)), "Remind Me Later");
+                //if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Set Up an External Accountant User") == true)
+                //{
+                //    Window ExtAcctWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Set Up an External Accountant User");
+                //    Actions.ClickElementByName(ExtAcctWin, "No");
+                //}
+
+                //if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Automatic Backup") == true)
+                //{
+                //    SendKeys.SendWait("%N");
+                //}
+
+                //if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Accountant Center") == true)
+                //{
+
+                //    Window AcctCenWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Accountant Center");
+                //    Actions.ClickElementByName(AcctCenWin, "Close");
+
+                //}
+
+                //if (Actions.CheckWindowExists(MainWindow, "QuickBooks Usage & Analytics Study"))
+                //{
+                //    Actions.ClickElementByName(Actions.GetChildWindow(MainWindow, "QuickBooks Usage & Analytics Study"), "Continue");
+                //    Actions.ClickElementByName(Actions.GetChildWindow(MainWindow, "About Automatic Update"), "OK");
+                //}
+                   
+             Logger.logMessage (industryEdition + " Edition selected - Successful");
 
             }
-
             catch (Exception e)
             {
-               // Logger.logMessage("Click on Open QuickBooks - Failed");
+                Logger.logMessage("Select Edition " + industryEdition + " - Failed");
                 Logger.logMessage(e.Message);
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
-
-
         }
 
         public static void CleanUp ()
         {
             string dir = @"C:\ProgramData\Intuit\";
-            if (Directory.Exists (dir))
+            Logger.logMessage ("Cleanup after Uninstall - Started");
+            Logger.logMessage ("-----------------------------------------------------------");
+
+            try
             {
-                DirectoryInfo del_dir = new DirectoryInfo(dir);
-                del_dir.Delete(true);
+                if (Directory.Exists (dir))
+                {
+                   DirectoryInfo del_dir = new DirectoryInfo(dir);
+                   del_dir.Delete(true);
+                 }
+
+                Logger.logMessage (dir + " deletion - Successful");
             }
+
+            catch (Exception e)
+            {
+                Logger.logMessage (dir + " deletion - Failed");
+                Logger.logMessage (e.Message);
+                Logger.logMessage ("-----------------------------------------------------------");
+            }
+
 
             dir = @"C:\ProgramData\COMMON FILES\Intuit\";
-            if (Directory.Exists(dir))
+
+            try
             {
-                DirectoryInfo del_dir = new DirectoryInfo(dir);
-                del_dir.Delete(true);
+                if (Directory.Exists(dir))
+                {
+                   DirectoryInfo del_dir = new DirectoryInfo(dir);
+                   del_dir.Delete(true);
+                }
+
+              Logger.logMessage (dir + " deletion - Successful");
             }
+
+            catch (Exception e)
+            {
+                Logger.logMessage (dir + " deletion - Failed");
+                Logger.logMessage (e.Message);
+                Logger.logMessage ("-----------------------------------------------------------");
+            }
+
 
             dir = @"C:\Program Files (x86)\Intuit\";
-            if (Directory.Exists(dir))
+
+            try 
             {
-                DirectoryInfo del_dir = new DirectoryInfo(dir);
-                del_dir.Delete(true);
+                if (Directory.Exists(dir))
+                {
+                    DirectoryInfo del_dir = new DirectoryInfo(dir);
+                    del_dir.Delete(true);
+                }
+              Logger.logMessage (dir + " deletion - Successful");
             }
+
+            catch (Exception e)
+            {
+                Logger.logMessage (dir + " deletion - Failed");
+                Logger.logMessage (e.Message);
+                Logger.logMessage ("-----------------------------------------------------------");
+            }
+
 
             dir = @"C:\Program Files (x86)\Common Files\Intuit\";
-            if (Directory.Exists(dir))
+            try
             {
-                DirectoryInfo del_dir = new DirectoryInfo(dir);
-                del_dir.Delete(true);
+                if (Directory.Exists(dir))
+                {
+                    DirectoryInfo del_dir = new DirectoryInfo(dir);
+                    del_dir.Delete(true);
+                }
+               Logger.logMessage (dir + " deletion - Successful");
             }
 
-            dir = @"C:\Program Files\Intuit\";
-            if (Directory.Exists(dir))
+            catch (Exception e)
             {
-                DirectoryInfo del_dir = new DirectoryInfo(dir);
-                del_dir.Delete(true);
+                Logger.logMessage (dir + " deletion - Failed");
+                Logger.logMessage (e.Message);
+                Logger.logMessage ("-----------------------------------------------------------");
+            }
+
+
+            dir = @"C:\Program Files\Intuit\";
+
+            try
+            {
+                if (Directory.Exists(dir))
+                {
+                    DirectoryInfo del_dir = new DirectoryInfo(dir);
+                    del_dir.Delete(true);
+                }
+
+                Logger.logMessage (dir + " deletion - Successful");
+            }
+            
+            catch (Exception e)
+            {
+                Logger.logMessage (dir + " deletion - Failed");
+                Logger.logMessage (e.Message);
+                Logger.logMessage ("-----------------------------------------------------------");
             }
 
             dir = @"C:\Program Files\Common Files\Intuit\";
-            if (Directory.Exists(dir))
+
+            try
             {
-                DirectoryInfo del_dir = new DirectoryInfo(dir);
-                del_dir.Delete(true);
+                if (Directory.Exists(dir))
+                {
+                    DirectoryInfo del_dir = new DirectoryInfo(dir);
+                    del_dir.Delete(true);
+                }
+
+                Logger.logMessage (dir + " deletion - Successful");
+            }
+
+            catch (Exception e)
+            {
+                Logger.logMessage (dir + " deletion - Failed");
+                Logger.logMessage (e.Message);
+                Logger.logMessage ("-----------------------------------------------------------");
             }
 
             // Delete Company Files
             dir = @"C:\Users\Public\Documents\Intuit\";
-            if (Directory.Exists(dir))
+
+            try
             {
-                DirectoryInfo del_dir = new DirectoryInfo(dir);
-                foreach (var file in del_dir.GetFiles("*", SearchOption.AllDirectories))
+                if (Directory.Exists(dir))
                 {
-                    file.Attributes &= ~FileAttributes.ReadOnly;
-                    file.Delete();
+                    DirectoryInfo del_dir = new DirectoryInfo(dir);
+                    foreach (var file in del_dir.GetFiles("*", SearchOption.AllDirectories))
+                    {
+                        file.Attributes &= ~FileAttributes.ReadOnly;
+                        file.Delete();
+                    }
+                   // del_dir.Delete(true);
+
+                    foreach (System.IO.DirectoryInfo subDirectory in del_dir.GetDirectories()) 
+                    del_dir.Delete(true);
                 }
-               // del_dir.Delete(true);
-
-                foreach (System.IO.DirectoryInfo subDirectory in del_dir.GetDirectories()) 
-                del_dir.Delete(true);
+              
+                Logger.logMessage (dir + " deletion - Successful");
             }
 
-            string regPath;
-            if (Environment.Is64BitOperatingSystem)
+            catch (Exception e)
             {
-                regPath = @"Software\Wow6432Node\";
+                Logger.logMessage (dir + " deletion - Failed");
+                Logger.logMessage (e.Message);
+                Logger.logMessage ("-----------------------------------------------------------");
             }
-            else
+
+            try
             {
-                regPath = @"Software\";
+                if (Environment.Is64BitOperatingSystem)
+                {
+                    regPath = @"Software\Wow6432Node\";
+                }
+                else
+                {
+                    regPath = @"Software\";
+                }
+                Logger.logMessage ("Registry entry " + regPath + " deletion - Successful");
             }
+
+            catch (Exception e)
+            {
+                Logger.logMessage ("Registry entry " + regPath + " deletion - Failed");
+                Logger.logMessage (e.Message);
+                Logger.logMessage ("-----------------------------------------------------------");
+            }
+
 
             RegistryKey regKey = Registry.LocalMachine.OpenSubKey(regPath, true);
-
             if (regKey != null)
             {
                 regKey.DeleteSubKeyTree("Intuit");
@@ -1560,8 +1755,88 @@ namespace Installer_Test
             {
                 regKey.DeleteSubKeyTree("Intuit");
             }
+
+            Logger.logMessage ("Cleanup after Uninstall - Completed");
+            Logger.logMessage ("-----------------------------------------------------------");
+
+            Logger.logMessage ("***************************************************************************************");
+            Logger.logMessage ("Execution of Install Suite - Completed");
+            Logger.logMessage ("***************************************************************************************");
         }
 
+        public static void Post_Install ()
+        {
+            string userName;
+            string readpath = "C:\\Temp\\Parameters.xlsm"; 
+
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            dic = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
+
+            ver = dic["B2"];
+            reg_ver = dic["B3"];
+            expected_ver = dic["B4"];
+
+            userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            userName = userName.Remove(0, 5);
+
+            installed_version = File_Functions.GetQBVersion(ver, reg_ver);
+            installed_dataPath = File_Functions.GetDataPath(ver, reg_ver);
+            dataPath = File_Functions.GetDataPathKey(ver, reg_ver);
+
+            Logger.logMessage ("-----------------------------------------------");
+            Logger.logMessage ("-----------------------------------------------");
+            Logger.logMessage ("Post Install Checks - Started");
+            Logger.logMessage ("-----------------------------------------------");
+
+            Actions.XunitAssertEuqals(expected_ver, installed_version);
+
+            try
+            {
+                Assert.True(File.Exists(dataPath + "QBInfo.dat"));
+                Logger.logMessage("File QBInfo.dat is available at " + dataPath + " - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("File QBInfo.dat is not available at " + dataPath + " - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            try
+            {
+                Assert.True(File.Exists(dataPath + "QBInfo.dat"));
+                Logger.logMessage("File QBInfo.dat is available at " + dataPath + " - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("File QBInfo.dat is not available at " + dataPath + " - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+
+            string fileName = "oauth_" + userName + ".dat";
+            try
+            {
+                Assert.True(File.Exists(dataPath + @"iamdata\" + fileName));
+                Logger.logMessage("File oauth_<username>.dat is available at " + dataPath + "iamdata\\ - Successful");
+                Logger.logMessage("------------------------------------------------------------------------------");
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("File oauth_<username>.dat is not available at " + dataPath + "iamdata\\ - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("------------------------------------------------------------------------------");
+
+            }
+
+            Logger.logMessage ("-----------------------------------------------");
+            Logger.logMessage ("Post Install Checks - Completed");
+            Logger.logMessage ("-----------------------------------------------");
+            Logger.logMessage ("-----------------------------------------------");
+        }
 
     }
 }

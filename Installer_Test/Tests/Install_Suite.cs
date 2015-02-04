@@ -13,6 +13,7 @@ using FrameworkLibraries;
 using FrameworkLibraries.Utils;
 using FrameworkLibraries.ActionLibs;
 using FrameworkLibraries.AppLibs.QBDT;
+using FrameworkLibraries.ActionLibs.WhiteAPI;
 
 using TestStack.BDDfy;
 using TestStack.White.UIItems;
@@ -182,11 +183,16 @@ namespace Installer_Test.Tests
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.MaximizeQB(qbApp);
         }
 
+        [AndThen(StepTitle = "Then - Perform PostInstall Tests")]
+        public void Test_PostInstall()
+        {
+            Install_Functions.Post_Install();
+        }
+
+
         [AndThen(StepTitle = "Then - Open F2")]
         public void CheckF2value()
         {
-            qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
-            qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
             QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
             PostInstall_Functions.CheckF2value(qbApp, qbWindow, resultsPath);
         }
@@ -235,32 +241,44 @@ namespace Installer_Test.Tests
                 case "Enterprise":
                     if (country == "US" | country == "CA")
                     {
-                        PostInstall_Functions.SwitchEdition(qbApp, dic_Switch_Enterprise, exe, Bizname, SearchText);
+                        SwitchToggle.SwitchEdition("Enterprise");
+                        // PostInstall_Functions.SwitchEdition(qbApp, dic_Switch_Enterprise, exe, Bizname, SearchText);
                     }
                     break;
 
                 case "Premier":
-                    PostInstall_Functions.SwitchEdition(qbApp, dic_Switch_Premier, exe, Bizname, SearchText);
+                    SwitchToggle.SwitchEdition("Premier");
+                    // PostInstall_Functions.SwitchEdition(qbApp, dic_Switch_Premier, exe, Bizname, SearchText);
                     break;
 
                 case "Premier Plus":
                     if (country == "US")
                     {
-                        PostInstall_Functions.SwitchEdition(qbApp, dic_Switch_Premier, exe, Bizname, SearchText);
+                        SwitchToggle.SwitchEdition("Premier");
+                        // PostInstall_Functions.SwitchEdition(qbApp, dic_Switch_Premier, exe, Bizname, SearchText);
                     }
                     break;
 
                 case "Enterprise Accountant":
                     if (country == "US" | country == "CA")
                     {
-                        PostInstall_Functions.ToggleEdition(qbApp, dic_Toggle_Enterprise, exe, Bizname);
+                        SwitchToggle.ToggleEdition("Enterprise");
+                        // PostInstall_Functions.ToggleEdition(qbApp, dic_Toggle_Enterprise, exe, Bizname);
                     }
                     break;
 
                 case "Premier Accountant":
-                    PostInstall_Functions.ToggleEdition(qbApp, dic_Toggle_Premier, exe, Bizname);
+                    SwitchToggle.ToggleEdition("Premier");
+                    // PostInstall_Functions.ToggleEdition(qbApp, dic_Toggle_Premier, exe, Bizname);
                     break;
             }
+        }
+
+          [AndThen(StepTitle = "Close QuickBooks")]
+        public void CloseQB ()
+        {
+            Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
+            Actions.SelectMenu(qbApp, qbWindow, "File", "Exit");
         }
 
         [AndThen(StepTitle = "Repair QuickBooks")]
@@ -275,7 +293,11 @@ namespace Installer_Test.Tests
             Install_Functions.Delete_QBDLLs(installed_dir);
 
             // Invoke QB
-            QuickBooks.Initialize(installed_path);
+           // QuickBooks.Initialize(installed_path);
+
+            Process proc = new Process();
+            proc.StartInfo.FileName = installed_path;
+            proc.Start();
 
             //Repair
             QuickBooks.RepairOrUnInstallQB(installed_product, true, false);

@@ -50,6 +50,9 @@ namespace Installer_Test.Lib
 
         public static void CheckF2value(TestStack.White.Application qbApp, Window qbWindow, string resultsPath)
         {
+            Logger.logMessage("-------------------------------------------------------------");
+            Logger.logMessage("Check F2 - Started");
+            
             Actions.SendF2ToWindow(qbWindow);
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
@@ -57,7 +60,8 @@ namespace Installer_Test.Lib
             pointer = GetForegroundWindow();
             sc.CaptureWindowToFile(pointer, resultsPath + "CheckF2.png", ImageFormat.Png);
             Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Product Information"), "OK");
-            
+            Logger.logMessage("Check F2 - Completed");
+            Logger.logMessage("-------------------------------------------------------------");
         }
 
         public static void SwitchEdition(TestStack.White.Application qbApp, Dictionary<String, String> dic, String exe, String Bizname, String SearchText)
@@ -387,10 +391,14 @@ namespace Installer_Test.Lib
         {
             var qbApp = QuickBooks.GetApp("QuickBooks");
             var qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
-            var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
+
             string bizName = null, industryList = null, industryType = null, businessType = null, address1 = null, address2 = null, state = null, city = null, country = null, taxid = null, phone = null, zip = null;
             string emailid = null, existpassword = null, newpwd = null, confirmpass = null, fname = null, lname = null;
-  
+
+            Logger.logMessage("--------------------------------------------------------------------");
+            Logger.logMessage("Create Company File - Started");
+            Logger.logMessage("--------------------------------------------------------------------");
+
             Actions.SelectMenu(qbApp, qbWindow, "File", "New Company...");
 
             Actions.WaitForChildWindow(qbWindow, "QuickBooks Setup", 999999);
@@ -570,13 +578,17 @@ namespace Installer_Test.Lib
 
             if (Title.Contains(bizName) == true)
             {
-                Logger.logMessage("Company File Created successfully");
-
+                Logger.logMessage("--------------------------------------------------------------------");
+                Logger.logMessage("Company File creation - Successful");
+                Logger.logMessage("--------------------------------------------------------------------");
             }
 
             else
-                Logger.logMessage("Company file creation failed");
-
+            {
+                Logger.logMessage("--------------------------------------------------------------------");
+                Logger.logMessage("Company File creation - Failed");
+                Logger.logMessage("--------------------------------------------------------------------");
+            }
             //Wait for the Marketing Page window
             qbWindow = Actions.GetAppWindow(qbApp, "QuickBooks");
             Actions.WaitForChildWindow(qbWindow, "QuickBooks Setup", 10000);
@@ -746,14 +758,16 @@ namespace Installer_Test.Lib
 
         public static void PerformMIMO(TestStack.White.Application qbApp, Window qbWindow)
         {
+            Logger.logMessage("----------------------------------------------------");
+            Logger.logMessage("Money In Money Out - Started");
+            Logger.logMessage("----------------------------------------------------");
+
             //Setting up the preferences 
             QB_functions.Reset_Preferences(qbApp, qbWindow);
 
             //Setting a new Customer
-
             custname = "Cust" + _r.Next(1000).ToString();
             QB_functions.Create_Customer(qbApp, qbWindow, custname);
-
 
             // Item is not created , create an item
             itemname = "item" + _r.Next(1000).ToString();
@@ -761,8 +775,7 @@ namespace Installer_Test.Lib
 
             //Creating an invoice
             QB_functions.Create_Invoice(qbApp, qbWindow, custname,itemname);
-            
-
+ 
             //Receive Payment
             QB_functions.Receive_Payments(qbApp, qbWindow, custname);
          
@@ -770,27 +783,27 @@ namespace Installer_Test.Lib
             vendorname = "Vend" + _r.Next(1000).ToString();
             QB_functions.Create_Vendor(qbApp,qbWindow,vendorname);
 
-            
             //Create Purhcase orders
             QB_functions.Create_Purchase_Order(qbApp,qbWindow,custname,itemname,vendorname);
             
             // Creating a bill
             QB_functions.Create_Bill(qbApp, qbWindow, vendorname, itemname);
-
            
-
             //Pay Bills
             QB_functions.Pay_Bill(qbApp,qbWindow);
-           
 
             //Reseting the preferences 
             QB_functions.Reset_Preferences(qbApp,qbWindow);
-
-
+            
+            Logger.logMessage("Money In Money Out - Successful");
+            Logger.logMessage("----------------------------------------------------");
         }
 
         public static void PerformVerify(TestStack.White.Application qbApp, Window qbWindow)
         {
+            Logger.logMessage("----------------------------------------------------");
+            Logger.logMessage("Verify Data - Started");
+            Logger.logMessage("----------------------------------------------------");
 
             // Invoking Verify Data from File-> Utility
             Actions.SelectMenu(qbApp, qbWindow, "File", "Utilities", "Verify Data");
@@ -800,13 +813,15 @@ namespace Installer_Test.Lib
                 if (Actions.CheckWindowExists(qbWindow, "Verify Data"))
                 {
                     Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Verify Data"), "OK");
-                    Logger.logMessage("Click on Verify Data Successful.");
-
+                    Logger.logMessage("Click on File -> Utilities -> Verify Data - Successful");
+                    Logger.logMessage("------------------------------------------------------------------");
                 }
             }
             catch (Exception e)
             {
-                Logger.logMessage(e.ToString());
+                Logger.logMessage("Click on File -> Utilities -> Verify Data - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("----------------------------------------------------------------------");
             }
 
             try
@@ -814,13 +829,17 @@ namespace Installer_Test.Lib
                 Actions.WaitForChildWindow(qbWindow, "QuickBooks Information", int.Parse(Sync_Timeout));
                 if (Actions.CheckWindowExists(qbWindow, "QuickBooks Information"))
                 {
-                    Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Information"), "OK");
-                    Logger.logMessage("Data Verified Successfully.");
+                  Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Information"), "OK");
+
+                  Logger.logMessage("Verify Data - Successful");
+                  Logger.logMessage("--------------------------------------------------------------------");
                 }
             }
             catch (Exception e)
             {
-                Logger.logMessage(e.ToString());
+                Logger.logMessage("Verify Data - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("--------------------------------------------------------------------");
             }
         }
 
@@ -840,12 +859,14 @@ namespace Installer_Test.Lib
                 if (Actions.CheckWindowExists(qbWindow, "QuickBooks Information"))
                 {
                     Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Information"), "OK");
-                    Logger.logMessage("Warning to take backup before continue.");
+                    Logger.logMessage("Click on QuickBooks Information -> OK - Successful");
                 }
             }
             catch (Exception e)
             {
-                Logger.logMessage(e.ToString());
+                Logger.logMessage("Click on QuickBooks Information -> OK - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("----------------------------------------------------------------------");
             }
             try
             {
@@ -888,10 +909,15 @@ namespace Installer_Test.Lib
                     Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Information"), "OK");
                 }
 
+                Logger.logMessage("Rebuild Data - Successful");
+                Logger.logMessage("--------------------------------------------------------------------");
             }
+
             catch (Exception e)
             {
-                Logger.logMessage(e.ToString());
+                Logger.logMessage("Rebuild Data - Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("--------------------------------------------------------------------");
             }
 
         }

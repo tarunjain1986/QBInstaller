@@ -134,8 +134,8 @@ namespace Installer_Test
 
         public static void ClickHelpAbout(TestStack.White.Application qbApp, Window qbWindow, string resultsPath)
         {
-            Logger.logMessage("Function call @ :" + DateTime.Now);
-            Logger.logMessage("Click Help -> About" + " - Started..");
+            Logger.logMessage("-----------------------------------------------------");
+            Logger.logMessage("Click Help -> About - Started");
 
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
@@ -156,7 +156,7 @@ namespace Installer_Test
                 pointer = GetForegroundWindow();
                 sc.CaptureWindowToFile(pointer, resultsPath + "01_Help_About.png", ImageFormat.Png);
                 Logger.logMessage("Help -> About - Successful");
-                Logger.logMessage("------------------------------------------------------------------------------");
+                Logger.logMessage("-----------------------------------------------------");
             }
             catch (Exception e)
             {

@@ -53,9 +53,9 @@ namespace QBInstall.Tests
         public void Setup()
         {
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
-          //  Logger log = new Logger(testName + "_" + timeStamp);
+     Logger log = new Logger(testName + "_" + timeStamp);
 
-            Install_Functions.CleanUp();
+          // Install_Functions.CleanUp();
 
 
             //string readpath = @"C:\Temp\Parameters.txt";
