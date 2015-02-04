@@ -64,6 +64,8 @@ namespace Installer_Test.Lib
             Logger.logMessage("-------------------------------------------------------------");
         }
 
+
+
         public static void SwitchEdition(TestStack.White.Application qbApp, Dictionary<String, String> dic, String exe, String Bizname, String SearchText)
         {
             String edistr;
@@ -841,6 +843,84 @@ namespace Installer_Test.Lib
                 Logger.logMessage(e.Message);
                 Logger.logMessage("--------------------------------------------------------------------");
             }
+        }
+
+         public static void ApplyWebpatch(String resultsPath)
+        {
+        
+        
+        string testName = "WebPatch";
+       
+
+        string readpath = "C:\\Temp\\Parameters.xlsm";
+        string targetPath, sku;
+        var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
+        Logger log = new Logger(testName + "_" + timeStamp);
+        Dictionary<string, string> dic = new Dictionary<string, string>();
+        dic = Lib.File_Functions.ReadExcelValues(readpath, "WebPatch", "B2:B12");
+        sku = dic["B7"];
+        targetPath = dic["B11"];
+
+        try
+        {
+            OSOperations.KillProcess("qbw32");
+            Logger.logMessage("QuickBooks process killed successfully");
+        }
+        catch (Exception e)
+        {
+            Logger.logMessage("Unable to Kill process QBW32" + e.ToString());
+        }
+
+        ScreenCapture sc = new ScreenCapture();
+        System.Drawing.Image img = sc.CaptureScreen();
+        IntPtr pointer = GetForegroundWindow();
+
+        if (sku == "Enterprise" || sku == "Enterprise Accountant")
+            OSOperations.InvokeInstaller(targetPath, "en_qbwebpatch.exe");
+        else
+            OSOperations.InvokeInstaller(targetPath, "qbwebpatch.exe");
+
+
+        try
+        {
+            Actions.WaitForWindow("QuickBooks Update", 30000);
+            if (Actions.CheckDesktopWindowExists("QuickBooks Update"))
+            {
+
+                pointer = GetForegroundWindow();
+                sc.CaptureWindowToFile(pointer, resultsPath + "Wrong_WebPatch_Error.png", ImageFormat.Png);
+                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update"), "OK");
+            }
+
+        }
+        catch (Exception e)
+        {
+            Logger.logMessage("Wrong Patch" + e.ToString());
+        }
+        try
+        {
+            Actions.WaitForWindow("QuickBooks Update,Version", 60000);
+            if (Actions.CheckDesktopWindowExists("QuickBooks Update,Version"))
+            {
+                Window patchWin = Actions.GetDesktopWindow("QuickBooks Update,Version");
+                Actions.WaitForElementEnabled(patchWin, "Install Now", 60000);
+                Actions.ClickElementByName(patchWin, "Install Now");
+                Logger.logMessage("Installing webpatch");
+                Actions.WaitForWindow("QuickBooks Update,Version", 60000);
+                Window patchWin1 = Actions.GetDesktopWindow("QuickBooks Update,Version");
+                Window updatecomp = Actions.GetChildWindow(patchWin1, "Update complete");
+                pointer = GetForegroundWindow();
+                sc.CaptureWindowToFile(pointer, resultsPath + "Patch_Applied_Succes.png", ImageFormat.Png);
+                Actions.ClickElementByName(updatecomp, "OK");
+                Logger.logMessage("Patch Applied Successfully");
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.logMessage("Patch Failed" + e.ToString());
+
+        }
+
         }
 
         public static void PerformRebuild(TestStack.White.Application qbApp, Window qbWindow)
