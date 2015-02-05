@@ -48,7 +48,7 @@ namespace Installer_Test
         public string line;
         public static string custname, vendorname, itemname,backuppath;
         public static Random _r = new Random();
-        public static string resultsPath, LogFilePath, industryEdition;;
+        public static string resultsPath, LogFilePath, industryEdition;
 
         public static string ver, reg_ver, expected_ver, installed_version, installed_dataPath, dataPath;
 
@@ -97,18 +97,16 @@ namespace Installer_Test
             temp = regex.Replace(Product_No, "$&" + "\n");
             ProductNo = temp.Split('\n');
                        
-            resultsPath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + @"\Screenshots\";
-            LogFilePath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + @"\Logs\";
+            resultsPath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMdd") + @"\Screenshots\";
+            LogFilePath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMdd") + @"\Logs\";
             Add_Log_Automation_Properties(LogFilePath);
             Thread.Sleep(3000); // Wait for the entry to be added in the Automation.Properties file
 
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
 
+            Logger log = new Logger(testName + "_" + DateTime.Now.ToString("yyyyMMdd"));// + timeStamp);
             // Create a folder to save the Screenshots
             Create_Dir(resultsPath);
-            Thread.Sleep(2000); // Wait for folder to be created
-
-            Logger log = new Logger(testName + "_" + timeStamp);
 
             Logger.logMessage ("----------------------------------------------------------------------");
             Logger.logMessage ("Installation of QuickBooks at " + targetPath + " - Started");
@@ -1146,14 +1144,17 @@ namespace Installer_Test
                 try
                 {
                     Directory.CreateDirectory(resultsPath);
+                    Thread.Sleep(1000);
+                    Logger.logMessage("----------------------------------------------------------------------------------------------------");
                     Logger.logMessage("Directory " + resultsPath + " created - Successful");
-                    Logger.logMessage("------------------------------------------------------------------------------");
+                    Logger.logMessage("----------------------------------------------------------------------------------------------------");
                 }
                 catch (Exception e)
                 {
+                    Logger.logMessage("----------------------------------------------------------------------------------------------------");
                     Logger.logMessage("Directory " + resultsPath + " could not be created - Failed");
                     Logger.logMessage(e.Message);
-                    Logger.logMessage("------------------------------------------------------------------------------");
+                    Logger.logMessage("----------------------------------------------------------------------------------------------------");
                 }
             }
 

@@ -314,8 +314,8 @@ namespace Installer_Test.Tests
         }
         
        [Fact]
-       [Category("P1")]
-        public void RunQBInstallTest()
+       [Category("Installer_Suite")]
+        public void RunQBInstallSuite()
         {
             this.BDDfy();
         }
