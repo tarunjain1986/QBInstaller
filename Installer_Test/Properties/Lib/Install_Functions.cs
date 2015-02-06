@@ -1466,7 +1466,7 @@ namespace Installer_Test
                 Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Next >");
                 Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Finish");
 
-                Select_Edition(SKU, industryEdition);
+                Select_Edition(industryEdition);
 
                 string exe = conf.get("QBExePath");
                 qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
@@ -1487,7 +1487,7 @@ namespace Installer_Test
 
         }
 
-        public static void Select_Edition(string SKU, string industryEdition)
+        public static void Select_Edition(string industryEdition)
         {
 
             try
