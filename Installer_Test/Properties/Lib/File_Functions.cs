@@ -3,8 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 using Microsoft.Win32;
+
 
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Diagnostics;
@@ -73,10 +75,23 @@ namespace Installer_Test.Lib
         public static Dictionary<string, string> ReadExcelValues (string readpath,string workSheet, string Range)
         {
             //string readpath = "C:\\Temp\\Parameters.xlsm"; // "C:\\Installation\\Sample.txt";
-            Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
-            Excel.Workbook xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-            Excel.Worksheet xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(workSheet);
-            Excel.Range xlRng = (Excel.Range)xlWorkSheet.get_Range(Range, Type.Missing);
+
+            Excel._Application xlApp = null;
+            Excel.Workbooks xlWorkBooks = null;
+            Excel.Workbook xlWorkBook = null;
+            Excel.Worksheet xlWorkSheet = null;
+            Excel.Range xlRng = null;
+
+            xlApp = new Microsoft.Office.Interop.Excel.Application();
+            xlWorkBooks = xlApp.Workbooks;
+            xlWorkBook = xlWorkBooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+            xlWorkSheet = xlWorkBook.Worksheets.get_Item(workSheet);
+            xlRng = xlWorkSheet.get_Range(Range, Type.Missing);
+
+            //Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+            //Excel.Workbook xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+            //Excel.Worksheet xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(workSheet);
+            //Excel.Range xlRng = (Excel.Range)xlWorkSheet.get_Range(Range, Type.Missing);
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
@@ -90,12 +105,44 @@ namespace Installer_Test.Lib
 
             }
 
-            xlWorkBook.Close();
-            xlApp.Quit();
+            
+
+            //if (xlRng != null) Marshal.FinalReleaseComObject(xlRng);
+            //if (xlWorkSheet != null) Marshal.FinalReleaseComObject(xlWorkSheet);
+            //if (xlWorkBooks != null) Marshal.FinalReleaseComObject(xlWorkBooks);
+            //if (xlWorkBook != null)
+            //{
+            //    xlWorkBook.Close(Type.Missing, Type.Missing, Type.Missing);
+            //    Marshal.FinalReleaseComObject(xlWorkBook);
+            //}
+            //if (xlApp != null)
+            //{
+            //    xlApp.Quit();
+            //    Marshal.FinalReleaseComObject(xlApp);
+            //}
+
+            //xlWorkBook.Close();
+            //xlApp.Quit();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+         //   GC.Collect();
+
+
+            Marshal.FinalReleaseComObject(xlRng);
+            Marshal.FinalReleaseComObject(xlWorkSheet);
+            Marshal.FinalReleaseComObject(xlWorkBook);
+            Marshal.FinalReleaseComObject(xlWorkBooks);
+            Marshal.FinalReleaseComObject(xlApp);
+
+            xlApp = null;
+            xlWorkBooks = null;
+            xlWorkBook = null;
+            xlWorkSheet = null;
+            xlRng = null;
+      
+
             return dic;
-
-
-
         }
 
         public static Dictionary<string, string> ReadExcelCellValues(string readpath, string workSheet)
@@ -430,12 +477,12 @@ namespace Installer_Test.Lib
                 File.WriteAllLines(aut_file, prop_value);
             }
 
-            lineIndex = prop_value.FindIndex(line => line.StartsWith("LogDirectory="));
-            if (lineIndex != -1)
-            {
-                prop_value[lineIndex] = "LogDirectory=";
-                File.WriteAllLines(aut_file, prop_value);
-            }
+            //lineIndex = prop_value.FindIndex(line => line.StartsWith("LogDirectory="));
+            //if (lineIndex != -1)
+            //{
+            //    prop_value[lineIndex] = "LogDirectory=";
+            //    File.WriteAllLines(aut_file, prop_value);
+            //}
            
         }
 

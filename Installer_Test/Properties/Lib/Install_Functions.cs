@@ -89,6 +89,8 @@ namespace Installer_Test
 
             installPath = dic["B27"];
 
+
+
             var regex = new Regex(@".{4}");
             string temp = regex.Replace(License_No, "$&" + "\n");
             LicenseNo = temp.Split('\n');
@@ -99,10 +101,11 @@ namespace Installer_Test
                        
             resultsPath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMdd") + @"\Screenshots\";
             LogFilePath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMdd") + @"\Logs\";
+            
             Add_Log_Automation_Properties(LogFilePath);
             Thread.Sleep(3000); // Wait for the entry to be added in the Automation.Properties file
 
-            var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
+            // var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
 
             Logger log = new Logger(testName + "_" + DateTime.Now.ToString("yyyyMMdd"));// + timeStamp);
             // Create a folder to save the Screenshots
@@ -1459,10 +1462,11 @@ namespace Installer_Test
 
                 Actions.WaitForWindow("Select QuickBooks Industry-Specific Edition", 180000);    
                 Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), industryEdition);
+                Thread.Sleep(1000);
                 Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Next >");
                 Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Finish");
 
-                Select_Edition(industryEdition);
+                Select_Edition(SKU, industryEdition);
 
                 string exe = conf.get("QBExePath");
                 qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
@@ -1483,14 +1487,14 @@ namespace Installer_Test
 
         }
 
-        public static void Select_Edition(string industryEdition)
+        public static void Select_Edition(string SKU, string industryEdition)
         {
 
             try
             {
-                Actions.WaitForWindow("QuickBooks Enterprise Solutions Product Configuration", 30000);
+                Actions.WaitForWindow("Product Configuration", 30000);
 
-                Window win1 = Actions.GetDesktopWindow("QuickBooks Enterprise Solutions Product Configuration");
+                Window win1 = Actions.GetDesktopWindow("Product Configuration");
 
                 Boolean flag = false;
                 while (flag == false)
@@ -1512,6 +1516,21 @@ namespace Installer_Test
                     Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Update Service"));
                     SendKeys.SendWait("%l");
                 }
+
+                Thread.Sleep(2000);
+
+                // to be updated
+                //flag = false;
+                //if (SKU == "Premier")
+                //{
+                //    flag = Actions.CheckDesktopWindowExists("License Agreement");
+                //    if (flag == true)
+                //    {
+                //        win1 = Actions.GetDesktopWindow("License Agreement");
+                //       // Actions.ClickElementByName();
+
+                //    }
+                //}
 
                 string readpath = "C:\\Temp\\Parameters.xlsm";
                 Dictionary<string, string> dic_QBDetails = new Dictionary<string, string>();

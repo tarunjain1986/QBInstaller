@@ -74,12 +74,12 @@ namespace Installer_Test.Tests
         /// <summary>
         /// Switch / Toggle
         /// </summary>
-        public static string Bizname;
-        String SearchText = "  - Intuit QuickBooks"; 
-        Dictionary<String, String> dic_Switch_Enterprise;
-        Dictionary<String, String> dic_Switch_Premier;
-        Dictionary<String, String> dic_Toggle_Enterprise;
-        Dictionary<String, String> dic_Toggle_Premier;
+        //public static string Bizname;
+        //String SearchText = "  - Intuit QuickBooks"; 
+        //Dictionary<String, String> dic_Switch_Enterprise;
+        //Dictionary<String, String> dic_Switch_Premier;
+        //Dictionary<String, String> dic_Toggle_Enterprise;
+        //Dictionary<String, String> dic_Toggle_Premier;
 
         /// <summary>
         /// Repair / Uninstall
@@ -110,13 +110,13 @@ namespace Installer_Test.Tests
             // Invoke QB
             ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-            List<string> listHeader = new List<string>();
-            List<string> ListValue = new List<string>();
-            dic_InvokeQB = new Dictionary<string, string>();
-            File_Functions.ReadExcelSheet(readpath, "InvokeQB", 1, ref listHeader);
-            File_Functions.ReadExcelSheet(readpath, "InvokeQB", 2, ref ListValue);
-            dic_InvokeQB = listHeader.Zip(ListValue, (k, v) => new { k, v })
-                 .ToDictionary(x => x.k, x => x.v);
+            //List<string> listHeader = new List<string>();
+            //List<string> ListValue = new List<string>();
+            //dic_InvokeQB = new Dictionary<string, string>();
+            //File_Functions.ReadExcelSheet(readpath, "InvokeQB", 1, ref listHeader);
+            //File_Functions.ReadExcelSheet(readpath, "InvokeQB", 2, ref ListValue);
+            //dic_InvokeQB = listHeader.Zip(ListValue, (k, v) => new { k, v })
+            //     .ToDictionary(x => x.k, x => x.v);
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Check F2
@@ -137,11 +137,11 @@ namespace Installer_Test.Tests
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Switch / Toggle
             ///////////////////////////////////////////////////////////////////////////////////////////////////
-            Bizname = File_Functions.ReadExcelBizName(readpath);
-            dic_Switch_Enterprise = File_Functions.ReadExcelCellValues(readpath, "Ent-Switch");
-            dic_Switch_Premier = File_Functions.ReadExcelCellValues(readpath, "Pre-Switch");
-            dic_Toggle_Enterprise = File_Functions.ReadExcelCellValues(readpath, "Ent-Toggle");
-            dic_Toggle_Premier = File_Functions.ReadExcelCellValues(readpath, "Pre-Toggle");
+            //Bizname = File_Functions.ReadExcelBizName(readpath);
+            //dic_Switch_Enterprise = File_Functions.ReadExcelCellValues(readpath, "Ent-Switch");
+            //dic_Switch_Premier = File_Functions.ReadExcelCellValues(readpath, "Pre-Switch");
+            //dic_Toggle_Enterprise = File_Functions.ReadExcelCellValues(readpath, "Ent-Toggle");
+            //dic_Toggle_Premier = File_Functions.ReadExcelCellValues(readpath, "Pre-Toggle");
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Repair / Uninstall
