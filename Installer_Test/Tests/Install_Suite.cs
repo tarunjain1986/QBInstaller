@@ -93,9 +93,11 @@ namespace Installer_Test.Tests
         public void Setup()
         {
 
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            // Read an initiliaze variables used in all scripts in this function (Setup ())
+            //////////////////////////////////////////////////////////////////////////////////////////////////
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
-          //  Logger log = new Logger(testName + "_" + timeStamp);
-      
+                
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Invoke Installer and Install QB
             ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,6 +182,7 @@ namespace Installer_Test.Tests
             qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
 
+            // Maximize QuickBooks before continuing
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.MaximizeQB(qbApp);
         }
 
@@ -203,7 +206,6 @@ namespace Installer_Test.Tests
            Help.ClickHelpAbout(qbApp, qbWindow, resultsPath);
         }
 
-
         [AndThen(StepTitle = "Then - Create Company File")]
         public void CreateCompanyFile()
         {
@@ -211,7 +213,6 @@ namespace Installer_Test.Tests
         }
 
         [AndThen(StepTitle = "Then - Perform Money In Money Out")]
-
         public void PerformMIMO()
         {
             QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
@@ -219,7 +220,6 @@ namespace Installer_Test.Tests
         }
 
         [AndThen(StepTitle = "Then - Perform Verify")]
-
         public void PerformVerfiy()
         {
             QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
@@ -227,7 +227,6 @@ namespace Installer_Test.Tests
         }
 
         [AndThen(StepTitle = "Then - Perform Rebuild")]
-
         public void PerformRebuild()
         {
             PostInstall_Functions.PerformRebuild(qbApp, qbWindow);
@@ -274,7 +273,7 @@ namespace Installer_Test.Tests
             }
         }
 
-          [AndThen(StepTitle = "Close QuickBooks")]
+        [AndThen(StepTitle = "Close QuickBooks")]
         public void CloseQB ()
         {
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
