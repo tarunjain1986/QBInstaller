@@ -104,44 +104,42 @@ namespace Installer_Test.Lib
                 dic.Add(cellIndex, cellValue);
 
             }
+         
 
-            
+            ////if (xlRng != null) Marshal.FinalReleaseComObject(xlRng);
+            ////if (xlWorkSheet != null) Marshal.FinalReleaseComObject(xlWorkSheet);
+            ////if (xlWorkBooks != null) Marshal.FinalReleaseComObject(xlWorkBooks);
+            ////if (xlWorkBook != null)
+            ////{
+            ////    xlWorkBook.Close(Type.Missing, Type.Missing, Type.Missing);
+            ////    Marshal.FinalReleaseComObject(xlWorkBook);
+            ////}
+            ////if (xlApp != null)
+            ////{
+            ////    xlApp.Quit();
+            ////    Marshal.FinalReleaseComObject(xlApp);
+            ////}
 
-            //if (xlRng != null) Marshal.FinalReleaseComObject(xlRng);
-            //if (xlWorkSheet != null) Marshal.FinalReleaseComObject(xlWorkSheet);
-            //if (xlWorkBooks != null) Marshal.FinalReleaseComObject(xlWorkBooks);
-            //if (xlWorkBook != null)
-            //{
-            //    xlWorkBook.Close(Type.Missing, Type.Missing, Type.Missing);
-            //    Marshal.FinalReleaseComObject(xlWorkBook);
-            //}
-            //if (xlApp != null)
-            //{
-            //    xlApp.Quit();
-            //    Marshal.FinalReleaseComObject(xlApp);
-            //}
+            ////xlWorkBook.Close();
+            ////xlApp.Quit();
 
-            //xlWorkBook.Close();
-            //xlApp.Quit();
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
          //   GC.Collect();
+         //   GC.WaitForPendingFinalizers();
+         ////   GC.Collect();
 
 
-            Marshal.FinalReleaseComObject(xlRng);
-            Marshal.FinalReleaseComObject(xlWorkSheet);
-            Marshal.FinalReleaseComObject(xlWorkBook);
-            Marshal.FinalReleaseComObject(xlWorkBooks);
-            Marshal.FinalReleaseComObject(xlApp);
+         //   Marshal.FinalReleaseComObject(xlRng);
+         //   Marshal.FinalReleaseComObject(xlWorkSheet);
+         //   Marshal.FinalReleaseComObject(xlWorkBook);
+         //   Marshal.FinalReleaseComObject(xlWorkBooks);
+         //   Marshal.FinalReleaseComObject(xlApp);
 
-            xlApp = null;
-            xlWorkBooks = null;
-            xlWorkBook = null;
-            xlWorkSheet = null;
-            xlRng = null;
-      
-
+         //   xlApp = null;
+         //   xlWorkBooks = null;
+         //   xlWorkBook = null;
+         //   xlWorkSheet = null;
+         //   xlRng = null;
+ 
             return dic;
         }
 
