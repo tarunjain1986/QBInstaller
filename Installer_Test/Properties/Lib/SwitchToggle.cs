@@ -89,9 +89,10 @@ namespace Installer_Test.Lib
 
                 qbApp = QuickBooks.GetApp("QuickBooks");
                 qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+                Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
 
-                QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
-                Thread.Sleep(20000);
+                //QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+                Thread.Sleep(10000);
 
                 Logger.logMessage("Switch Edition - Successful");
                 Logger.logMessage("-----------------------------------------------------------");
@@ -167,8 +168,10 @@ namespace Installer_Test.Lib
                 qbApp = QuickBooks.GetApp("QuickBooks");
                 qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
 
-                QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
-                Thread.Sleep(20000);
+                Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
+
+                //QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+                Thread.Sleep(10000);
 
                 Logger.logMessage("Toggle Edition - Successful");
                 Logger.logMessage("-----------------------------------------------------------");

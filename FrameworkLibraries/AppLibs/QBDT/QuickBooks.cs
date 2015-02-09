@@ -222,6 +222,14 @@ namespace FrameworkLibraries.AppLibs.QBDT
                 var controlPanelWindow = Actions.GetDesktopWindow("Programs and Features");
                 var uiaWindow = Actions.UIA_GetAppWindow("Programs and Features");
 
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // Added by Pooja
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////
+                controlPanelWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+                Thread.Sleep(int.Parse(Execution_Speed));
+             
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
                 Actions.UIA_SetTextByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), "Search Box", qbVersion);
 
                 try

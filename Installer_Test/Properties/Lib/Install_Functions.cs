@@ -1478,7 +1478,7 @@ namespace Installer_Test
                 while (flag == false)
                 {
                     flag = Actions.CheckWindowExists(win1, "QuickBooks Product Configuration");
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
                 }
 
                 Window win2 = Actions.GetChildWindow(win1, "QuickBooks Product Configuration");
@@ -1493,6 +1493,16 @@ namespace Installer_Test
                 {
                     Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Update Service"));
                     SendKeys.SendWait("%l");
+                }
+
+                flag = false;
+                win1 = Actions.GetDesktopWindow("QuickBooks");
+                flag = Actions.CheckWindowExists(win1, "About Automatic Update");
+
+                if (flag == true)
+                {
+                    win2 = Actions.GetChildWindow(win1, "About Automatic Update");
+                    Actions.ClickElementByName(win2, "OK");
                 }
 
                 Thread.Sleep(2000);
@@ -1521,7 +1531,7 @@ namespace Installer_Test
                 installed_product = File_Functions.GetProduct(ver, reg_ver);
                 Thread.Sleep(5000);
                
-                var MainWindow = Actions.GetDesktopWindow("Intuit QuickBooks");
+                var MainWindow = Actions.GetDesktopWindow("QuickBooks");
 
                 if (Actions.CheckWindowExists(MainWindow, "Register "))
                 {

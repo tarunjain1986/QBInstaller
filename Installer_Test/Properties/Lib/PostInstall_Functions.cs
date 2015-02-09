@@ -612,8 +612,7 @@ namespace Installer_Test.Lib
                 Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
                 Actions.SendENTERoWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
             }
-
-           
+          
 
         }
           
@@ -793,6 +792,9 @@ namespace Installer_Test.Lib
            
             //Pay Bills
             QB_functions.Pay_Bill(qbApp,qbWindow);
+
+            // Close all windows before resetting preferences
+            Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
 
             //Reseting the preferences 
             QB_functions.Reset_Preferences(qbApp,qbWindow);

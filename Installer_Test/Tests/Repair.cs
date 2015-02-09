@@ -15,6 +15,7 @@ using FrameworkLibraries.Utils;
 using FrameworkLibraries.ActionLibs;
 using FrameworkLibraries.AppLibs.QBDT;
 using TestStack.White.UIItems.WindowItems;
+using FrameworkLibraries.ActionLibs.WhiteAPI;
 
 using TestStack.BDDfy;
 using TestStack.White.UIItems;
@@ -53,7 +54,7 @@ namespace QBInstall.Tests
         public void Setup()
         {
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
-     Logger log = new Logger(testName + "_" + timeStamp);
+            Logger log = new Logger(testName + "_" + timeStamp);
 
           // Install_Functions.CleanUp();
 
@@ -72,10 +73,16 @@ namespace QBInstall.Tests
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
             ver = dic["B2"];
-            reg_ver = dic["B4"];
+            reg_ver = dic["B3"];
 
             OS_Name = File_Functions.GetOS();
             installed_product = File_Functions.GetProduct(ver, reg_ver);
+
+            if (installed_product.Contains ("QuickBooks Premier"))
+            {
+              installed_product = installed_product.Replace("QuickBooks Premier", "QuickBooks Premier Edition");
+            }
+
             installed_path = File_Functions.GetPath(ver, reg_ver);         
             installed_dir = Path.GetDirectoryName(installed_path); // Get the path (without the exe name)
         }
@@ -83,26 +90,48 @@ namespace QBInstall.Tests
         [Then (StepTitle = "Delete dlls")]
         public void DeleteDLLs()
         {
+            //qbApp = QuickBooks.GetApp("QuickBooks");
+            //qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+
+            //Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
+            //Actions.SelectMenu(qbApp, qbWindow, "File", "Exit");
+            //Thread.Sleep(10000);
+            OSOperations.KillProcess("QBW32");
+            Thread.Sleep(1000);
             Install_Functions.Delete_QBDLLs(installed_dir);
         }
 
         [AndThen(StepTitle = "Invoke QuickBooks")]
         public void InvokeQB()
         {
-            QuickBooks.Initialize(installed_path);
+            // QuickBooks.Initialize(installed_path);
+
+            Process proc = new Process();
+            proc.StartInfo.FileName = installed_path;
+            proc.Start();
+
+            Thread.Sleep(1000);
+            Boolean flag;
+            flag = Actions.CheckDesktopWindowExists("Error");
+            if (flag == true)
+            {
+                Actions.ClickElementByName(Actions.GetDesktopWindow("Error"), "OK");
+            }
+            Thread.Sleep(1000);
         }
 
         [AndThen (StepTitle = "Repair QuickBooks")]
         public void RepairQB ()
         {
             //Repair
+            // QuickBooks.RepairOrUnInstallQB(installed_product, true, false);
             QuickBooks.RepairOrUnInstallQB(installed_product, true, false);
         }
 
         [AndThen(StepTitle = "Invoke QuickBooks after repair")]
         public void InvokeQB_afterRepair()
         {
-            QuickBooks.Initialize(installed_path);
+           // QuickBooks.Initialize(installed_path);
         }
 
         [Fact]

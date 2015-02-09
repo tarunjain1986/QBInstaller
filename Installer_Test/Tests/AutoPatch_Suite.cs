@@ -31,7 +31,7 @@ using Installer_Test.Lib;
 namespace Installer_Test.Tests
 {
    
-    public class Installer_Suite
+    public class AutoPatch_Suite
     {
        /// <summary>
        /// Install QB
@@ -73,16 +73,6 @@ namespace Installer_Test.Tests
         Dictionary<String, String> keyvaluepairdic;
 
         /// <summary>
-        /// Switch / Toggle
-        /// </summary>
-        //public static string Bizname;
-        //String SearchText = "  - Intuit QuickBooks"; 
-        //Dictionary<String, String> dic_Switch_Enterprise;
-        //Dictionary<String, String> dic_Switch_Premier;
-        //Dictionary<String, String> dic_Toggle_Enterprise;
-        //Dictionary<String, String> dic_Toggle_Premier;
-
-        /// <summary>
         /// Repair / Uninstall
         /// </summary>
 
@@ -110,24 +100,6 @@ namespace Installer_Test.Tests
             targetPath = targetPath + @"QBooks\";
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
-            // Invoke QB
-            ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-            //List<string> listHeader = new List<string>();
-            //List<string> ListValue = new List<string>();
-            //dic_InvokeQB = new Dictionary<string, string>();
-            //File_Functions.ReadExcelSheet(readpath, "InvokeQB", 1, ref listHeader);
-            //File_Functions.ReadExcelSheet(readpath, "InvokeQB", 2, ref ListValue);
-            //dic_InvokeQB = listHeader.Zip(ListValue, (k, v) => new { k, v })
-            //     .ToDictionary(x => x.k, x => x.v);
-
-            ///////////////////////////////////////////////////////////////////////////////////////////////////
-            // Check F2
-            ///////////////////////////////////////////////////////////////////////////////////////////////////
-            //qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
-            //qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
-
-            ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Create Company File
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             List<string> listHeader1 = new List<string>();
@@ -136,15 +108,6 @@ namespace Installer_Test.Tests
             File_Functions.ReadExcelSheet(readpath, "CompanyFile", 3, ref ListValue1);
             keyvaluepairdic = listHeader1.Zip(ListValue1, (k, v) => new { k, v })
                  .ToDictionary(x => x.k, x => x.v);
-
-            ///////////////////////////////////////////////////////////////////////////////////////////////////
-            // Switch / Toggle
-            ///////////////////////////////////////////////////////////////////////////////////////////////////
-            //Bizname = File_Functions.ReadExcelBizName(readpath);
-            //dic_Switch_Enterprise = File_Functions.ReadExcelCellValues(readpath, "Ent-Switch");
-            //dic_Switch_Premier = File_Functions.ReadExcelCellValues(readpath, "Pre-Switch");
-            //dic_Toggle_Enterprise = File_Functions.ReadExcelCellValues(readpath, "Ent-Toggle");
-            //dic_Toggle_Premier = File_Functions.ReadExcelCellValues(readpath, "Pre-Toggle");
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Repair / Uninstall
@@ -214,6 +177,14 @@ namespace Installer_Test.Tests
         public void CreateCompanyFile()
         {
             PostInstall_Functions.CreateCompanyFile(keyvaluepairdic);
+        }
+
+        [AndThen(StepTitle = "Then - Perform AutoPatch")]
+        public void AutoPatch()
+        {
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+            Actions.SelectMenu(qbApp, qbWindow, "Help", "Update QuickBooks...");
         }
 
         [AndThen(StepTitle = "Then - Perform Money In Money Out")]
@@ -337,8 +308,6 @@ namespace Installer_Test.Tests
             if (Actions.CheckWindowExists(MainWindow, "Register "))
             {
                 Actions.ClickElementByName(Actions.GetChildWindow(MainWindow, "Register "), "Remind Me Later");
-                //Logger.logMessage("Register QuickBooks window found.");
-                //Logger.logMessage("-----------------------------------------------------------------");
             }
 
             Thread.Sleep(1000);
