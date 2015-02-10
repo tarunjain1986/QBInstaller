@@ -27,7 +27,6 @@ using Installer_Test.Lib;
 
 
 
-
 namespace Installer_Test.Tests
 {
    
@@ -53,8 +52,6 @@ namespace Installer_Test.Tests
         /// <summary>
         /// Invoke QB
         /// </summary>
-        /// 
-        
         string OS_Name = string.Empty;
         Dictionary<string, string> dic_InvokeQB = new Dictionary<string, string>();
 
@@ -67,6 +64,10 @@ namespace Installer_Test.Tests
         public string exe = conf.get("QBExePath");
         // public string exe = conf.get("QBExePath");
 
+
+        Dictionary<string, string> dic_WebPatch = new Dictionary<string, string>();
+        public string SKU_WebPatch, targetPath_WP;
+
         /// <summary>
         /// Create Company File
         /// </summary>
@@ -75,7 +76,6 @@ namespace Installer_Test.Tests
         /// <summary>
         /// Repair / Uninstall
         /// </summary>
-
         public static string installed_dir, installed_path, installed_product, ver, reg_ver;
         Dictionary<string, string> dic_Repair = new Dictionary<string, string>();
 
@@ -99,6 +99,15 @@ namespace Installer_Test.Tests
             SKU = dic["B7"];
             targetPath = targetPath + @"QBooks\";
 
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            // WebPatch
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+            dic_WebPatch = Lib.File_Functions.ReadExcelValues(readpath, "WebPatch", "B2:B12");
+            SKU_WebPatch = dic["B7"];
+            targetPath_WP = dic["B11"];
+
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Create Company File
             ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,8 +123,8 @@ namespace Installer_Test.Tests
             ///////////////////////////////////////////////////////////////////////////////////////////////////
 
             dic_Repair = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
-            ver = dic["B2"];
-            reg_ver = dic["B3"];
+            ver = dic_Repair["B2"];
+            reg_ver = dic_Repair["B3"];
  
             ///////////////////////////////////////////////////////////////////////////////////////////////////
         }
@@ -143,6 +152,7 @@ namespace Installer_Test.Tests
                     Install_Functions.Install_CA();
                     break;
             }
+
             qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
 
@@ -157,27 +167,42 @@ namespace Installer_Test.Tests
             Install_Functions.Post_Install();
         }
 
-
         [AndThen(StepTitle = "Then - Open F2")]
         public void CheckF2value()
         {
             // QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
             // Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             PostInstall_Functions.CheckF2value(qbApp, qbWindow, resultsPath);
         }
 
         [AndThen(StepTitle = "Then - Click on Help -> About")]
         public void HelpAbout()
         {
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
             Help.ClickHelpAbout(qbApp, qbWindow, resultsPath);
         }
 
         [AndThen(StepTitle = "Then - Perform WebPatch")]
-        public void WebPatch()
+        public void Web_Patch()
         {
-            //Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
-            //Help.ClickHelpAbout(qbApp, qbWindow, resultsPath);
+            dic_WebPatch = Lib.File_Functions.ReadExcelValues(readpath, "WebPatch", "B2:B12");
+            SKU_WebPatch = dic["B7"];
+            targetPath_WP = dic["B11"];
+
+            CloseQB();
+            OSOperations.KillProcess("qbw32");
+
+            if (SKU_WebPatch == "Enterprise" || SKU_WebPatch == "Enterprise Accountant")
+                OSOperations.InvokeInstaller(targetPath_WP, "en_qbwebpatch.exe");
+            else
+                OSOperations.InvokeInstaller(targetPath_WP, "qbwebpatch.exe");
+            
+            WebPatch.ApplyWebPatch(resultsPath);
+          
         }
 
         [AndThen(StepTitle = "Then - Create Company File")]
@@ -190,6 +215,8 @@ namespace Installer_Test.Tests
         public void PerformMIMO()
         {
             // QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
             PostInstall_Functions.PerformMIMO(qbApp, qbWindow);
         }
@@ -198,6 +225,8 @@ namespace Installer_Test.Tests
         public void PerformVerify()
         {
             // QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
             PostInstall_Functions.PerformVerify(qbApp, qbWindow);
         }
@@ -205,6 +234,8 @@ namespace Installer_Test.Tests
         [AndThen(StepTitle = "Then - Perform Rebuild")]
         public void PerformRebuild()
         {
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
             PostInstall_Functions.PerformRebuild(qbApp, qbWindow);
         }

@@ -53,8 +53,6 @@ namespace Installer_Test.Tests
         /// <summary>
         /// Invoke QB
         /// </summary>
-        /// 
-        
         string OS_Name = string.Empty;
         Dictionary<string, string> dic_InvokeQB = new Dictionary<string, string>();
 
@@ -151,8 +149,8 @@ namespace Installer_Test.Tests
             ///////////////////////////////////////////////////////////////////////////////////////////////////
 
             dic_Repair = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
-            ver = dic["B2"];
-            reg_ver = dic["B3"];
+            ver = dic_Repair["B2"];
+            reg_ver = dic_Repair["B3"];
  
             ///////////////////////////////////////////////////////////////////////////////////////////////////
         }
@@ -200,12 +198,16 @@ namespace Installer_Test.Tests
         {
             // QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
             // Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             PostInstall_Functions.CheckF2value(qbApp, qbWindow, resultsPath);
         }
 
         [AndThen(StepTitle = "Then - Click on Help -> About")]
         public void HelpAbout()
         {
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
             Help.ClickHelpAbout(qbApp, qbWindow, resultsPath);
         }
@@ -220,6 +222,8 @@ namespace Installer_Test.Tests
         public void PerformMIMO()
         {
             // QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
             PostInstall_Functions.PerformMIMO(qbApp, qbWindow);
         }
@@ -228,6 +232,8 @@ namespace Installer_Test.Tests
         public void PerformVerify()
         {
             // QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
             PostInstall_Functions.PerformVerify(qbApp, qbWindow);
         }

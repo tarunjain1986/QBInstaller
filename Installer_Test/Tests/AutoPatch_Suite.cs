@@ -53,8 +53,6 @@ namespace Installer_Test.Tests
         /// <summary>
         /// Invoke QB
         /// </summary>
-        /// 
-        
         string OS_Name = string.Empty;
         Dictionary<string, string> dic_InvokeQB = new Dictionary<string, string>();
 
@@ -71,6 +69,14 @@ namespace Installer_Test.Tests
         /// Create Company File
         /// </summary>
         Dictionary<String, String> keyvaluepairdic;
+
+
+        /// <summary>
+        /// AutoPatch
+        /// </summary>
+        public static string installed_datapath, service_source, service_dest, service_backup;
+        Dictionary<string, string> dic_AP = new Dictionary<string, string>();
+
 
         /// <summary>
         /// Repair / Uninstall
@@ -114,9 +120,17 @@ namespace Installer_Test.Tests
             ///////////////////////////////////////////////////////////////////////////////////////////////////
 
             dic_Repair = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
-            ver = dic["B2"];
-            reg_ver = dic["B3"];
- 
+            ver = dic_Repair["B2"];
+            reg_ver = dic_Repair["B3"];
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            // AutoPatch
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+            dic_AP = File_Functions.ReadExcelValues(readpath, "AutoPatch", "B10");
+            service_source = dic_AP["B10"];
+            installed_datapath = File_Functions.GetDataPath(ver, reg_ver);
+
             ///////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
@@ -143,6 +157,7 @@ namespace Installer_Test.Tests
                     Install_Functions.Install_CA();
                     break;
             }
+
             qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
 
@@ -157,18 +172,21 @@ namespace Installer_Test.Tests
             Install_Functions.Post_Install();
         }
 
-
         [AndThen(StepTitle = "Then - Open F2")]
         public void CheckF2value()
         {
             // QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
             // Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             PostInstall_Functions.CheckF2value(qbApp, qbWindow, resultsPath);
         }
 
         [AndThen(StepTitle = "Then - Click on Help -> About")]
         public void HelpAbout()
         {
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
             Help.ClickHelpAbout(qbApp, qbWindow, resultsPath);
         }
@@ -182,30 +200,56 @@ namespace Installer_Test.Tests
         [AndThen(StepTitle = "Then - Perform AutoPatch")]
         public void AutoPatch()
         {
-            qbApp = QuickBooks.GetApp("QuickBooks");
-            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
-            Actions.SelectMenu(qbApp, qbWindow, "Help", "Update QuickBooks...");
+            // Close QuickBooks
+            CloseQB();
+            
+            // Kill QuickBooks processes
+            OSOperations.KillProcess("QBW32");
+            OSOperations.KillProcess("QBDBMgr");
+
+            Thread.Sleep(1000);
+
+            // Replace the local copy of the serviceguide.xml with the server copy
+            service_dest = installed_datapath + @"Components\QBUpdate\serviceguide.xml";
+            service_source = service_source + "serviceguide.xml";
+            service_backup = installed_datapath + @"Components\QBUpdate\serviceguide_backup.xml";
+
+            File.Replace(service_source, service_dest, service_backup);
+
+            // Launch QuickBooks
+            qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
+            qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+
+            // Actions.SelectMenu(qbApp, qbWindow, "Help", "Update QuickBooks...");
+
+            Help.ClickHelpUpdate(qbApp, qbWindow, resultsPath);
         }
 
         [AndThen(StepTitle = "Then - Perform Money In Money Out")]
-        public void PerformMIMO()
+        public void Perform_MIMO()
         {
             // QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
             PostInstall_Functions.PerformMIMO(qbApp, qbWindow);
         }
 
         [AndThen(StepTitle = "Then - Perform Verify")]
-        public void PerformVerify()
+        public void Perform_Verify()
         {
             // QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
             PostInstall_Functions.PerformVerify(qbApp, qbWindow);
         }
 
         [AndThen(StepTitle = "Then - Perform Rebuild")]
-        public void PerformRebuild()
+        public void Perform_Rebuild()
         {
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
             PostInstall_Functions.PerformRebuild(qbApp, qbWindow);
         }
