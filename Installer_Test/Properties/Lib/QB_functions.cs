@@ -272,7 +272,8 @@ namespace Installer_Test.Properties.Lib
         {
             try
             {
-                Actions.SelectMenu(qbApp, qbWindow, "Vendors", "Receive Items and Enter Bill");
+                Actions.SelectMenu(qbApp, qbWindow, "Vendors", "Enter Bills"); // "Receive Items and Enter Bill");
+                Thread.Sleep(2000);
                 if (Actions.CheckWindowExists(qbWindow, "Enter Bills"))
                 {
                     Window billWin = Actions.GetChildWindow(qbWindow, "Enter Bills");
@@ -294,20 +295,25 @@ namespace Installer_Test.Properties.Lib
                             Actions.ClickElementByName(openpoWin, "OK");
                         }
 
-                        if (Actions.CheckElementExistsByName(billWin, "Save && Close"))
-                        {
-                            Actions.ClickElementByName(billWin, "Save && Close");
-                        }
+                        SendKeys.SendWait("%(a)");
 
-                        else
-                        {
-                            Actions.ClickElementByName(billWin, "Close");
-                            if (Actions.CheckWindowExists(qbWindow, "Recording Transaction"))
-                            {
-                                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Recording Transaction"), "Yes");
-                            }
+                        //if (Actions.CheckElementExistsByName(billWin, "Save && Close"))
+                        //{
+                        //    Actions.ClickElementByName(billWin, "Save && Close");
+                        //    Logger.logMessage("Clicked on: Enter Bills -> Save and Close");
+                        //}
 
-                        }
+                        //else
+                        //{
+                        //    Actions.ClickElementByName(billWin, "Close");
+                        //    Thread.Sleep(3000);
+                        //    if (Actions.CheckWindowExists(qbWindow, "Recording Transaction"))
+                        //    {
+                        //        Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Recording Transaction"), "Yes");
+                        //        Logger.logMessage("Clicked on: Recording Transaction -> Yes");
+                        //    }
+
+                        //}
 
                     }
                     else
@@ -324,26 +330,31 @@ namespace Installer_Test.Properties.Lib
                         Actions.SendTABToWindow(billWin);
                         Actions.SetTextByAutomationID(billWin, "2", "1");
 
-                        if (Actions.CheckElementExistsByName(billWin, "Save && Close"))
-                        {
-                            Actions.ClickElementByName(billWin, "Save && Close");
-                        }
+                        SendKeys.SendWait("%(a)");
 
-                        else
-                        {
-                            Actions.ClickElementByName(billWin, "Close");
-                            if (Actions.CheckWindowExists(qbWindow, "Recording Transaction"))
-                            {
-                                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Recording Transaction"), "Yes");
-                            }
+                        //if (Actions.CheckElementExistsByName(billWin, "Save && Close"))
+                        //{
+                        //    Actions.ClickElementByName(billWin, "Save && Close");
+                        //    Logger.logMessage("Clicked on: Enter Bills -> Save and Close");
+                        //}
 
-                        }
+                        //else
+                        //{
+                        //    Actions.ClickElementByName(billWin, "Close");
+                        //    if (Actions.CheckWindowExists(qbWindow, "Recording Transaction"))
+                        //    {
+                        //        Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Recording Transaction"), "Yes");
+                        //        Logger.logMessage("Clicked on: Recording Transaction -> Yes");
+                        //    }
+
+                        //}
 
                     }
 
 
                 }
 
+              
                 Logger.logMessage("Bill creation - Successful");
             }
 
@@ -373,6 +384,8 @@ namespace Installer_Test.Properties.Lib
                     Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Payment Summary"), "Done");
 
                 }
+
+
 
                 Logger.logMessage("Bills Payment - Successful");
             }

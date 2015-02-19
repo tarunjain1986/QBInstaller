@@ -43,10 +43,11 @@ namespace Installer_Test.Lib
             for (int i = 1; i < arrEdition.Length; i++)
             {
                 Perform_Switch(arrEdition[i], SKU);
+                Thread.Sleep(5000);
             }
 
             Perform_Switch(arrEdition[0], SKU);
-
+            
             Logger.logMessage("Switch Edition - Completed");
             Logger.logMessage("-----------------------------------------------------------");
 
@@ -61,7 +62,7 @@ namespace Installer_Test.Lib
             //qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
 
             qbApp = QuickBooks.GetApp("QuickBooks");
-            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
 
             try
             {
@@ -77,22 +78,23 @@ namespace Installer_Test.Lib
 
                 Thread.Sleep(2000);
 
-                if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Automatic Backup") == true)
+                if (Actions.CheckDesktopWindowExists("QuickBooks " + SKU))
                 {
-                    SendKeys.SendWait("%N");
+                    if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks " + SKU), "Automatic Backup") == true)
+                    {
+                        SendKeys.SendWait("%N");
+                    }
                 }
-                
-                Install_Functions.Select_Edition(SKU);
+                Install_Functions.Select_Edition(currEdition); ////////////
 
                 //qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
                 //qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
 
                 qbApp = QuickBooks.GetApp("QuickBooks");
-                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
                 Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
 
-                //QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
-                Thread.Sleep(10000);
+                Install_Functions.Get_QuickBooks_Edition(qbApp, qbWindow);
 
                 Logger.logMessage("Switch Edition - Successful");
                 Logger.logMessage("-----------------------------------------------------------");
@@ -143,7 +145,7 @@ namespace Installer_Test.Lib
             //qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
 
             qbApp = QuickBooks.GetApp("QuickBooks");
-            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
 
             try
             {
@@ -161,14 +163,16 @@ namespace Installer_Test.Lib
                 {
                   SendKeys.SendWait("%N");
                 }
-                
-                Install_Functions.Select_Edition(SKU);
+
+                Install_Functions.Select_Edition(currEdition); ///////////
                 Thread.Sleep(20000);
 
                 qbApp = QuickBooks.GetApp("QuickBooks");
-                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
 
                 Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
+
+                Install_Functions.Get_QuickBooks_Edition(qbApp, qbWindow);
 
                 //QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
                 Thread.Sleep(10000);

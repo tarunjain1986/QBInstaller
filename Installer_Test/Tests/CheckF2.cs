@@ -28,9 +28,9 @@ namespace Installer_Test.Tests
         {
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
             Logger log = new Logger(testName + "_" + timeStamp);
-            qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
-            qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
-            QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+            //qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
+            //qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+            //QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
         }
 
         [Then(StepTitle = "Then - Open F2")]
@@ -38,7 +38,9 @@ namespace Installer_Test.Tests
         {
             //Actions.SelectMenu(qbApp, qbWindow, "File", "New Company...");
             // PostInstall_Functions.CheckF2value(qbApp, qbWindow,resultsPath);
-
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+           // PostInstall_Functions.CheckF2value(qbApp, qbWindow, @"C:\Temp\", SKU);
         }
         [Fact]
         public void Run_CheckF2()

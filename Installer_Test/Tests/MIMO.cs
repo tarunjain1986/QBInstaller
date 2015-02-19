@@ -27,7 +27,7 @@ namespace Installer_Test.Tests
             Logger log = new Logger(testName + "_" + timeStamp);
             qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
-            QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+           //  QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
         }
 
          [Then(StepTitle = "Then - Perform MIMO")]  

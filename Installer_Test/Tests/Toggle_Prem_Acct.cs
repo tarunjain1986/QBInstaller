@@ -47,7 +47,7 @@ namespace Installer_Test.Tests
         public void ToggleEdition()
         {
 
-            PostInstall_Functions.ToggleEdition(qbApp, dic, exe,Bizname);
+         //   PostInstall_Functions.ToggleEdition(qbApp, dic, exe,Bizname);
 
         }
         [Fact]

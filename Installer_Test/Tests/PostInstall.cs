@@ -34,7 +34,7 @@ namespace Installer_Test.Tests
         public static Property conf = Property.GetPropertyInstance();
         public static int Sync_Timeout = int.Parse(conf.get("SyncTimeOut"));
         public static string testName = "PostInstall";
-        public string ver, reg_ver, expected_ver, installed_version, installed_product, installed_dataPath, installed_commonPath, dataPath;
+        public string SKU, ver, reg_ver, expected_ver, installed_version, installed_product, installed_dataPath, installed_commonPath, dataPath;
          
 
         string OS_Name = string.Empty;
@@ -51,11 +51,21 @@ namespace Installer_Test.Tests
             
             Dictionary<string, string> dic = new Dictionary<string, string>();
            
-            dic = File_Functions.ReadExcelValues(readpath,"PostInstall","B2:B4");
+            //dic = File_Functions.ReadExcelValues(readpath,"PostInstall","B2:B4");
 
-            ver = dic["B2"];
-            reg_ver = dic["B3"];
-            expected_ver = dic["B4"];
+            //ver = dic["B2"];
+            //reg_ver = dic["B3"];
+            //expected_ver = dic["B4"];
+
+            dic = File_Functions.ReadExcelValues(readpath, "Install", "B9:B12");
+            ver = dic["B9"];
+            SKU = dic["B12"];
+
+            dic = File_Functions.ReadExcelValues(readpath, "Install", "E7");
+            reg_ver = File_Functions.GetRegVer(SKU);
+
+
+            expected_ver = dic["E7"];
 
             OS_Name = File_Functions.GetOS();
             installed_version = File_Functions.GetQBVersion(ver,reg_ver);

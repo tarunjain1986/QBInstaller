@@ -38,8 +38,13 @@ namespace FrameworkLibraries.AppLibs.QBDT
 
         public static TestStack.White.Application Initialize(String exePath)
         {
-            Logger.logMessage("Initialize " + exePath);
+            ///////////////////////////////////////////
+            conf.reload();
+            QbwINI = conf.get("QBW.ini");
+            ///////////////////////////////////////////
 
+            Logger.logMessage("Initialize " + exePath);
+            
             var accessiblity = FrameworkLibraries.Utils.FileOperations.CheckForStringInFile(QbwINI, "QBACCESSIBILITY=1");
             if (!accessiblity)
             {
@@ -48,6 +53,7 @@ namespace FrameworkLibraries.AppLibs.QBDT
                 FileOperations.AppendStringToFile(QbwINI, "[ACCESSIBILITY]");
                 FileOperations.AppendStringToFile(QbwINI, "QBACCESSIBILITY=1");
                 OSOperations.KillProcess("QBW32");
+                Thread.Sleep(5000);
             }
 
             int processID = 0;
@@ -182,7 +188,7 @@ namespace FrameworkLibraries.AppLibs.QBDT
                     }
                 }
 
-                Logger.logMessage("Maximized " + app + " - Sucessful");
+                Logger.logMessage("Maximized " + app + " - Successful");
                 Logger.logMessage(qbWin.Title);
                 Logger.logMessage("------------------------------------------------------------------------------");
 
@@ -219,25 +225,34 @@ namespace FrameworkLibraries.AppLibs.QBDT
                 }
                 catch { }
 
+                Actions.SetFocusOnWindow(Actions.GetDesktopWindow("Programs and Features"));///////////////////////
                 var controlPanelWindow = Actions.GetDesktopWindow("Programs and Features");
                 var uiaWindow = Actions.UIA_GetAppWindow("Programs and Features");
 
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // Added by Pooja
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-                controlPanelWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+                
+                if (controlPanelWindow.DisplayState != DisplayState.Maximized)
+                   controlPanelWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
                 Thread.Sleep(int.Parse(Execution_Speed));
              
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 Actions.UIA_SetTextByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), "Search Box", qbVersion);
-
+                Thread.Sleep(int.Parse(Execution_Speed)); //////////////////////////// 
                 try
                 {
                     Logger.logMessage("---------------Try-Catch Block------------------------");
                     Actions.WaitForElementEnabled(Actions.GetDesktopWindow("Programs and Features"), qbVersion, int.Parse(Sync_Timeout));
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.logMessage("---------------------------------------------------------");
+                    Logger.logMessage("Element not enabled " + qbVersion);
+                    Logger.logMessage(e.Message);
+                    Logger.logMessage("---------------------------------------------------------");
+                }
 
                 Actions.UIA_ClickEditControlByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), qbVersion);
 

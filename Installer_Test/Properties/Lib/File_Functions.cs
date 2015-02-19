@@ -19,6 +19,7 @@ namespace Installer_Test.Lib
     public class File_Functions
     {
         public string expected_ver, installed_product, installed_dataPath, installed_commonPath;
+        public static string reg_ver;
 
         public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
@@ -280,6 +281,35 @@ namespace Installer_Test.Lib
             return regPath;
         }
 
+        public static string GetRegVer (string SKU)
+        {
+
+            switch (SKU)
+            {
+                case "Enterprise":
+                    reg_ver = "bel";
+                    break;
+                case "Enterprise Accountant":
+                    reg_ver = "belacct";
+                    break;
+
+                case "Premier":
+                case "Premier Plus":
+                    reg_ver = "superpro";
+                    break;
+
+                case "Premier Accountant":
+                    reg_ver = "accountant";
+                    break;
+
+                case "Pro":
+                case "Pro Plus":
+                    reg_ver = "pro";
+                    break;
+            }
+            return reg_ver;
+        }
+
         public static string GetQBVersion(string ver, string reg_ver)
         {
             Object QBVer;
@@ -432,21 +462,22 @@ namespace Installer_Test.Lib
             }
              return installed_commonPath;
           }
-
-       
-
+ 
         public static void Update_Automation_Properties ()
         {
             string readpath = "C:\\Temp\\Parameters.xlsm";
             Dictionary<string, string> dic_QBDetails = new Dictionary<string, string>();
-            string ver, reg_ver, data_path, installed_product, installed_path, installed_dir, regPath;
+            string SKU, ver, reg_ver, data_path, installed_product, installed_path, installed_dir, regPath;
 
 
-            dic_QBDetails = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
-            ver = dic_QBDetails["B2"];
-            reg_ver = dic_QBDetails["B3"];
+            //dic_QBDetails = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
+            //ver = dic_QBDetails["B2"];
+            //reg_ver = dic_QBDetails["B3"];
 
-            //OS_Name = File_Functions.GetOS();
+            dic_QBDetails = File_Functions.ReadExcelValues(readpath, "Install", "B8:B12");
+            SKU = dic_QBDetails["B12"];
+            ver = dic_QBDetails ["B8"];
+            reg_ver = GetRegVer(SKU);
 
             regPath = File_Functions.GetRegPath();
             installed_product = File_Functions.GetProduct(ver, reg_ver);
@@ -458,8 +489,6 @@ namespace Installer_Test.Lib
             string curr_dir, aut_file;
             curr_dir = Directory.GetCurrentDirectory();
             aut_file = curr_dir + @"\Automation.Properties";
-
-
 
             List<string> prop_value = new List<string>(File.ReadAllLines(aut_file));
             int lineIndex = prop_value.FindIndex(line => line.StartsWith("QBExePath="));

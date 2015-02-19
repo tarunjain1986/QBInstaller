@@ -13,6 +13,7 @@ using TestStack.BDDfy;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.WindowItems;
+using FrameworkLibraries.ActionLibs.WhiteAPI;
 
 using Xunit;
 
@@ -38,15 +39,20 @@ namespace Installer_Test.Tests
         {
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
             Logger log = new Logger(testName + "_" + timeStamp);
-            qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
-            qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
-            QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+            //qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
+            //qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+            //QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
         }
 
         [Then(StepTitle = "Then - click on Help -> About")]
-        public void HelpUpdate()
+        public void HelpAbout()
         {
-           // Help.ClickHelpAbout(qbApp, qbWindow, resultsPath);
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+
+            // Close QuickBook pop-up windows
+            // Install_Functions.CheckWindowsAndClose(SKU);
+            Help.ClickHelpAbout(qbApp, qbWindow, @"C:\Temp\");
         }
         
         //[AndThen(StepTitle = "AndThen - Perform tear down activities to ensure that there are no on-screen exceptions")]

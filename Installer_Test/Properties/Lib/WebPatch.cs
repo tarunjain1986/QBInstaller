@@ -40,8 +40,8 @@ namespace Installer_Test.Lib
         public static void ApplyWebPatch(string resultsPath)
         {
 
-            Logger.logMessage("Function call @ :" + DateTime.Now);
-            Logger.logMessage("Click Help -> Update" + " - Started..");
+ 
+            Logger.logMessage("Application of WebPatch Started..");
 
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
@@ -90,13 +90,13 @@ namespace Installer_Test.Lib
                     sc.CaptureWindowToFile(pointer, resultsPath + "Patch_Applied_Succes.png", ImageFormat.Png);
                     Actions.ClickElementByName(updatecomp, "OK");
 
-                    Logger.logMessage("Patch Application - Successful");
+                    Logger.logMessage("WebPatch Application - Successful");
                     Logger.logMessage("-----------------------------------------------------------------------");
                 
             }
             catch (Exception e)
             {
-                Logger.logMessage("Patch Application - Failed");
+                Logger.logMessage("WebPatch Application - Failed");
                 Logger.logMessage(e.Message);
                 Logger.logMessage("-----------------------------------------------------------------------");
             }

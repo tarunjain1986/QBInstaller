@@ -48,7 +48,7 @@ namespace Installer_Test.Lib
         public static string custname, vendorname, itemname, backuppath;
         public static Random _r = new Random();
 
-        public static void CheckF2value(TestStack.White.Application qbApp, Window qbWindow, string resultsPath)
+        public static void CheckF2value(TestStack.White.Application qbApp, Window qbWindow, string resultsPath, string SKU)
         {
             Logger.logMessage("-------------------------------------------------------------");
             Logger.logMessage("Check F2 - Started");
@@ -59,335 +59,335 @@ namespace Installer_Test.Lib
             IntPtr pointer = GetForegroundWindow();
             pointer = GetForegroundWindow();
             sc.CaptureWindowToFile(pointer, resultsPath + "CheckF2.png", ImageFormat.Png);
-            Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Product Information"), "OK");
+            Thread.Sleep(2000);
+            Actions.ClickElementByName(Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks " + SKU), "Product Information"), "OK");
             Logger.logMessage("Check F2 - Completed");
             Logger.logMessage("-------------------------------------------------------------");
         }
+//      /////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// The following 2 Functions: SwitchEdition () and ToggleEdition () can be deleted /////////////////////////////////
+//        public static void SwitchEdition(TestStack.White.Application qbApp, Dictionary<String, String> dic, String exe, String Bizname, String SearchText)
+//        {
+//            String edistr;
+//            try
+//            {
+//                foreach (var pair in dic)
+//                {
 
+//                    if (qbApp.HasExited == true)
+//                    {
+//                        qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
+//                    }
+//                    TestStack.White.UIItems.WindowItems.Window qbWindow = null;
+//                    qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+//                    String title = qbWindow.Title;
 
-
-        public static void SwitchEdition(TestStack.White.Application qbApp, Dictionary<String, String> dic, String exe, String Bizname, String SearchText)
-        {
-            String edistr;
-            try
-            {
-                foreach (var pair in dic)
-                {
-
-                    if (qbApp.HasExited == true)
-                    {
-                        qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
-                    }
-                    TestStack.White.UIItems.WindowItems.Window qbWindow = null;
-                    qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
-                    String title = qbWindow.Title;
-
-                    if ((Bizname + pair.Value).Equals(title))
-                    {
+//                    if ((Bizname + pair.Value).Equals(title))
+//                    {
                         
-                        continue;
-                    }
+//                        continue;
+//                    }
 
-                    else
-                    {
+//                    else
+//                    {
 
 
-                        if (Actions.CheckWindowExists(qbWindow, "QuickBooks Update Service"))
-                        {
+//                        if (Actions.CheckWindowExists(qbWindow, "QuickBooks Update Service"))
+//                        {
 
-                            Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Update Service"), "Install Later");
-                        }
-                        if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
-                        {
-                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
-                        }
+//                            Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Update Service"), "Install Later");
+//                        }
+//                        if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
+//                        {
+//                            Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
+//                        }
 
                       
-                        Thread.Sleep(1000);
-                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
-                        { SendKeys.SendWait("%L"); }
-                        Thread.Sleep(1000);
-                        qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
-                        Actions.SelectMenu(qbApp, qbWindow, "Help", "Manage My License", "Change to a Different Industry Edition...");
-                        Thread.Sleep(3000);
+//                        Thread.Sleep(1000);
+//                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
+//                        { SendKeys.SendWait("%L"); }
+//                        Thread.Sleep(1000);
+//                        qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+//                        Actions.SelectMenu(qbApp, qbWindow, "Help", "Manage My License", "Change to a Different Industry Edition...");
+//                        Thread.Sleep(3000);
 
-                        Window editionWindow = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
-                        //if (Actions.CheckElementIsEnabled(editionWindow, pair.Key + " - Currently open  "))
-                        if (pair.Key == "Enterprise Solutions General Business" || pair.Key == "Premier Edition (General Business)")
-                        {
-                            edistr = pair.Key + " - Currently open  ";
+//                        Window editionWindow = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
+//                        //if (Actions.CheckElementIsEnabled(editionWindow, pair.Key + " - Currently open  "))
+//                        if (pair.Key == "Enterprise Solutions General Business" || pair.Key == "Premier Edition (General Business)")
+//                        {
+//                            edistr = pair.Key + " - Currently open  ";
 
-                        }
-                        else edistr = pair.Key;
+//                        }
+//                        else edistr = pair.Key;
 
-                        if (Actions.CheckElementIsEnabled(editionWindow, edistr))
-                        {
+//                        if (Actions.CheckElementIsEnabled(editionWindow, edistr))
+//                        {
 
-                            Logger.logMessage(pair.Key + " - Currently open  ");
-                            Actions.ClickElementByName(editionWindow, pair.Key);
-                        }
-                        else
-                        {
-                            // qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
-                            Actions.ClickElementByName(editionWindow, "Cancel");
-                            continue;
-                        }
+//                            Logger.logMessage(pair.Key + " - Currently open  ");
+//                            Actions.ClickElementByName(editionWindow, pair.Key);
+//                        }
+//                        else
+//                        {
+//                            // qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+//                            Actions.ClickElementByName(editionWindow, "Cancel");
+//                            continue;
+//                        }
 
-                        Thread.Sleep(3000);
-
-
-
-                        Actions.ClickElementByName(editionWindow, "Next >");
+//                        Thread.Sleep(3000);
 
 
-                        Window editionWindow1 = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
-                        Thread.Sleep(3000);
-                        Actions.ClickElementByAutomationID(editionWindow1, "10004");
-                        Thread.Sleep(500);
-                        try
-                        {
+
+//                        Actions.ClickElementByName(editionWindow, "Next >");
+
+
+//                        Window editionWindow1 = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
+//                        Thread.Sleep(3000);
+//                        Actions.ClickElementByAutomationID(editionWindow1, "10004");
+//                        Thread.Sleep(500);
+//                        try
+//                        {
                            
-                            var x = Actions.GetDesktopWindow(Bizname + SearchText);
-                            var t = x.ModalWindows();
+//                            var x = Actions.GetDesktopWindow(Bizname + SearchText);
+//                            var t = x.ModalWindows();
 
 
-                            if (Actions.CheckWindowExists(x, "Automatic Backup"))
-                            {
-                                Actions.ClickElementByName(Actions.GetChildWindow(x, "Automatic Backup"), "No");
-                               // SendKeys.SendWait("%N");
-                            }
+//                            if (Actions.CheckWindowExists(x, "Automatic Backup"))
+//                            {
+//                                Actions.ClickElementByName(Actions.GetChildWindow(x, "Automatic Backup"), "No");
+//                               // SendKeys.SendWait("%N");
+//                            }
                             
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage("failed" + e.GetBaseException());
+//                        }
+//                        catch (Exception e)
+//                        {
+//                            Logger.logMessage("failed" + e.GetBaseException());
 
-                        }
-                        Thread.Sleep(30000);
-
-
-                        Window win1 = Actions.GetDesktopWindow("Product Configuration");
-                        Thread.Sleep(1000);
-                        Actions.ClickElementByName(Actions.GetChildWindow(win1, "QuickBooks Product Configuration"), "No");
-                        Thread.Sleep(30000);
-
-                        if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
-                        {
-                            SendKeys.SendWait("%L");
-                            // Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
-                        }
-
-                        //  SendKeys.SendWait("%L"); 
-
-                        Thread.Sleep(10000);
-                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
-                        { SendKeys.SendWait("%L"); }
-
-                        Thread.Sleep(30000);
+//                        }
+//                        Thread.Sleep(30000);
 
 
+//                        Window win1 = Actions.GetDesktopWindow("Product Configuration");
+//                        Thread.Sleep(1000);
+//                        Actions.ClickElementByName(Actions.GetChildWindow(win1, "QuickBooks Product Configuration"), "No");
+//                        Thread.Sleep(30000);
 
-                    }
+//                        if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
+//                        {
+//                            SendKeys.SendWait("%L");
+//                            // Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
+//                        }
 
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.logMessage("failed" + e.GetBaseException());
+//                        //  SendKeys.SendWait("%L"); 
 
-            }
-        }
+//                        Thread.Sleep(10000);
+//                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
+//                        { SendKeys.SendWait("%L"); }
 
-        public static void ToggleEdition(TestStack.White.Application qbApp, Dictionary<String, String> dic, String exe, String Bizname)
-        {
-            try
-            {
-
-                foreach (var pair in dic)
-                {
-                    if (qbApp.HasExited == true)
-                    {
-                        qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
-                    }
-                    TestStack.White.UIItems.WindowItems.Window qbWindow = null;
-                    qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
-                    String title = qbWindow.Title;
-                    if ((Bizname + pair.Value).Equals(title))
-                    {
-                        continue;
-                    }
-
-                    else
-                    {
-                        try
-                        {
-                            if (Actions.CheckWindowExists(qbWindow, "QuickBooks Update Service"))
-                            {
-
-                                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Update Service"), "Install Later");
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage(e.ToString());
-                        }
-                        try
-                        {
-                            if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
-                            {
-                                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage(e.ToString());
-                        }
-                        try
-                        {
-                            //  Actions.WaitForChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks", int.Parse(Sync_Timeout));
-                            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
-                            {
-                                SendKeys.SendWait("%L");
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage(e.ToString());
-                        }
-
-                        try
-                        {
-
-                            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Set Up an External Accountant User") == true)
-                            {
-                                Window ExtAcctWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Set Up an External Accountant User");
-                                Actions.ClickElementByName(ExtAcctWin, "No");
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage(e.ToString());
-                        }
-                        try
-                        {
-
-                            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Accountant Center") == true)
-                            {
-
-                                Window AcctCenWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Accountant Center");
-                                Actions.ClickElementByName(AcctCenWin, "Close");
-
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage(e.ToString());
-                        }
+//                        Thread.Sleep(30000);
 
 
 
-                        qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
-                        Actions.SelectMenu(qbApp, qbWindow, "File", "Toggle to Another Edition... ");
+//                    }
+
+//                }
+//            }
+//            catch (Exception e)
+//            {
+//                Logger.logMessage("failed" + e.GetBaseException());
+
+//            }
+//        }
+
+//        public static void ToggleEdition(TestStack.White.Application qbApp, Dictionary<String, String> dic, String exe, String Bizname)
+//        {
+//            try
+//            {
+
+//                foreach (var pair in dic)
+//                {
+//                    if (qbApp.HasExited == true)
+//                    {
+//                        qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
+//                    }
+//                    TestStack.White.UIItems.WindowItems.Window qbWindow = null;
+//                    qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+//                    String title = qbWindow.Title;
+//                    if ((Bizname + pair.Value).Equals(title))
+//                    {
+//                        continue;
+//                    }
+
+//                    else
+//                    {
+//                        try
+//                        {
+//                            if (Actions.CheckWindowExists(qbWindow, "QuickBooks Update Service"))
+//                            {
+
+//                                Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Update Service"), "Install Later");
+//                            }
+//                        }
+//                        catch (Exception e)
+//                        {
+//                            Logger.logMessage(e.ToString());
+//                        }
+//                        try
+//                        {
+//                            if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
+//                            {
+//                                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
+//                            }
+//                        }
+//                        catch (Exception e)
+//                        {
+//                            Logger.logMessage(e.ToString());
+//                        }
+//                        try
+//                        {
+//                            //  Actions.WaitForChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks", int.Parse(Sync_Timeout));
+//                            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
+//                            {
+//                                SendKeys.SendWait("%L");
+//                            }
+//                        }
+//                        catch (Exception e)
+//                        {
+//                            Logger.logMessage(e.ToString());
+//                        }
+
+//                        try
+//                        {
+
+//                            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Set Up an External Accountant User") == true)
+//                            {
+//                                Window ExtAcctWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Set Up an External Accountant User");
+//                                Actions.ClickElementByName(ExtAcctWin, "No");
+//                            }
+//                        }
+//                        catch (Exception e)
+//                        {
+//                            Logger.logMessage(e.ToString());
+//                        }
+//                        try
+//                        {
+
+//                            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Accountant Center") == true)
+//                            {
+
+//                                Window AcctCenWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Accountant Center");
+//                                Actions.ClickElementByName(AcctCenWin, "Close");
+
+//                            }
+//                        }
+//                        catch (Exception e)
+//                        {
+//                            Logger.logMessage(e.ToString());
+//                        }
 
 
-                        Window editionWindow = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
+
+//                        qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+//                        Actions.SelectMenu(qbApp, qbWindow, "File", "Toggle to Another Edition... ");
 
 
-                        Actions.ClickElementByName(editionWindow, pair.Key);
-
-                        Actions.ClickElementByName(editionWindow, "Next >");
+//                        Window editionWindow = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
 
 
-                        Window editionWindow1 = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
+//                        Actions.ClickElementByName(editionWindow, pair.Key);
 
-                        Actions.ClickElementByName(editionWindow1, "Toggle");
-
-                        Thread.Sleep(30000);
-
-                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Automatic Backup") == true)
-                        {
-                            Logger.logMessage("Backup Window Found");
-
-                            SendKeys.SendWait("%N");
-
-                        }
-                        try
-                        {
-                            //Actions.WaitForWindow("QuickBooks Update Service",int.Parse(Sync_Timeout));
-                            if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
-                            {
-
-                                Logger.logMessage("Update window found");
-                                Window UpdateWin = Actions.GetDesktopWindow("QuickBooks Update Service");
-                                SendKeys.SendWait("%L");
-                                //Actions.SendTABToWindow(UpdateWin);
-                                //Actions.SendENTERoWindow(UpdateWin);
+//                        Actions.ClickElementByName(editionWindow, "Next >");
 
 
-                            }
-                            else
-                            {
-                                SendKeys.SendWait("%L");
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage(e.ToString());
-                        }
+//                        Window editionWindow1 = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
 
-                        try
-                        {
-                            if (Actions.CheckDesktopWindowExists("QuickBooks Product Configuration"))
-                            {
-                                Logger.logMessage("Update/Product window found");
-                                Window ProdConfWin = Actions.GetDesktopWindow("QuickBooks Product Configuration");
-                                SendKeys.SendWait("%L");
-                                //Actions.SendTABToWindow(ProdConfWin);
-                                //Actions.SendENTERoWindow(ProdConfWin);
-                            }
+//                        Actions.ClickElementByName(editionWindow1, "Toggle");
 
-                            else
-                            {
-                                SendKeys.SendWait("%L");
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.logMessage(e.ToString());
+//                        Thread.Sleep(30000);
 
-                        }
+//                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Automatic Backup") == true)
+//                        {
+//                            Logger.logMessage("Backup Window Found");
 
-                        Thread.Sleep(20000);
-                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
-                        {
-                            Logger.logMessage("Register window found");
-                            Window registerWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks");
+//                            SendKeys.SendWait("%N");
 
-                            Logger.logMessage(registerWin.ToString());
-                            Actions.ClickElementByName(registerWin, "Remind Me Later");
+//                        }
+//                        try
+//                        {
+//                            //Actions.WaitForWindow("QuickBooks Update Service",int.Parse(Sync_Timeout));
+//                            if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
+//                            {
+
+//                                Logger.logMessage("Update window found");
+//                                Window UpdateWin = Actions.GetDesktopWindow("QuickBooks Update Service");
+//                                SendKeys.SendWait("%L");
+//                                //Actions.SendTABToWindow(UpdateWin);
+//                                //Actions.SendENTERoWindow(UpdateWin);
 
 
+//                            }
+//                            else
+//                            {
+//                                SendKeys.SendWait("%L");
+//                            }
+//                        }
+//                        catch (Exception e)
+//                        {
+//                            Logger.logMessage(e.ToString());
+//                        }
 
+//                        try
+//                        {
+//                            if (Actions.CheckDesktopWindowExists("QuickBooks Product Configuration"))
+//                            {
+//                                Logger.logMessage("Update/Product window found");
+//                                Window ProdConfWin = Actions.GetDesktopWindow("QuickBooks Product Configuration");
+//                                SendKeys.SendWait("%L");
+//                                //Actions.SendTABToWindow(ProdConfWin);
+//                                //Actions.SendENTERoWindow(ProdConfWin);
+//                            }
 
+//                            else
+//                            {
+//                                SendKeys.SendWait("%L");
+//                            }
+//                        }
+//                        catch (Exception e)
+//                        {
+//                            Logger.logMessage(e.ToString());
 
+//                        }
 
-                        }
-                        Thread.Sleep(30000);
-                    }
-                }
+//                        Thread.Sleep(20000);
+//                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
+//                        {
+//                            Logger.logMessage("Register window found");
+//                            Window registerWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks");
 
-            }
+//                            Logger.logMessage(registerWin.ToString());
+//                            Actions.ClickElementByName(registerWin, "Remind Me Later");
 
 
 
 
 
-            catch (Exception e)
-            {
-                Logger.logMessage("failed" + e.GetBaseException());
-            }
-        }
 
+//                        }
+//                        Thread.Sleep(30000);
+//                    }
+//                }
+
+//            }
+
+
+
+
+
+//            catch (Exception e)
+//            {
+//                Logger.logMessage("failed" + e.GetBaseException());
+//            }
+//        }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // -------------------------Sunder Raj added for creating company file -----------------------------------------------------------------------------------------------------------
         public static void CreateCompanyFile(Dictionary<string, string> refkeyvaluepairdic)
         {
@@ -402,7 +402,6 @@ namespace Installer_Test.Lib
             Logger.logMessage("--------------------------------------------------------------------");
 
             Actions.SelectMenu(qbApp, qbWindow, "File", "New Company...");
-
             Actions.WaitForChildWindow(qbWindow, "QuickBooks Setup", 999999);
 
             if ((Actions.CheckElementExistsByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Express Start")) == true)
@@ -567,10 +566,14 @@ namespace Installer_Test.Lib
                 phone = refkeyvaluepairdic["PhoneNo"];
                 Actions.SetTextByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "txtBoxPhone", phone);
             }
-            if (Actions.CheckElementExistsByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Create Company")==true)
+            if (Actions.CheckElementExistsByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Create Company") == true)
+            {
                 Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Create Company");
+            }
             else
+            {
                 Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btnCreateCompany");
+            }
             String Title = qbWindow.Title;
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -602,7 +605,7 @@ namespace Installer_Test.Lib
                 Actions.ClickElementByName(qbchild, "Start Working");
 
                 Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
-                Actions.SendENTERoWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
+               // Actions.SendENTERoWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
                 
 
             }
@@ -617,145 +620,6 @@ namespace Installer_Test.Lib
         }
           
         //------------------------End of code for creating company file -----------------------------------------------------------------------------------------------------------
-
-        //------Code by Sunder Raj for Invoke QB-------------------------------------------
-
-        public static void InvokeQB()
-        {
-          
-           
-
-            Window qb_install = Actions.GetDesktopWindow("QuickBooks Installation");
-
-            TestStack.White.UIItems.Panel Pane1 = Actions.GetPaneByName(qb_install, "Intuit QuickBooks Installer");
-            try
-            {
-                Actions.ClickButtonInsidePanelByName(qb_install, Pane1, "Finish");
-                Thread.Sleep(200);
-            }
-            catch (Exception e)
-            {
-                Logger.logMessage(e.ToString());
-            }
-            //Actions.WaitForTextVisibleInsidePane(qb_install, Pane1, "Open QuickBooks", int.Parse(Sync_Timeout));
-           
-           
-
-            try
-            {
-                Window qb_install1 = Actions.GetDesktopWindow("QuickBooks Installation");
-            TestStack.White.UIItems.Panel Pane2 = Actions.GetPaneByName(qb_install1, "Intuit QuickBooks Installer");
-            
-                Actions.ClickButtonInsidePanelByName(qb_install1, Pane2, "Open QuickBooks");
-               
-            }
-            catch (Exception e)
-            {
-                Logger.logMessage(e.ToString());
-            }
-            try
-            {
-                Window qb_install1 = Actions.GetDesktopWindow("Intuit QuickBooks Installer");
-                Actions.ClickElementByName(qb_install1,"Open QuickBooks");
-
-            }
-            catch (Exception e)
-            {
-                Logger.logMessage(e.ToString());
-            }
-
-           
-        }
-
-        public static void SelectEdition(Dictionary<string, string> refkeyvaluepairdic)
-        {
-            String winname = "Select QuickBooks Industry-Specific Edition";
-            string industryEdition = null;
-            try
-            {
-                
-
-                
-                Logger.logMessage("Start");
-                try { 
-                    Actions.WaitForWindow(winname, 80000);
-                }
-                catch {
-                }
-                Logger.logMessage("End");
-               //Actions.WaitForAppWindow(winname, int.Parse(Sync_Timeout));
-             // Actions.WaitForAppWindow(winname, int.Parse(Sync_Timeout));
-                if (Actions.CheckDesktopWindowExists(winname) == true)
-                {
-
-
-                    if (refkeyvaluepairdic.ContainsKey("IndustryEdition"))
-                    {
-                        Window selWin = null;
-                        industryEdition = refkeyvaluepairdic["IndustryEdition"];
-
-                        selWin = Actions.GetDesktopWindow(winname);
-                        Actions.WaitForElementEnabled(selWin, industryEdition, int.Parse(Sync_Timeout));
-                        Actions.ClickElementByName(selWin, industryEdition);
-                        Actions.ClickElementByName(selWin, "Next >");
-                        Actions.WaitForWindow(winname, 50000);
-                        selWin = Actions.GetDesktopWindow(winname);
-                        Actions.ClickElementByName(selWin, "Finish");
-
-                    }
-                }
-                try
-                {
-                    Actions.WaitForWindow("Product Configuration", int.Parse(Sync_Timeout));
-                    Window win1 = Actions.GetDesktopWindow("Product Configuration");
-                    Logger.logMessage(win1.ToString());
-                    Thread.Sleep(30000);
-                    //Actions.WaitForChildWindow(win1, "QuickBooks Product Configuration", 60000);
-                    
-                    Window win2 = Actions.GetChildWindow(win1, "QuickBooks Product Configuration");
-                   Thread.Sleep(1000);
-                    Actions.ClickElementByName(win2, "No");
-                }
-                catch (Exception e)
-                {
-                    Logger.logMessage(e.ToString());
-                }
-
-                try
-                {
-                    Actions.WaitForWindow("QuickBooks Update Service", int.Parse(Sync_Timeout));
-                    if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
-                    {
-                       // SendKeys.SendWait("%L");
-                        Actions.WaitForElementEnabled(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later", int.Parse(Sync_Timeout));
-                        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Update Service"), "Install Later");
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.logMessage(e.ToString());
-                }
-                try
-                {
-                    Actions.WaitForWindow("QuickBooks", int.Parse(Sync_Timeout));
-                    if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks") == true)
-                    { //SendKeys.SendWait("%L");
-                    Actions.ClickElementByName((Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Register QuickBooks")), "Remind Me Later");
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.logMessage(e.ToString());
-                }
-
-            }
-            catch (Exception e)
-            {
-                Logger.logMessage(e.ToString());
-            }
-        }
-
-        //------Code by SUnder Raj for Invoke QB-------------------------------------------  
 
         public static void PerformMIMO(TestStack.White.Application qbApp, Window qbWindow)
         {
@@ -772,29 +636,30 @@ namespace Installer_Test.Lib
 
             // Item is not created , create an item
             itemname = "item" + _r.Next(1000).ToString();
-            QB_functions.Create_Item(qbApp,qbWindow,itemname);
+            QB_functions.Create_Item(qbApp, qbWindow, itemname);
 
             //Creating an invoice
-            QB_functions.Create_Invoice(qbApp, qbWindow, custname,itemname);
- 
+            QB_functions.Create_Invoice(qbApp, qbWindow, custname, itemname);
+
             //Receive Payment
             QB_functions.Receive_Payments(qbApp, qbWindow, custname);
-         
+
             //Setting a new Vendor
             vendorname = "Vend" + _r.Next(1000).ToString();
-            QB_functions.Create_Vendor(qbApp,qbWindow,vendorname);
+            QB_functions.Create_Vendor(qbApp, qbWindow, vendorname);
 
             //Create Purhcase orders
-            QB_functions.Create_Purchase_Order(qbApp,qbWindow,custname,itemname,vendorname);
+            QB_functions.Create_Purchase_Order(qbApp, qbWindow, custname, itemname, vendorname);
             
-            // Creating a bill
-            QB_functions.Create_Bill(qbApp, qbWindow, vendorname, itemname);
+            //// Creating a bill
+            //QB_functions.Create_Bill(qbApp, qbWindow, vendorname, itemname);
            
-            //Pay Bills
-            QB_functions.Pay_Bill(qbApp,qbWindow);
+            ////Pay Bills
+            //QB_functions.Pay_Bill(qbApp,qbWindow);
 
             // Close all windows before resetting preferences
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
+            Thread.Sleep(1000);
 
             //Reseting the preferences 
             QB_functions.Reset_Preferences(qbApp,qbWindow);
@@ -847,7 +712,7 @@ namespace Installer_Test.Lib
             }
         }
 
-         public static void ApplyWebpatch(String resultsPath)
+        public static void ApplyWebpatch(String resultsPath)
         {
         
         

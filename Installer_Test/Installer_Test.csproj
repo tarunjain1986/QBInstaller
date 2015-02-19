@@ -94,9 +94,7 @@
     <Compile Include="Tests\AutoPatch_Suite.cs" />
     <Compile Include="Tests\WebPatch_Suite.cs" />
     <Compile Include="Tests\Install_Suite.cs" />
-    <Compile Include="Tests\InvokeQB.cs" />
     <Compile Include="Tests\NewCompanyFile.cs" />
-    <Compile Include="Tests\Switch_Prem.cs" />
     <Compile Include="Tests\Toggle_Prem_Acct.cs" />
     <Compile Include="Tests\Toggle_Ent_Acct.cs" />
     <Compile Include="Tests\MIMO.cs" />
@@ -113,7 +111,6 @@
     <Compile Include="Tests\PFTW_Comparison.cs" />
     <Compile Include="Tests\Help_Update.cs" />
     <Compile Include="Tests\CheckF2.cs" />
-    <Compile Include="Tests\Switch_Ent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Excel\Parameters.xlsm" />

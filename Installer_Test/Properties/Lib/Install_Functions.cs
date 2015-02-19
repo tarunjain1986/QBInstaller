@@ -50,9 +50,12 @@ namespace Installer_Test
         public static Random _r = new Random();
         public static string resultsPath, LogFilePath, industryEdition;
 
-        public static string ver, reg_ver, expected_ver, installed_version, installed_dataPath, dataPath;
+        public static string country, SKU, installType, targetPath, installPath, wkflow, customOpt, License_No, Product_No, UserID, Passwd, firstName, lastName;
+        public static string[] LicenseNo, ProductNo;
+ 
+        public static string ver, reg_ver, expected_ver, installed_version, installed_dataPath, dataPath, regPath;
 
-        public static string testName = "Installer Test Suite", regPath;
+        public static string testName = "Installer Test Suite";
 
         public static TestStack.White.Application qbApp = null;
         public static TestStack.White.UIItems.WindowItems.Window qbWindow = null;
@@ -60,35 +63,59 @@ namespace Installer_Test
 
         public static string Install_US()
         {
-            string country, SKU, installType, targetPath, installPath, wkflow, customOpt, License_No, Product_No, UserID, Passwd, firstName, lastName;
-            string[] LicenseNo, ProductNo;
+            //string country, SKU, installType, targetPath, installPath, wkflow, customOpt, License_No, Product_No, UserID, Passwd, firstName, lastName;
+            //string[] LicenseNo, ProductNo;
  
+
             Installer_Test.Lib.ScreenCapture sc = new Installer_Test.Lib.ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
             IntPtr pointer = GetForegroundWindow();
   
             string readpath = "C:\\Temp\\Parameters.xlsm";
 
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //// Read all the input values from "C:\\Temp\\Parameters.xlsm"
+            //Dictionary<string, string> dic = new Dictionary<string, string>();
+            //dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B2:B27");
+            //country = dic["B5"];
+            //SKU = dic["B7"];
+            //installType = dic["B8"];
+
+            //targetPath = dic["B12"];
+            //targetPath = targetPath + @"QBooks\";
+
+            //customOpt = dic["B17"];
+            //wkflow = dic["B18"];
+            //License_No = dic["B19"];
+            //Product_No = dic["B20"];
+            //UserID = dic["B21"];
+            //Passwd = dic["B22"];
+            //firstName = dic["B23"];
+            //lastName = dic["B24"];
+
+            //installPath = dic["B27"];
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             // Read all the input values from "C:\\Temp\\Parameters.xlsm"
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B2:B27");
-            country = dic["B5"];
-            SKU = dic["B7"];
-            installType = dic["B8"];
+            dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B7:B30");
+            country = dic["B10"];
+            SKU = dic["B12"];
+            installType = dic["B13"];
 
-            targetPath = dic["B12"];
+            targetPath = dic["B30"];
             targetPath = targetPath + @"QBooks\";
 
-            customOpt = dic["B17"];
-            wkflow = dic["B18"];
-            License_No = dic["B19"];
-            Product_No = dic["B20"];
-            UserID = dic["B21"];
-            Passwd = dic["B22"];
-            firstName = dic["B23"];
-            lastName = dic["B24"];
+            customOpt = dic["B14"];
+            wkflow = dic["B15"];
+            License_No = dic["B16"];
+            Product_No = dic["B17"];
+            UserID = dic["B18"];
+            Passwd = dic["B19"];
+            firstName = dic["B20"];
+            lastName = dic["B21"];
 
-            installPath = dic["B27"];
+            installPath = dic["B24"];
 
             var regex = new Regex(@".{4}");
             string temp = regex.Replace(License_No, "$&" + "\n");
@@ -98,15 +125,15 @@ namespace Installer_Test
             temp = regex.Replace(Product_No, "$&" + "\n");
             ProductNo = temp.Split('\n');
                        
-            resultsPath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMdd") + @"\Screenshots\";
-            LogFilePath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMdd") + @"\Logs\";
+            resultsPath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMddmm") + @"\Screenshots\";
+            LogFilePath = @"C:\Temp\Results\Install_" + customOpt + "_" + wkflow + "_" + DateTime.Now.ToString("yyyyMMddmm") + @"\Logs\";
             
             // Add the LogFilePath created at runtime in the Automation.Properties file
             Add_Log_Automation_Properties(LogFilePath);
-            Thread.Sleep(3000); // Wait for the entry to be added in the Automation.Properties file
+            conf.reload(); // Reload the property file
 
-            Logger log = new Logger(testName + "_" + DateTime.Now.ToString("yyyyMMdd"));
-            
+            Logger log = new Logger(testName + "_" + DateTime.Now.ToString("yyyyMMddmm"));
+
             // Create a folder to save the Screenshots
             Create_Dir(resultsPath);
 
@@ -193,7 +220,8 @@ namespace Installer_Test
 
                // Update the Automation.Properties with the new properties
                File_Functions.Update_Automation_Properties();
-               
+               conf.reload(); // Added
+
                 // Launch QuickBooks after installation
                Launch_QB(SKU);
         
@@ -230,25 +258,48 @@ namespace Installer_Test
 
             string readpath = "C:\\Temp\\Parameters.xlsm";
 
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B2:B27");
-            country = dic["B5"];
-            SKU = dic["B7"];
-            installType = dic["B8"];
+            ////////////////////////////////////////////////////////////////////////////////////////
+            //Dictionary<string, string> dic = new Dictionary<string, string>();
+            //dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B2:B27");
+            //country = dic["B5"];
+            //SKU = dic["B7"];
+            //installType = dic["B8"];
 
-            targetPath = dic["B12"];
+            //targetPath = dic["B12"];
+            //targetPath = targetPath + @"QBooks\";
+
+            //customOpt = dic["B17"];
+            //wkflow = dic["B18"];
+            //License_No = dic["B19"];
+            //Product_No = dic["B20"];
+            //UserID = dic["B21"];
+            //Passwd = dic["B22"];
+            //firstName = dic["B23"];
+            //lastName = dic["B24"];
+
+            //installPath = dic["B27"];
+            //////////////////////////////////////////////////////////////////////////////////////////
+
+            // Read all the input values from "C:\\Temp\\Parameters.xlsm"
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B7:B30");
+            country = dic["B10"];
+            SKU = dic["B12"];
+            installType = dic["B13"];
+
+            targetPath = dic["B30"];
             targetPath = targetPath + @"QBooks\";
 
-            customOpt = dic["B17"];
-            wkflow = dic["B18"];
-            License_No = dic["B19"];
-            Product_No = dic["B20"];
-            UserID = dic["B21"];
-            Passwd = dic["B22"];
-            firstName = dic["B23"];
-            lastName = dic["B24"];
+            customOpt = dic["B14"];
+            wkflow = dic["B15"];
+            License_No = dic["B16"];
+            Product_No = dic["B17"];
+            UserID = dic["B18"];
+            Passwd = dic["B19"];
+            firstName = dic["B20"];
+            lastName = dic["B21"];
 
-            installPath = dic["B27"];
+            installPath = dic["B24"];
 
             var regex = new Regex(@".{4}");
             string temp = regex.Replace(License_No, "$&" + "\n");
@@ -316,25 +367,48 @@ namespace Installer_Test
 
             string readpath = "C:\\Temp\\Parameters.xlsm";
 
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B2:B27");
-            country = dic["B5"];
-            SKU = dic["B7"];
-            installType = dic["B8"];
+            //////////////////////////////////////////////////////////////////////////////////////////
+            //Dictionary<string, string> dic = new Dictionary<string, string>();
+            //dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B2:B27");
+            //country = dic["B5"];
+            //SKU = dic["B7"];
+            //installType = dic["B8"];
 
-            targetPath = dic["B12"];
+            //targetPath = dic["B12"];
+            //targetPath = targetPath + @"QBooks\";
+
+            //customOpt = dic["B17"];
+            //wkflow = dic["B18"];
+            //License_No = dic["B19"];
+            //Product_No = dic["B20"];
+            //UserID = dic["B21"];
+            //Passwd = dic["B22"];
+            //firstName = dic["B23"];
+            //lastName = dic["B24"];
+
+            //installPath = dic["B27"];
+            ////////////////////////////////////////////////////////////////////////////////////////////
+
+            // Read all the input values from "C:\\Temp\\Parameters.xlsm"
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B7:B30");
+            country = dic["B10"];
+            SKU = dic["B12"];
+            installType = dic["B13"];
+
+            targetPath = dic["B30"];
             targetPath = targetPath + @"QBooks\";
 
-            customOpt = dic["B17"];
-            wkflow = dic["B18"];
-            License_No = dic["B19"];
-            Product_No = dic["B20"];
-            UserID = dic["B21"];
-            Passwd = dic["B22"];
-            firstName = dic["B23"];
-            lastName = dic["B24"];
+            customOpt = dic["B14"];
+            wkflow = dic["B15"];
+            License_No = dic["B16"];
+            Product_No = dic["B17"];
+            UserID = dic["B18"];
+            Passwd = dic["B19"];
+            firstName = dic["B20"];
+            lastName = dic["B21"];
 
-            installPath = dic["B27"];
+            installPath = dic["B24"];
 
             var regex = new Regex(@".{4}");
             string temp = regex.Replace(License_No, "$&" + "\n");
@@ -420,7 +494,7 @@ namespace Installer_Test
             {
                 Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Print");
                 pointer = GetForegroundWindow();
-                sc.CaptureWindowToFile(pointer, resultsPath + "09_Ready_to_Install_Print.png", ImageFormat.Png);
+                sc.CaptureWindowToFile(pointer, resultsPath + "Ready_to_Install_Print.png", ImageFormat.Png);
                 Logger.logMessage("Click on Print - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
@@ -456,9 +530,11 @@ namespace Installer_Test
             // Click on Install
             try
             {
+                Thread.Sleep(1000);
+                Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1"); // Click on Install
                 Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1"); // Click on Install
                 pointer = GetForegroundWindow();
-                sc.CaptureWindowToFile(pointer, resultsPath + "10_Installation_Progress_01.png", ImageFormat.Png);
+                sc.CaptureWindowToFile(pointer, resultsPath + "Installation_Progress_01.png", ImageFormat.Png);
                 Logger.logMessage("Click on Install - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
@@ -522,12 +598,13 @@ namespace Installer_Test
             // Wait for the Next button to be enabled
             Actions.WaitForElementEnabled(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >", int.Parse(Sync_Timeout));
             pointer = GetForegroundWindow();
-            sc.CaptureWindowToFile(pointer, resultsPath + "01_Install.png", ImageFormat.Png);
+            sc.CaptureWindowToFile(pointer, resultsPath + "Install.png", ImageFormat.Png);
 
             // Verify that the installer dialog box is displayed and click Next 
             try
             {
                 Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >"); // Click on Next
+                Thread.Sleep(1000);
                 Logger.logMessage("Click Next - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
@@ -551,7 +628,7 @@ namespace Installer_Test
                     Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "I accept the terms of the licence agreement");
                 }
                 pointer = GetForegroundWindow();
-                sc.CaptureWindowToFile(pointer, resultsPath + "02_License_Agreement.png", ImageFormat.Png);
+                sc.CaptureWindowToFile(pointer, resultsPath + "License_Agreement.png", ImageFormat.Png);
                 Logger.logMessage("License agreement accepted - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
@@ -600,6 +677,7 @@ namespace Installer_Test
             try
             {
                 Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >"); // Click on Next
+                Thread.Sleep(2000);
                 Logger.logMessage("Click on License agreement -> Next button - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
@@ -609,6 +687,8 @@ namespace Installer_Test
                 Logger.logMessage(e.Message);
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
+
+            // Thread.Sleep(5000);
         }
 
         public static void Select_Option(string customOpt, string targetPath, string installPath)
@@ -648,10 +728,11 @@ namespace Installer_Test
                     case "Local":
                         try
                         {
+                            // Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Installation"));
                             // Select the first radio button to install QB on "this" machine
                             Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "I'll be using QuickBooks on this computer."); // 1016
                             pointer = GetForegroundWindow();
-                            sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_Local.png", ImageFormat.Png);
+                            sc.CaptureWindowToFile(pointer, resultsPath + "InstallationType_Local.png", ImageFormat.Png);
                             Logger.logMessage("Click on I'll be using QuickBooks on this computer - Successful");
                             Logger.logMessage("------------------------------------------------------------------------------");
                         }
@@ -667,10 +748,11 @@ namespace Installer_Test
                     case "Shared":
                         try
                         {
+                            // Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Installation"));
                             // Select the second radio button for a shared installation of QB
                             Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1018"); // Select the second radio button
                             pointer = GetForegroundWindow();
-                            sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_Shared.png", ImageFormat.Png);
+                            sc.CaptureWindowToFile(pointer, resultsPath + "InstallationType_Shared.png", ImageFormat.Png);
                             Logger.logMessage("Click on Shared option - Successful");
                             Logger.logMessage("------------------------------------------------------------------------------");
                         }
@@ -686,8 +768,10 @@ namespace Installer_Test
 
             try
             {
+                // Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Installation"));
                 // Click on Next
                 Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
+                Thread.Sleep(1000);
                 Logger.logMessage("Click on Next - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
@@ -724,10 +808,11 @@ namespace Installer_Test
                 case "Express":
                     try
                     {
+                        // Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Installation"));
                         // Select the first radio button
                         Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "504");
                         pointer = GetForegroundWindow();
-                        sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_Express.png", ImageFormat.Png);
+                        sc.CaptureWindowToFile(pointer, resultsPath + "InstallationType_Express.png", ImageFormat.Png);
                         Logger.logMessage("Click on Express option - Successful");
                         Logger.logMessage("------------------------------------------------------------------------------");
                     }
@@ -742,6 +827,7 @@ namespace Installer_Test
                     {
                         // Click on Next
                         Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
+                        Thread.Sleep(1000);
                     }
                     catch (Exception e)
                     {
@@ -754,10 +840,11 @@ namespace Installer_Test
                 case "Custom and Network Options":
                     try
                     {
+                        // Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Installation"));
                         // Select the second radio button
                         Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1006");
                         pointer = GetForegroundWindow();
-                        sc.CaptureWindowToFile(pointer, resultsPath + "04_InstallationType_CustomAndNetworkOptions.png", ImageFormat.Png);
+                        sc.CaptureWindowToFile(pointer, resultsPath + "InstallationType_CustomAndNetworkOptions.png", ImageFormat.Png);
                         Logger.logMessage("Click on Custom and Network option - Successful");
                         Logger.logMessage("------------------------------------------------------------------------------");
                     }
@@ -771,6 +858,7 @@ namespace Installer_Test
                     {
                         // Click on Next
                         Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
+                        Thread.Sleep(1000);
                     }
                     catch (Exception e)
                     {
@@ -799,7 +887,7 @@ namespace Installer_Test
                 Actions.SetTextByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1056", LicenseNo[2]);
                 Actions.SetTextByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1057", LicenseNo[3]);
                 pointer = GetForegroundWindow();
-                sc.CaptureWindowToFile(pointer, resultsPath + "05_License_Number.png", ImageFormat.Png);
+                sc.CaptureWindowToFile(pointer, resultsPath + "License_Number.png", ImageFormat.Png);
                 Logger.logMessage("Enter License Numbers - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
@@ -816,9 +904,10 @@ namespace Installer_Test
                 Actions.SetTextByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1059", ProductNo[0]);
                 Actions.SetTextByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1060", ProductNo[1]);
                 pointer = GetForegroundWindow();
-                sc.CaptureWindowToFile(pointer, resultsPath + "06_Product_Number.png", ImageFormat.Png);
+                sc.CaptureWindowToFile(pointer, resultsPath + "Product_Number.png", ImageFormat.Png);
                 Logger.logMessage("Enter Product Numbers - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
+                // Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Installation"));
             }
             catch (Exception e)
             {
@@ -835,6 +924,7 @@ namespace Installer_Test
                 Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "I can't find these numbers");
                 Logger.logMessage("Click on I can't find these numbers - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
+            
             }
             catch (Exception e)
             {
@@ -846,9 +936,10 @@ namespace Installer_Test
             // Click on Next
             try
             {
+                // Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Installation"));
                 Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
                 pointer = GetForegroundWindow();
-                sc.CaptureWindowToFile(pointer, resultsPath + "07_Default_Installation_Location.png", ImageFormat.Png);
+                sc.CaptureWindowToFile(pointer, resultsPath + "Default_Installation_Location.png", ImageFormat.Png);
                 Logger.logMessage("Click on Next - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
@@ -876,6 +967,7 @@ namespace Installer_Test
                 while (flag == false)
                 {
                     flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks");
+                    Thread.Sleep(1500);
                 }
                 Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks"); // Launch QuickBooks
                 Logger.logMessage("Click on Open QuickBooks - Successful");
@@ -925,6 +1017,7 @@ namespace Installer_Test
 
             try
             {
+                // Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Installation"));
                 // Select the third radio button
                 Actions.ClickElementByAutomationID(Actions.GetDesktopWindow("QuickBooks Installation"), "1019");
                 pointer = GetForegroundWindow();
@@ -980,6 +1073,7 @@ namespace Installer_Test
 
             try
             {
+                // Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Installation"));
                 // Click on Next
                 Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
                 pointer = GetForegroundWindow();
@@ -1049,7 +1143,7 @@ namespace Installer_Test
             {
                 Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Skip this");
                 pointer = GetForegroundWindow();
-                sc.CaptureWindowToFile(pointer, resultsPath + "11_Installation_Progress_after_Skip.png", ImageFormat.Png);
+                sc.CaptureWindowToFile(pointer, resultsPath + "Installation_Progress_after_Skip.png", ImageFormat.Png);
                 Logger.logMessage("Click on Skip this - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
@@ -1317,6 +1411,7 @@ namespace Installer_Test
             try
             {
                 Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Next >");
+                Thread.Sleep(1000);
                 pointer = GetForegroundWindow();
                 sc.CaptureWindowToFile(pointer, resultsPath + "08_Ready_to_Install.png", ImageFormat.Png);
                 Logger.logMessage("Click on Next - Successful");
@@ -1339,6 +1434,7 @@ namespace Installer_Test
 
             try
             {
+                // Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Installation"));
                 Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Browse");
                 pointer = GetForegroundWindow();
                 sc.CaptureWindowToFile(pointer, resultsPath + "08_Browse_Installation_Location.png", ImageFormat.Png);
@@ -1412,25 +1508,45 @@ namespace Installer_Test
                 case "Premier Accountant":
                     industryEdition = "Premier Edition (General Business)";
                     break;
+
+                case "Pro":
+                case "Pro Plus":
+                industryEdition = "";
+                Thread.Sleep(20000);
+                break;
             }
             try
             {
+                if (industryEdition != "")
+                {
 
-                Actions.WaitForWindow("Select QuickBooks Industry-Specific Edition", 180000);
-                Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), industryEdition);
-                Thread.Sleep(1000);
-                Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Next >");
-                Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Finish");
+                    Actions.WaitForWindow("Select QuickBooks Industry-Specific Edition", 180000);
+                    Thread.Sleep(5000);
+                    Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), industryEdition);
+                    Thread.Sleep(2000);
+                    Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Next >");
+                    Thread.Sleep(2000);
+                    Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Finish");
+                    Thread.Sleep(2000);
+                    Select_Edition(industryEdition);
 
-                Select_Edition(industryEdition);
+                    //string exe = conf.get("QBExePath");
+                    //qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
+                    //qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
 
-                string exe = conf.get("QBExePath");
-                qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
-                qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
-
-                QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
-                Thread.Sleep(20000);
-
+                    //QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
+                    //Thread.Sleep(20000);
+                }
+                else
+                {
+                    var MainWindow = Actions.GetDesktopWindow("QuickBooks " + SKU);
+                    if (Actions.CheckWindowExists(MainWindow, "Register "))
+                    {
+                        Actions.ClickElementByName(Actions.GetChildWindow(MainWindow, "Register "), "Remind Me Later");
+                        Logger.logMessage("Register QuickBooks window found.");
+                        Logger.logMessage("-----------------------------------------------------------------");
+                    }
+                }
             }
 
             catch (Exception e)
@@ -1467,14 +1583,15 @@ namespace Installer_Test
   
         public static void Select_Edition(string industryEdition)
         {
+            
+            Boolean flag = false;
 
             try
             {
                 Actions.WaitForWindow("Product Configuration", 30000);
 
                 Window win1 = Actions.GetDesktopWindow("Product Configuration");
-
-                Boolean flag = false;
+                
                 while (flag == false)
                 {
                     flag = Actions.CheckWindowExists(win1, "QuickBooks Product Configuration");
@@ -1493,19 +1610,19 @@ namespace Installer_Test
                 {
                     Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Update Service"));
                     SendKeys.SendWait("%l");
+                    Logger.logMessage("QuickBooks Update Service Window found.");
                 }
 
-                flag = false;
-                win1 = Actions.GetDesktopWindow("QuickBooks");
-                flag = Actions.CheckWindowExists(win1, "About Automatic Update");
+                string readpath = "C:\\Temp\\Parameters.xlsm";
+                Dictionary<string, string> dic_SKU = new Dictionary<string, string>();
+                //dic_SKU = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B7");
+                //string SKU = dic_SKU["B7"];
 
-                if (flag == true)
-                {
-                    win2 = Actions.GetChildWindow(win1, "About Automatic Update");
-                    Actions.ClickElementByName(win2, "OK");
-                }
+                dic_SKU = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B12");
+                string SKU = dic_SKU["B12"];
 
-                Thread.Sleep(2000);
+                qbApp = QuickBooks.GetApp("QuickBooks " + SKU);
+                // qbApp.WaitWhileBusy();
 
                 // to be updated
                 //flag = false;
@@ -1519,52 +1636,9 @@ namespace Installer_Test
 
                 //    }
                 //}
-
-                string readpath = "C:\\Temp\\Parameters.xlsm";
-                Dictionary<string, string> dic_QBDetails = new Dictionary<string, string>();
-                string ver, reg_ver, installed_product;
-
-                dic_QBDetails = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
-                ver = dic_QBDetails["B2"];
-                reg_ver = dic_QBDetails["B3"];
-
-                installed_product = File_Functions.GetProduct(ver, reg_ver);
-                Thread.Sleep(5000);
-               
-                var MainWindow = Actions.GetDesktopWindow("QuickBooks");
-
-                if (Actions.CheckWindowExists(MainWindow, "Register "))
-                {
-                    Actions.ClickElementByName(Actions.GetChildWindow(MainWindow, "Register "), "Remind Me Later");
-                    Logger.logMessage ("Register QuickBooks window found.");
-                    Logger.logMessage ("-----------------------------------------------------------------");
-                }
-
-                //if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Set Up an External Accountant User") == true)
-                //{
-                //    Window ExtAcctWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Set Up an External Accountant User");
-                //    Actions.ClickElementByName(ExtAcctWin, "No");
-                //}
-
-                //if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Automatic Backup") == true)
-                //{
-                //    SendKeys.SendWait("%N");
-                //}
-
-                //if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks"), "Accountant Center") == true)
-                //{
-
-                //    Window AcctCenWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks"), "Accountant Center");
-                //    Actions.ClickElementByName(AcctCenWin, "Close");
-
-                //}
-
-                //if (Actions.CheckWindowExists(MainWindow, "QuickBooks Usage & Analytics Study"))
-                //{
-                //    Actions.ClickElementByName(Actions.GetChildWindow(MainWindow, "QuickBooks Usage & Analytics Study"), "Continue");
-                //    Actions.ClickElementByName(Actions.GetChildWindow(MainWindow, "About Automatic Update"), "OK");
-                //}
-                   
+ 
+                CheckWindowsAndClose(SKU);
+  
              Logger.logMessage (industryEdition + " Edition selected - Successful");
 
             }
@@ -1574,6 +1648,67 @@ namespace Installer_Test
                 Logger.logMessage(e.Message);
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
+        }
+
+        public static void CheckWindowsAndClose (string SKU)
+        {
+            var MainWindow = Actions.GetDesktopWindow("QuickBooks " + SKU);
+
+            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks " + SKU), "QuickBooks Setup") == true)
+            {
+                Window SetupWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks " + SKU), "QuickBooks Setup");
+               // Actions.ClickElementByName(SetupWin, "Close"); // Does not work
+                SendKeys.SendWait("%{F4}");
+                Logger.logMessage("QuickBooks Setup Window found.");
+                Logger.logMessage("-----------------------------------------------------------------");
+            }
+
+            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks " + SKU), "Set Up an External Accountant User") == true)
+            {
+                Window ExtAcctWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks " + SKU), "Set Up an External Accountant User");
+                Actions.ClickElementByName(ExtAcctWin, "No");
+                Logger.logMessage("Set Up an External Accountant User Window found.");
+                Logger.logMessage("-----------------------------------------------------------------");
+            }
+
+            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks " + SKU), "Automatic Backup") == true)
+            {
+                SendKeys.SendWait("%N");
+                Logger.logMessage("Automatic Backup Window found.");
+                Logger.logMessage("-----------------------------------------------------------------");
+            }
+
+            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks " + SKU), "Accountant Center") == true)
+            {
+
+                Window AcctCenWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks " + SKU), "Accountant Center");
+                Actions.ClickElementByName(AcctCenWin, "Close");
+                Logger.logMessage("Accountant Center Window found.");
+                Logger.logMessage("-----------------------------------------------------------------");
+            }
+
+            if (Actions.CheckWindowExists(MainWindow, "QuickBooks Usage & Analytics Study"))
+            {
+                Actions.ClickElementByName(Actions.GetChildWindow(MainWindow, "QuickBooks Usage  Analytics Study"), "Continue");
+                Thread.Sleep(5000);
+                Logger.logMessage("QuickBooks Usage & Analytics Study Window found.");
+                Logger.logMessage("-----------------------------------------------------------------");
+            }
+
+            if (Actions.CheckWindowExists(MainWindow, "About Automatic Update"))
+            {
+                Actions.ClickElementByName(Actions.GetChildWindow(MainWindow, "About Automatic Update"), "OK");
+                Logger.logMessage("About Automatic Update Window found.");
+                Logger.logMessage("-----------------------------------------------------------------");
+            }
+
+            if (Actions.CheckWindowExists(MainWindow, "Register "))
+            {
+                Actions.ClickElementByName(Actions.GetChildWindow(MainWindow, "Register "), "Remind Me Later");
+                Logger.logMessage("Register QuickBooks window found.");
+                Logger.logMessage("-----------------------------------------------------------------");
+            }
+           
         }
 
         public static void Delete_QBDLLs(string installed_path)
@@ -1613,9 +1748,9 @@ namespace Installer_Test
                 {
                    DirectoryInfo del_dir = new DirectoryInfo(dir);
                    del_dir.Delete(true);
+                   Thread.Sleep(1000);
+                   Logger.logMessage(dir + " deletion - Successful");
                  }
-
-                Logger.logMessage (dir + " deletion - Successful");
             }
 
             catch (Exception e)
@@ -1634,9 +1769,9 @@ namespace Installer_Test
                 {
                    DirectoryInfo del_dir = new DirectoryInfo(dir);
                    del_dir.Delete(true);
+                   Thread.Sleep(1000);
+                   Logger.logMessage(dir + " deletion - Successful");
                 }
-
-              Logger.logMessage (dir + " deletion - Successful");
             }
 
             catch (Exception e)
@@ -1655,8 +1790,9 @@ namespace Installer_Test
                 {
                     DirectoryInfo del_dir = new DirectoryInfo(dir);
                     del_dir.Delete(true);
+                    Thread.Sleep(1000);
+                    Logger.logMessage(dir + " deletion - Successful");
                 }
-              Logger.logMessage (dir + " deletion - Successful");
             }
 
             catch (Exception e)
@@ -1674,8 +1810,9 @@ namespace Installer_Test
                 {
                     DirectoryInfo del_dir = new DirectoryInfo(dir);
                     del_dir.Delete(true);
+                    Thread.Sleep(1000);
+                    Logger.logMessage(dir + " deletion - Successful");
                 }
-               Logger.logMessage (dir + " deletion - Successful");
             }
 
             catch (Exception e)
@@ -1694,9 +1831,9 @@ namespace Installer_Test
                 {
                     DirectoryInfo del_dir = new DirectoryInfo(dir);
                     del_dir.Delete(true);
+                    Thread.Sleep(1000);
+                    Logger.logMessage(dir + " deletion - Successful");
                 }
-
-                Logger.logMessage (dir + " deletion - Successful");
             }
             
             catch (Exception e)
@@ -1714,9 +1851,9 @@ namespace Installer_Test
                 {
                     DirectoryInfo del_dir = new DirectoryInfo(dir);
                     del_dir.Delete(true);
+                    Thread.Sleep(1000);
+                    Logger.logMessage(dir + " deletion - Successful");
                 }
-
-                Logger.logMessage (dir + " deletion - Successful");
             }
 
             catch (Exception e)
@@ -1738,15 +1875,19 @@ namespace Installer_Test
                     {
                         file.Attributes &= ~FileAttributes.ReadOnly;
                         file.Delete();
+                        Thread.Sleep(1000);
                     }
                    // del_dir.Delete(true);
 
-                    foreach (System.IO.DirectoryInfo subDirectory in del_dir.GetDirectories()) 
-                    del_dir.Delete(true);
+                    foreach (System.IO.DirectoryInfo subDirectory in del_dir.GetDirectories())
+                    {
+                        del_dir.Delete(true);
+                        Thread.Sleep(1000);
+                    }
+
+                    Logger.logMessage(dir + " deletion - Successful");
                 }
-              
-                Logger.logMessage (dir + " deletion - Successful");
-            }
+             }
 
             catch (Exception e)
             {
@@ -1755,39 +1896,39 @@ namespace Installer_Test
                 Logger.logMessage ("-----------------------------------------------------------");
             }
 
-            try
-            {
-                if (Environment.Is64BitOperatingSystem)
-                {
-                    regPath = @"Software\Wow6432Node\";
-                }
-                else
-                {
-                    regPath = @"Software\";
-                }
-                Logger.logMessage ("Registry entry " + regPath + " deletion - Successful");
-            }
+            //try
+            //{
+            //    if (Environment.Is64BitOperatingSystem)
+            //    {
+            //        regPath = @"Software\Wow6432Node\";
+            //    }
+            //    else
+            //    {
+            //        regPath = @"Software\";
+            //    }
+            //    Logger.logMessage ("Registry entry " + regPath + " deletion - Successful");
+            //}
 
-            catch (Exception e)
-            {
-                Logger.logMessage ("Registry entry " + regPath + " deletion - Failed");
-                Logger.logMessage (e.Message);
-                Logger.logMessage ("-----------------------------------------------------------");
-            }
+            //catch (Exception e)
+            //{
+            //    Logger.logMessage ("Registry entry " + regPath + " deletion - Failed");
+            //    Logger.logMessage (e.Message);
+            //    Logger.logMessage ("-----------------------------------------------------------");
+            //}
 
 
-            RegistryKey regKey = Registry.LocalMachine.OpenSubKey(regPath, true);
-            if (regKey != null)
-            {
-                regKey.DeleteSubKeyTree("Intuit");
-            }
-            regPath = @"Software\";
-            regKey = Registry.LocalMachine.OpenSubKey(regPath, true);
+            //RegistryKey regKey = Registry.LocalMachine.OpenSubKey(regPath, true);
+            //if (regKey != null)
+            //{
+            //    regKey.DeleteSubKeyTree("Intuit");
+            //}
+            //regPath = @"Software\";
+            //regKey = Registry.LocalMachine.OpenSubKey(regPath, true);
 
-            if (regKey != null)
-            {
-                regKey.DeleteSubKeyTree("Intuit");
-            }
+            //if (regKey != null)
+            //{
+            //    regKey.DeleteSubKeyTree("Intuit");
+            //}
 
             Logger.logMessage ("Cleanup after Uninstall - Completed");
             Logger.logMessage ("-----------------------------------------------------------");
@@ -1804,11 +1945,21 @@ namespace Installer_Test
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
-            dic = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
+            //dic = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
 
-            ver = dic["B2"];
-            reg_ver = dic["B3"];
-            expected_ver = dic["B4"];
+            //ver = dic["B2"];
+            //reg_ver = dic["B3"];
+            //expected_ver = dic["B4"];
+
+            dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B8:B15");
+            SKU = dic["B12"];
+            ver = dic["B8"];
+            string workflow = dic["B15"];
+            reg_ver = Lib.File_Functions.GetRegVer(SKU);
+                      
+
+            dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "E7");
+            expected_ver = dic["E7"];
 
             userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             userName = userName.Remove(0, 5);
@@ -1822,53 +1973,111 @@ namespace Installer_Test
             Logger.logMessage ("Post Install Checks - Started");
             Logger.logMessage ("-----------------------------------------------");
 
-            Actions.XunitAssertEuqals(expected_ver, installed_version);
+            // Actions.XunitAssertEuqals(expected_ver, installed_version);
 
-            try
+            if (expected_ver == installed_version)
             {
-                Assert.True(File.Exists(dataPath + "QBInfo.dat"));
-                Logger.logMessage("File QBInfo.dat is available at " + dataPath + " - Successful");
-                Logger.logMessage("------------------------------------------------------------------------------");
+                Logger.logMessage("---------------------------------------------------------");
+                Logger.logMessage("Expected version = Installed version = " + expected_ver);
+                Logger.logMessage("---------------------------------------------------------");
             }
-            catch (Exception e)
+            else
             {
-                Logger.logMessage("File QBInfo.dat is not available at " + dataPath + " - Failed");
-                Logger.logMessage(e.Message);
-                Logger.logMessage("------------------------------------------------------------------------------");
-            }
-
-            try
-            {
-                Assert.True(File.Exists(dataPath + "QBInfo.dat"));
-                Logger.logMessage("File QBInfo.dat is available at " + dataPath + " - Successful");
-                Logger.logMessage("------------------------------------------------------------------------------");
-            }
-            catch (Exception e)
-            {
-                Logger.logMessage("File QBInfo.dat is not available at " + dataPath + " - Failed");
-                Logger.logMessage(e.Message);
-                Logger.logMessage("------------------------------------------------------------------------------");
+                Logger.logMessage("---------------------------------------------------------");
+                Logger.logMessage("Expected version is NOT EQUAL to Installed version");
+                Logger.logMessage("Expected Version: " + expected_ver);
+                Logger.logMessage("Installed Version: " + installed_version);
+                Logger.logMessage("---------------------------------------------------------");
             }
 
-            string fileName = "oauth_" + userName + ".dat";
-            try
+            if (workflow == "Signin")
             {
-                Assert.True(File.Exists(dataPath + @"iamdata\" + fileName));
-                Logger.logMessage("File oauth_<username>.dat is available at " + dataPath + "iamdata\\ - Successful");
-                Logger.logMessage("------------------------------------------------------------------------------");
-            }
-            catch (Exception e)
-            {
-                Logger.logMessage("File oauth_<username>.dat is not available at " + dataPath + "iamdata\\ - Failed");
-                Logger.logMessage(e.Message);
-                Logger.logMessage("------------------------------------------------------------------------------");
+                try
+                {
+                    Assert.True(File.Exists(dataPath + "QBInfo.dat"));
+                    Logger.logMessage("File QBInfo.dat is available at " + dataPath + " - Successful");
+                    Logger.logMessage("------------------------------------------------------------------------------");
+                }
+                catch (Exception e)
+                {
+                    Logger.logMessage("File QBInfo.dat is not available at " + dataPath + " - Failed");
+                    Logger.logMessage(e.Message);
+                    Logger.logMessage("------------------------------------------------------------------------------");
+                }
 
-            }
+                try
+                {
+                    Assert.True(File.Exists(dataPath + "QBInfo.dat"));
+                    Logger.logMessage("File QBInfo.dat is available at " + dataPath + " - Successful");
+                    Logger.logMessage("------------------------------------------------------------------------------");
+                }
+                catch (Exception e)
+                {
+                    Logger.logMessage("File QBInfo.dat is not available at " + dataPath + " - Failed");
+                    Logger.logMessage(e.Message);
+                    Logger.logMessage("------------------------------------------------------------------------------");
+                }
 
+                string fileName = "oauth_" + userName + ".dat";
+                try
+                {
+                    Assert.True(File.Exists(dataPath + @"iamdata\" + fileName));
+                    Logger.logMessage("File oauth_<username>.dat is available at " + dataPath + "iamdata\\ - Successful");
+                    Logger.logMessage("------------------------------------------------------------------------------");
+                }
+                catch (Exception e)
+                {
+                    Logger.logMessage("File oauth_<username>.dat is not available at " + dataPath + "iamdata\\ - Failed");
+                    Logger.logMessage(e.Message);
+                    Logger.logMessage("------------------------------------------------------------------------------");
+
+                }
+            }
             Logger.logMessage ("-----------------------------------------------");
             Logger.logMessage ("Post Install Checks - Completed");
             Logger.logMessage ("-----------------------------------------------");
             Logger.logMessage ("-----------------------------------------------");
+        }
+
+        public static void Add_Edition_Automation_Properties(string Edition)
+        {
+            conf.reload();
+            string curr_dir, aut_file;
+            curr_dir = Directory.GetCurrentDirectory();
+            aut_file = curr_dir + @"\Automation.Properties";
+            List<string> prop_value = new List<string>(File.ReadAllLines(aut_file));
+
+
+            int lineIndex = prop_value.FindIndex(line => line.StartsWith("Edition="));
+            if (lineIndex != -1)
+            {
+                prop_value[lineIndex] = "Edition=" + Edition;
+                File.WriteAllLines(aut_file, prop_value);
+            }
+
+        }
+
+        public static void Get_QuickBooks_Edition(TestStack.White.Application qbApp, Window qbWindow)
+        {
+            string Edition = qbWindow.Title;
+
+            Edition = Edition.Substring(Edition.IndexOf("Intuit ") + "Intuit ".Length);
+
+            if (Edition.Contains("Manufacturing and Wholesale"))
+            {
+                Edition = Edition.Replace("Manufacturing and Wholesale", "Mfg and Whsle");
+            }
+
+            string left_str = Edition.Substring(0, Edition.LastIndexOf(' '));
+            string right_str = Edition.Substring(Edition.LastIndexOf(' ') + 1);
+
+            if (left_str != "QuickBooks Enterprise Solutions")
+            {
+                Edition = left_str + " Edition " + right_str;
+            }
+
+            Install_Functions.Add_Edition_Automation_Properties(Edition);
+
         }
 
     }

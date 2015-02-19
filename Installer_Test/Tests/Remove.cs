@@ -11,6 +11,7 @@ using FrameworkLibraries;
 using FrameworkLibraries.Utils;
 using FrameworkLibraries.ActionLibs;
 using TestStack.White.UIItems.WindowItems;
+using FrameworkLibraries.ActionLibs.WhiteAPI;
 
 using TestStack.BDDfy;
 using TestStack.White.UIItems;
@@ -34,10 +35,8 @@ namespace QBInstall.Tests
         public static Property conf = Property.GetPropertyInstance();
         public static int Sync_Timeout = int.Parse(conf.get("SyncTimeOut"));
         public static string testName = "Uninstall";
-        public string ver, reg_ver, installed_product;
+        public string SKU, ver, reg_ver, installed_product;
         string OS_Name = string.Empty;
-
-        Object product;
 
         [Given]
         public void Setup()
@@ -45,28 +44,22 @@ namespace QBInstall.Tests
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
             Logger log = new Logger(testName + "_" + timeStamp);
 
-            //string readpath = @"C:\Temp\Parameters.txt";
-            //File.WriteAllLines(readpath, File.ReadAllLines(readpath).Where(l => !string.IsNullOrWhiteSpace(l))); // Remove white space from the file
+            //// Kill any existing QuickBooks process before uninstalling
+            //OSOperations.KillProcess("QBW32");
+            //Thread.Sleep(1000);
 
-            //string[] lines = File.ReadAllLines(readpath);
-            //var dic = lines.Select(line => line.Split('=')).ToDictionary(keyValue => keyValue[0], bits => bits[1]);
+            //if (Actions.CheckDesktopWindowExists("Programs and Features"))
+            //{
+            //    Actions.SetFocusOnWindow(Actions.GetDesktopWindow("Programs and Features"));
+            //    Actions.ClickElementByName(Actions.GetDesktopWindow("Programs and Features"), "Close");
+            //}
 
-            //ver = dic["Version"];
-            //reg_ver = dic["Registry Folder"];
+            //// Get the QuickBooks Edition to Repair from the Automation.Properties file
+            //conf.reload();
+            //installed_product = conf.get("Edition");
+            //QuickBooks.RepairOrUnInstallQB(installed_product, false, true);
 
-            string readpath = "C:\\Temp\\Parameters.xlsm"; 
-
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
-            ver = dic["B2"];
-            reg_ver = dic["B3"];
-
-            OS_Name = File_Functions.GetOS();
-            installed_product = Installer_Test.Lib.File_Functions.GetProduct(ver, reg_ver);
-                        
-            
-            //Remove
-            QuickBooks.RepairOrUnInstallQB(installed_product, false, true);
+            Install_Functions.CleanUp();
         }
 
         [Fact]

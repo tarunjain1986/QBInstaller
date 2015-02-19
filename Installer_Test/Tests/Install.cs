@@ -82,7 +82,7 @@ namespace Installer_Test.Tests
         }
 
        [Fact]
-       [Category("P1")]
+    //   [Category("P1")]
         public void RunQBInstallTest()
         {
             this.BDDfy();
