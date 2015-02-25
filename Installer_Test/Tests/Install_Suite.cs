@@ -213,7 +213,6 @@ namespace Installer_Test.Tests
             // Close QuickBook pop-up windows
             Install_Functions.CheckWindowsAndClose(SKU);
 
-            Thread.Sleep(1000);
             qbApp = QuickBooks.GetApp("QuickBooks");
             qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
             PostInstall_Functions.CheckF2value(qbApp, qbWindow, resultsPath, SKU);

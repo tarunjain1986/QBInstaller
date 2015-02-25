@@ -1519,7 +1519,8 @@ namespace Installer_Test
             {
                 if (industryEdition != "")
                 {
-
+                  
+                    Thread.Sleep(5000);
                     Actions.WaitForWindow("Select QuickBooks Industry-Specific Edition", 180000);
                     Thread.Sleep(5000);
                     Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), industryEdition);

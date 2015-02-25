@@ -613,7 +613,7 @@ namespace Installer_Test.Lib
             {
                 Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Start Working");
                 Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
-                Actions.SendENTERoWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
+                // Actions.SendENTERoWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));
             }
           
 

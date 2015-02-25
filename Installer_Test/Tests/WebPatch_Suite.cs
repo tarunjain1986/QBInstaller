@@ -101,11 +101,11 @@ namespace Installer_Test.Tests
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Invoke Installer and Install QB
             ///////////////////////////////////////////////////////////////////////////////////////////////////
-         
-            dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B2:B27");
-            country = dic["B5"];
-            targetPath = dic["B12"];
-            SKU = dic["B7"];
+
+            dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B7:B30");
+            country = dic["B10"];
+            targetPath = dic["B30"];
+            SKU = dic["B12"];
             targetPath = targetPath + @"QBooks\";
 
 
@@ -131,9 +131,8 @@ namespace Installer_Test.Tests
             // Repair / Uninstall
             ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-            dic_Repair = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
-            ver = dic_Repair["B2"];
-            reg_ver = dic_Repair["B3"];
+            ver = dic["B8"];
+            reg_ver = File_Functions.GetRegVer(SKU);
  
             ///////////////////////////////////////////////////////////////////////////////////////////////////
         }
@@ -162,12 +161,13 @@ namespace Installer_Test.Tests
                     break;
             }
 
+            // OSOperations.KillProcess("QBW32");
 
             conf.reload(); // Reload the property file
-            exe = conf.get("QBExePath"); 
+            exe = conf.get("QBExePath");
 
             qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
-
+            Thread.Sleep(20000);
             //////////////////////////////////////////////////////////////////////////////////////////////////////
             Boolean flag = false;
 
@@ -193,8 +193,6 @@ namespace Installer_Test.Tests
             // Maximize QuickBooks before continuing
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.MaximizeQB(qbApp);
 
-            Thread.Sleep(1000);
-
             // Close QuickBook pop-up windows
             Install_Functions.CheckWindowsAndClose(SKU);
 
@@ -204,7 +202,10 @@ namespace Installer_Test.Tests
             // Save the window title in the Automation.Properties file
             // This value will be used in Repair / Uninstall
             Install_Functions.Get_QuickBooks_Edition(qbApp, qbWindow);
-        }
+            conf.reload();
+        }   
+
+       
 
         [AndThen(StepTitle = "Then - Perform PostInstall Tests")]
         public void Test_PostInstall()
@@ -218,9 +219,8 @@ namespace Installer_Test.Tests
             // Close QuickBook pop-up windows
             Install_Functions.CheckWindowsAndClose(SKU);
 
-            Thread.Sleep(2000);
             qbApp = QuickBooks.GetApp("QuickBooks");
-            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
             PostInstall_Functions.CheckF2value(qbApp, qbWindow, resultsPath, SKU);
         }
 
@@ -228,7 +228,7 @@ namespace Installer_Test.Tests
         public void HelpAbout()
         {
             qbApp = QuickBooks.GetApp("QuickBooks");
-            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
 
             // Close QuickBook pop-up windows
             Install_Functions.CheckWindowsAndClose(SKU);
@@ -240,11 +240,15 @@ namespace Installer_Test.Tests
         [AndThen(StepTitle = "Then - Perform WebPatch")]
         public void Web_Patch()
         {
-            dic_WebPatch = Lib.File_Functions.ReadExcelValues(readpath, "WebPatch", "B2:B12");
+            dic_WebPatch = Lib.File_Functions.ReadExcelValues(readpath, "WebPatch", "B2:B10");
             SKU_WebPatch = dic_WebPatch["B7"];
-            targetPath_WP = dic_WebPatch["B11"];
+            targetPath_WP = dic_WebPatch["B10"];
 
-            CloseQB();
+            qbApp = QuickBooks.GetApp("QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
+            
+            Actions.SelectMenu(qbApp, qbWindow, "File", "Exit");
+
             OSOperations.KillProcess("qbw32");
 
             if (SKU_WebPatch == "Enterprise" || SKU_WebPatch == "Enterprise Accountant")
@@ -291,6 +295,10 @@ namespace Installer_Test.Tests
         [AndThen(StepTitle = "Then - Create Company File")]
         public void CreateCompanyFile()
         {
+            // Close QuickBook pop-up windows
+            Install_Functions.CheckWindowsAndClose(SKU);
+
+            // Create Company File
             PostInstall_Functions.CreateCompanyFile(keyvaluepairdic);
         }
 
@@ -299,13 +307,12 @@ namespace Installer_Test.Tests
         {
             // QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
             qbApp = QuickBooks.GetApp("QuickBooks");
-            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
 
             // Close QuickBook pop-up windows
             Install_Functions.CheckWindowsAndClose(SKU);
 
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
- 
             PostInstall_Functions.PerformMIMO(qbApp, qbWindow);
         }
 
@@ -314,7 +321,7 @@ namespace Installer_Test.Tests
         {
             // QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
             qbApp = QuickBooks.GetApp("QuickBooks");
-            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
 
             // Close QuickBook pop-up windows
             Install_Functions.CheckWindowsAndClose(SKU);
@@ -327,7 +334,7 @@ namespace Installer_Test.Tests
         public void PerformRebuild()
         {
             qbApp = QuickBooks.GetApp("QuickBooks");
-            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks");
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
 
             Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
             PostInstall_Functions.PerformRebuild(qbApp, qbWindow);
@@ -383,20 +390,21 @@ namespace Installer_Test.Tests
         public void RepairQB()
         {
             // OS_Name = File_Functions.GetOS();
-            installed_product = File_Functions.GetProduct(ver, reg_ver);
+            //installed_product = File_Functions.GetProduct(ver, reg_ver);
 
-            if (installed_product.Contains("QuickBooks Premier"))
-            {
-                installed_product = installed_product.Replace("QuickBooks Premier", "QuickBooks Premier Edition");
-            }
-            installed_path = File_Functions.GetPath(ver, reg_ver);
-            installed_dir = Path.GetDirectoryName(installed_path); // Get the path (without the exe name)
+            //if (installed_product.Contains("QuickBooks Premier"))
+            //{
+            //    installed_product = installed_product.Replace("QuickBooks Premier", "QuickBooks Premier Edition");
+            //}
+
 
             // Kill any existing QuickBooks process
             OSOperations.KillProcess("QBW32");
             Thread.Sleep(1000);
 
             // Delete DLLs
+            installed_path = File_Functions.GetPath(ver, reg_ver);
+            installed_dir = Path.GetDirectoryName(installed_path); // Get the path (without the exe name)
             Install_Functions.Delete_QBDLLs(installed_dir);
 
             // Invoke QuickBooks after deleting the dlls
@@ -450,14 +458,15 @@ namespace Installer_Test.Tests
             while (flag == false)
             {
                 flag = Actions.CheckDesktopWindowExists("QuickBooks " + SKU);
-            }
 
+            }
             //////////////////////////////////////////////////////////////////////////////////////////////////////
 
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
 
             Thread.Sleep(20000);
             qbApp.WaitWhileBusy();
+            Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks " + SKU));
 
             pointer = GetForegroundWindow();
             sc.CaptureWindowToFile(pointer, resultsPath + "QuickBooks_launched_after_Repair.png", ImageFormat.Png);
@@ -477,14 +486,30 @@ namespace Installer_Test.Tests
             OSOperations.KillProcess("QBW32");
             Thread.Sleep(1000);
 
+            if (Actions.CheckDesktopWindowExists("Programs and Features"))
+            {
+                Actions.SetFocusOnWindow(Actions.GetDesktopWindow("Programs and Features"));
+                Actions.ClickElementByName(Actions.GetDesktopWindow("Programs and Features"), "Close");
+            }
+
             // Get the QuickBooks Edition to Repair from the Automation.Properties file
             conf.reload();
             installed_product = conf.get("Edition");
             QuickBooks.RepairOrUnInstallQB(installed_product, false, true);
 
-            // Delete existing traces of QuickBooks
-            // Install_Functions.CleanUp();
+            if (Actions.CheckDesktopWindowExists("Programs and Features"))
+            {
+                Actions.SetFocusOnWindow(Actions.GetDesktopWindow("Programs and Features"));
+                Actions.ClickElementByName(Actions.GetDesktopWindow("Programs and Features"), "Close");
+            }
         }
+
+        //[AndThen(StepTitle = "Clean the Machine of any traces of QuickBooks")]
+        //public void Clean_Machine ()
+        //{
+        //    // Delete existing traces of QuickBooks
+        //    Install_Functions.CleanUp();
+        //}
         
        [Fact]
        [Category("WebPatch_Suite")]

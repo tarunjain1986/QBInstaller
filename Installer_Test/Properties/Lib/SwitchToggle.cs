@@ -64,6 +64,9 @@ namespace Installer_Test.Lib
             qbApp = QuickBooks.GetApp("QuickBooks");
             qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
 
+            // Close QuickBook pop-up windows
+            Install_Functions.CheckWindowsAndClose(SKU);
+
             try
             {
 
@@ -85,7 +88,7 @@ namespace Installer_Test.Lib
                         SendKeys.SendWait("%N");
                     }
                 }
-                Install_Functions.Select_Edition(currEdition); ////////////
+                Install_Functions.Select_Edition(currEdition); 
 
                 //qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
                 //qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);

@@ -150,8 +150,8 @@ namespace Installer_Test
                 //SendKeys.SendWait(" ");
                 ///////////////////////////////////////////////
 
-                //pointer = GetForegroundWindow();
-                //sc.CaptureWindowToFile(pointer, resultsPath + "Help_Update.png", ImageFormat.Png);
+                pointer = GetForegroundWindow();
+                sc.CaptureWindowToFile(pointer, resultsPath + "Help_Update.png", ImageFormat.Png);
                 Logger.logMessage("AutoPatch: Help -> Update Now - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
@@ -164,8 +164,8 @@ namespace Installer_Test
             try
             {
                 SendKeys.SendWait("%g"); // Click on Get Updates
-                //pointer = GetForegroundWindow();
-                //sc.CaptureWindowToFile(pointer, resultsPath + "AutoPatch_Get_Updates.png", ImageFormat.Png);
+                pointer = GetForegroundWindow();
+                sc.CaptureWindowToFile(pointer, resultsPath + "AutoPatch_Get_Updates.png", ImageFormat.Png);
                 Logger.logMessage("Click Get Updates - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
