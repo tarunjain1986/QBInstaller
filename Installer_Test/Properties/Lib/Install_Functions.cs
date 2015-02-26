@@ -1946,12 +1946,6 @@ namespace Installer_Test
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
-            //dic = File_Functions.ReadExcelValues(readpath, "PostInstall", "B2:B4");
-
-            //ver = dic["B2"];
-            //reg_ver = dic["B3"];
-            //expected_ver = dic["B4"];
-
             dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B8:B15");
             SKU = dic["B12"];
             ver = dic["B8"];

@@ -428,6 +428,39 @@ namespace Installer_Test.Properties.Lib
             }
         }
 
+        //*******************************************************************************************************************
+        //Maneet -  The function to Close the QB Application
+        //*******************************************************************************************************************
+        public static void CloseQBApplication(TestStack.White.Application qbApp, Window qbWindow)
+        {
+            try
+            {
+                //Click - Window -> Close All menu item.
+                Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
+
+                //Click File-> Exit Menu item.
+                Actions.SelectMenu(qbApp, qbWindow, "File", "Exit");
+
+                // Cancel the Back up window if it exists.
+
+                if (Actions.CheckWindowExists(qbWindow, "Automatic Backup"))
+                {
+                    Window winBackup = Actions.GetChildWindow(qbWindow, "Automatic Backup");
+                    Actions.ClickElementByName(winBackup, "No");
+                    Logger.logMessage("Click NO on Backup window.");
+                    Logger.logMessage("------------------------------------------------------------------");
+                }
+
+            }
+            catch (Exception e)
+            {
+                Logger.logMessage("Clossing QB Application Failed");
+                Logger.logMessage(e.Message);
+                Logger.logMessage("----------------------------------------------");
+            }
+        }
+
+
     }
 
 }

@@ -171,13 +171,30 @@ namespace Installer_Test.Lib
             {
 
                 str1 = Convert.ToString((range.Cells[rCnt, 1] as Excel.Range).Value2);
+            
+                if (str1 == null)
+                {
+                    //str1 = rCnt.ToString();
+                    continue;
+                }
                 str2 = Convert.ToString((range.Cells[rCnt, 2] as Excel.Range).Value2);
                 dic.Add(str1, str2);
 
             }
 
+            // Cleanup
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            Marshal.FinalReleaseComObject(range);
+            Marshal.FinalReleaseComObject(xlWorkSheet);
+
             xlWorkBook.Close();
+            Marshal.ReleaseComObject(xlWorkBook);
+
             xlApp.Quit();
+            Marshal.ReleaseComObject(xlWorkSheet);
+
             return dic;
 
         }

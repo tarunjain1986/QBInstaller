@@ -92,6 +92,7 @@
     <Compile Include="Properties\Lib\WebPatch.cs" />
     <Compile Include="Tests\Help_About.cs" />
     <Compile Include="Tests\AutoPatch_Suite.cs" />
+    <Compile Include="Tests\Install_Combined.cs" />
     <Compile Include="Tests\WebPatch_Suite.cs" />
     <Compile Include="Tests\Install_Suite.cs" />
     <Compile Include="Tests\NewCompanyFile.cs" />

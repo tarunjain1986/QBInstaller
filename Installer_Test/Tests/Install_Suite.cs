@@ -34,11 +34,12 @@ namespace Installer_Test.Tests
    
     public class Installer_Suite
     {
-
+      
         [DllImport("User32.dll")]
         public static extern int SetForegroundWindow(IntPtr point);
         [DllImport("User32.dll")]
         private static extern IntPtr GetForegroundWindow();
+      
 
        /// <summary>
        /// Install QB
@@ -47,26 +48,15 @@ namespace Installer_Test.Tests
         public static int Sync_Timeout = int.Parse(conf.get("SyncTimeOut"));
         public string readpath = "C:\\Temp\\Parameters.xlsm";
         public static string resultsPath;
-       // public static string testName = "Installer Test Suite";
-
-        //public static Property conf = Property.GetPropertyInstance();
-        //public static int Sync_Timeout = int.Parse(conf.get("SyncTimeOut"));
-        public string country, targetPath, SKU;
+        public static string country, targetPath, SKU;
         Dictionary<string, string> dic = new Dictionary<string, string>();
-        
-
-        ///// <summary>
-        ///// Invoke QB
-        ///// </summary>
-        //string OS_Name = string.Empty;
-        //Dictionary<string, string> dic_InvokeQB = new Dictionary<string, string>();
-
+ 
         /// <summary>
         /// Check F2
         /// </summary>
         public TestStack.White.Application qbApp = null;
         public TestStack.White.UIItems.WindowItems.Window qbWindow = null;
-        public TestStack.White.UIItems.WindowItems.Window appWizWindow = null;
+       // public TestStack.White.UIItems.WindowItems.Window appWizWindow = null;
         public string exe;
         // public string exe = conf.get("QBExePath");
 
@@ -76,16 +66,6 @@ namespace Installer_Test.Tests
         Dictionary<String, String> keyvaluepairdic;
 
         /// <summary>
-        /// Switch / Toggle
-        /// </summary>
-        //public static string Bizname;
-        //String SearchText = "  - Intuit QuickBooks"; 
-        //Dictionary<String, String> dic_Switch_Enterprise;
-        //Dictionary<String, String> dic_Switch_Premier;
-        //Dictionary<String, String> dic_Toggle_Enterprise;
-        //Dictionary<String, String> dic_Toggle_Premier;
-
-        /// <summary>
         /// Repair / Uninstall
         /// </summary>
 
@@ -93,7 +73,6 @@ namespace Installer_Test.Tests
        // Dictionary<string, string> dic_Repair = new Dictionary<string, string>();
 
         [Given(StepTitle = @"The parameters for installation are available at C:\Installer\Parameters.xlsm")]
-
         public void Setup()
         {
 
@@ -127,8 +106,8 @@ namespace Installer_Test.Tests
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             // Repair / Uninstall
             ///////////////////////////////////////////////////////////////////////////////////////////////////
-            ver = dic["B8"];
-            reg_ver = File_Functions.GetRegVer(SKU);
+            ver = dic["B8"]; 
+            reg_ver = File_Functions.GetRegVer(SKU); 
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
         }
@@ -157,13 +136,13 @@ namespace Installer_Test.Tests
                     break;
             }
             
-           // OSOperations.KillProcess("QBW32");
-
             conf.reload(); // Reload the property file
             exe = conf.get("QBExePath");
 
             qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
-            Thread.Sleep(20000);
+            qbApp.WaitWhileBusy();
+            
+            //Thread.Sleep(20000);
             //////////////////////////////////////////////////////////////////////////////////////////////////////
             Boolean flag = false;
 
@@ -177,10 +156,11 @@ namespace Installer_Test.Tests
 
             flag = false;
 
+            // Add code to get out of the loop: Add a timer
+
             while (flag == false)
             {
                 flag = Actions.CheckDesktopWindowExists("QuickBooks " + SKU);
-
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////
             
@@ -315,7 +295,7 @@ namespace Installer_Test.Tests
             }
         }
 
-        [AndThen(StepTitle = "Close QuickBooks")]
+        [AndThen(StepTitle = "Exit QuickBooks")]
         public void CloseQB ()
         {
             qbApp = QuickBooks.GetApp("QuickBooks");
@@ -402,7 +382,7 @@ namespace Installer_Test.Tests
 
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
 
-            Thread.Sleep(20000);
+            // Thread.Sleep(20000);
             qbApp.WaitWhileBusy();
             Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks " + SKU));
 
