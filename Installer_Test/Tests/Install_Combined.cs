@@ -124,7 +124,7 @@ namespace Installer_Test.Tests
             ///////////////////////////////////////////////////////////////////////////////////////////////////
 
             ver = dic["Select Version:"];
-            //reg_ver = File_Functions.GetRegVer(SKU); - Take code from Pooja
+            reg_ver = File_Functions.GetRegVer(SKU); 
         }
 
 
@@ -402,7 +402,7 @@ namespace Installer_Test.Tests
                 // Kill any existing QuickBooks process
                 OSOperations.KillProcess("QBW32");
                 Thread.Sleep(1000);
-
+               
                 // Delete DLLs
                 installed_path = File_Functions.GetPath(ver, reg_ver);
                 installed_dir = Path.GetDirectoryName(installed_path); // Get the path (without the exe name)
