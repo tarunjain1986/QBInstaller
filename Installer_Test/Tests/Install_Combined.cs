@@ -190,7 +190,7 @@ namespace Installer_Test.Tests
 
 
             // Wait for Window to appear for Ceratin iterations and then Break out
-            while (Flag == false || loopCounter > 20)
+            while (Flag == false || loopCounter < 20)
             {
                 Flag = Actions.CheckDesktopWindowExists("QuickBooks " + SKU);
                 Thread.Sleep(1000);
@@ -449,7 +449,7 @@ namespace Installer_Test.Tests
                 }
 
                 // Wait for Window to appear for Ceratin iterations and then Break out
-                while (flag == false || loopCounter > 20)
+                while (flag == false || loopCounter < 20)
                 {
                     flag = Actions.CheckDesktopWindowExists("QuickBooks " + SKU);
                     Thread.Sleep(1000);
