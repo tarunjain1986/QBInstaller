@@ -1534,15 +1534,27 @@ namespace Installer_Test
                 if (industryEdition != "")
                 {
                   
-                    Thread.Sleep(5000);
-                    Actions.WaitForWindow("Select QuickBooks Industry-Specific Edition", 180000);
-                    Thread.Sleep(5000);
-                    Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), industryEdition);
-                    Thread.Sleep(2000);
-                    Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Next >");
-                    Thread.Sleep(2000);
-                    Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Finish");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(10000);
+                     if(false == Actions.WaitForWindow("Select QuickBooks Industry-Specific Edition", 180000))
+                    {
+                        SendKeys.Send("{TAB}");
+                        Thread.Sleep(1000);
+                        SendKeys.Send("{ENTER}");
+                        Thread.Sleep(1000);
+                        SendKeys.Send("{ENTER}");
+                        Thread.Sleep(1000);
+                    }
+                    else
+                    {
+                        Thread.Sleep(2000);
+                        Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), industryEdition);
+                        Thread.Sleep(2000);
+                        Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Next >");
+                        Thread.Sleep(2000);
+                        Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Finish");
+                        Thread.Sleep(5000);
+                    }
+
                     Select_Edition(industryEdition);
 
                     //string exe = conf.get("QBExePath");

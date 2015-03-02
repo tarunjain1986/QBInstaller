@@ -124,7 +124,11 @@ namespace Installer_Test.Tests
             ///////////////////////////////////////////////////////////////////////////////////////////////////
 
             ver = dic["Select Version:"];
+<<<<<<< HEAD
             reg_ver = File_Functions.GetRegVer(SKU);
+=======
+            reg_ver = File_Functions.GetRegVer(SKU); 
+>>>>>>> b331ea61c3541412d52bb58b87568da90ad590cc
         }
 
 
@@ -402,7 +406,7 @@ namespace Installer_Test.Tests
                 // Kill any existing QuickBooks process
                 OSOperations.KillProcess("QBW32");
                 Thread.Sleep(1000);
-
+               
                 // Delete DLLs
                 installed_path = File_Functions.GetPath(ver, reg_ver);
                 installed_dir = Path.GetDirectoryName(installed_path); // Get the path (without the exe name)

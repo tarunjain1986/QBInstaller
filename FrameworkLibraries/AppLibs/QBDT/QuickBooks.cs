@@ -225,46 +225,55 @@ namespace FrameworkLibraries.AppLibs.QBDT
                 }
                 catch { }
 
-                Actions.SetFocusOnWindow(Actions.GetDesktopWindow("Programs and Features"));///////////////////////
+
+                Actions.SetFocusOnWindow(Actions.GetDesktopWindow("Programs and Features"));
                 var controlPanelWindow = Actions.GetDesktopWindow("Programs and Features");
                 var uiaWindow = Actions.UIA_GetAppWindow("Programs and Features");
-
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // Added by Pooja
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////
                 
                 if (controlPanelWindow.DisplayState != DisplayState.Maximized)
                    controlPanelWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
                 Thread.Sleep(int.Parse(Execution_Speed));
-             
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                Actions.UIA_SetTextByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), "Search Box", qbVersion);
-                Thread.Sleep(int.Parse(Execution_Speed)); //////////////////////////// 
-                try
+
+                // If the uiaWindow is not created for some reason.
+                if (uiaWindow == null)
                 {
-                    Logger.logMessage("---------------Try-Catch Block------------------------");
-                    Actions.WaitForElementEnabled(Actions.GetDesktopWindow("Programs and Features"), qbVersion, int.Parse(Sync_Timeout));
+                    
+                    controlPanelWindow.Enter(qbVersion);                    
+                    Thread.Sleep(2000);
+                    Actions.ClickElementByName(controlPanelWindow, "Uninstall/Change");
+                    Thread.Sleep(2000);
                 }
-                catch (Exception e)
+                // else if the uiaWindow is created successfully.
+                else
                 {
-                    Logger.logMessage("---------------------------------------------------------");
-                    Logger.logMessage("Element not enabled " + qbVersion);
-                    Logger.logMessage(e.Message);
-                    Logger.logMessage("---------------------------------------------------------");
+                    Actions.UIA_SetTextByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), "Search Box", qbVersion);
+                    Thread.Sleep(int.Parse(Execution_Speed));
+                    try
+                    {
+                        Logger.logMessage("---------------Try-Catch Block------------------------");
+                        Actions.WaitForElementEnabled(Actions.GetDesktopWindow("Programs and Features"), qbVersion, int.Parse(Sync_Timeout));
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.logMessage("---------------------------------------------------------");
+                        Logger.logMessage("Element not enabled " + qbVersion);
+                        Logger.logMessage(e.Message);
+                        Logger.logMessage("---------------------------------------------------------");
+                    }
+
+                    Actions.UIA_ClickEditControlByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), qbVersion);
+                    try
+                    {
+                        Logger.logMessage("---------------Try-Catch Block------------------------");
+                        Actions.WaitForElementEnabled(Actions.GetDesktopWindow("Programs and Features"), "Uninstall/Change", int.Parse(Sync_Timeout));
+                    }
+                    catch { }
+
+                    Actions.UIA_ClickItemByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), "Uninstall/Change");
                 }
 
-                Actions.UIA_ClickEditControlByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), qbVersion);
-
-                try
-                {
-                    Logger.logMessage("---------------Try-Catch Block------------------------");
-                    Actions.WaitForElementEnabled(Actions.GetDesktopWindow("Programs and Features"), "Uninstall/Change", int.Parse(Sync_Timeout));
-                }
-                catch { }
-
-                Actions.UIA_ClickItemByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), "Uninstall/Change");
-
+                // Wait for the Uninstall flow to trigger.
                 try
                 {
                     Logger.logMessage("---------------Try-Catch Block------------------------");
