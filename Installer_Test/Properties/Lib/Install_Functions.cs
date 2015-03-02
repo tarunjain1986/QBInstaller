@@ -959,17 +959,31 @@ namespace Installer_Test
             IntPtr pointer = GetForegroundWindow();
 
             Boolean flag = false;
-  
+            int loopCounter = 0;
             // Click on Open QuickBooks
             try
             {
                 flag = false;
-                while (flag == false)
+                //while (flag == false)
+                //{
+                //    flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("Intuit QuickBooks Installer"), "Open QuickBooks"); //Window name changed by maneet
+                //    Thread.Sleep(5000);
+                //}
+
+
+                // Wait for the QuickBooks Installation dialog to show up
+                Actions.WaitForAppWindow("QuickBooks Installation", int.Parse(Sync_Timeout));
+
+
+                // Wait for the "Open QuickBooks" button for max 10 mins
+                while (flag == false && loopCounter < 120)
                 {
-                    flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks");
-                    Thread.Sleep(1500);
+                    flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks"); //Window name changed by maneet
+                    Thread.Sleep(5000);
+                    loopCounter += 1;
                 }
-                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks"); // Launch QuickBooks
+
+                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks"); // Window name changed by maneet
                 Logger.logMessage("Click on Open QuickBooks - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
@@ -1586,7 +1600,8 @@ namespace Installer_Test
         {
             
             Boolean flag = false;
-
+            //wait for Product Configuration window to appear
+            Thread.Sleep(5000);
             try
             {
                 Actions.WaitForWindow("Product Configuration", 30000);
@@ -1609,7 +1624,7 @@ namespace Installer_Test
                 flag = Actions.CheckDesktopWindowExists("QuickBooks Update Service");
                 if (flag == true)
                 {
-                    Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Update Service"));
+                    //Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Update Service"));
                     SendKeys.SendWait("%l");
                     Logger.logMessage("QuickBooks Update Service Window found.");
                 }
