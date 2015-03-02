@@ -78,8 +78,6 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Archive_Tests\AutoPatch.cs" />
-    <Compile Include="Archive_Tests\WebPatch_t.cs" />
     <Compile Include="CategoryAttribute.cs" />
     <Compile Include="Properties\Lib\Install_Functions.cs" />
     <Compile Include="Properties\Lib\PostInstall_Functions.cs" />

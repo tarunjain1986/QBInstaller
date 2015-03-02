@@ -570,7 +570,6 @@ namespace Installer_Test.Tests
         }
 
         [Fact]
-        [Category("WebPatch_Suite")]
         public void RunWPSuite_Combined()
         {
             this.BDDfy();
