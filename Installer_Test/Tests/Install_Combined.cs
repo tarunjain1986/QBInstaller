@@ -124,7 +124,7 @@ namespace Installer_Test.Tests
             ///////////////////////////////////////////////////////////////////////////////////////////////////
 
             ver = dic["Select Version:"];
-            //reg_ver = File_Functions.GetRegVer(SKU); - Take code from Pooja
+            reg_ver = File_Functions.GetRegVer(SKU);
         }
 
 
@@ -181,7 +181,7 @@ namespace Installer_Test.Tests
 
 
             // Check for QuickBooks Update Service Window
-            if (Actions.CheckDesktopWindowExists("QuickBooks Update Service")) ;
+            if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
             {
                 Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Update Service"));
                 SendKeys.SendWait("%l");
@@ -190,14 +190,14 @@ namespace Installer_Test.Tests
 
 
             // Wait for Window to appear for Ceratin iterations and then Break out
-            while (Flag == false || loopCounter < 20)
+            while (Flag == false && loopCounter < 20)
             {
                 Flag = Actions.CheckDesktopWindowExists("QuickBooks " + SKU);
-                Thread.Sleep(1000);
+                Thread.Sleep(3000);
                 loopCounter += 1;
             }
 
-            // Get QB window and then Mazimize it.
+            // Iterate through Desktop Windows. Get QB window and then Mazimize it.
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
             qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.MaximizeQB(qbApp);
             qbWindow.WaitWhileBusy();
@@ -412,7 +412,7 @@ namespace Installer_Test.Tests
                 Process proc = new Process();
                 proc.StartInfo.FileName = installed_path;
                 proc.Start();
-                Thread.Sleep(1000);
+                Thread.Sleep(5000);
 
                 //---Taking screen shot --------------
                 Installer_Test.Lib.ScreenCapture sc = new Installer_Test.Lib.ScreenCapture();
@@ -449,7 +449,7 @@ namespace Installer_Test.Tests
                 }
 
                 // Wait for Window to appear for Ceratin iterations and then Break out
-                while (flag == false || loopCounter < 20)
+                while (flag == false && loopCounter < 20)
                 {
                     flag = Actions.CheckDesktopWindowExists("QuickBooks " + SKU);
                     Thread.Sleep(1000);
