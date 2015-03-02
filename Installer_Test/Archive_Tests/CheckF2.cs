@@ -11,7 +11,7 @@ using Installer_Test.Lib;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Installer_Test.Tests
+namespace Installer_Test.Archive_Tests
 {
     //[TestClass]
     public class CheckF2

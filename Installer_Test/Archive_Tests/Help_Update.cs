@@ -21,7 +21,7 @@ using Installer_Test;
 //using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
-namespace Installer_Test.Tests
+namespace Installer_Test.Archive_Tests
 {
     public class Help_Update
     {

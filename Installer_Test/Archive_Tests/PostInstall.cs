@@ -27,7 +27,7 @@ using Installer_Test.Lib;
 
 using Excel = Microsoft.Office.Interop.Excel;
 
-namespace Installer_Test.Tests
+namespace Installer_Test.Archive_Tests
 {
     public class PostInstall
     {

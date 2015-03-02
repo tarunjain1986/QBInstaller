@@ -26,7 +26,7 @@ using FrameworkLibraries.AppLibs.QBDT;
 using Installer_Test;
 using Installer_Test.Lib;
 
-namespace QBInstall.Tests
+namespace Installer_Test.Archive_Tests
 {
     public class Remove
     {

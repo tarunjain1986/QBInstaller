@@ -14,7 +14,7 @@ using Microsoft.Win32;
 
 using Excel = Microsoft.Office.Interop.Excel;
 
-namespace Installer_Test.Tests
+namespace Installer_Test.Archive_Tests
 {
 
    public class NewCompanyFile

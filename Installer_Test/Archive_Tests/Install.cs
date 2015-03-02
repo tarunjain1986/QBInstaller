@@ -24,11 +24,7 @@ using Xunit;
 using Installer_Test;
 using Installer_Test.Lib;
 
-
-
-
-
-namespace Installer_Test.Tests
+namespace Installer_Test.Archive_Tests
 {
    
     public class Installer
@@ -82,7 +78,6 @@ namespace Installer_Test.Tests
         }
 
        [Fact]
-    //   [Category("P1")]
         public void RunQBInstallTest()
         {
             this.BDDfy();

@@ -30,7 +30,7 @@ using Installer_Test.Lib;
 
 using Microsoft.Win32;
 
-namespace QBInstall.Tests
+namespace Installer_Test.Archive_Tests
 {
     public class Repair
     {

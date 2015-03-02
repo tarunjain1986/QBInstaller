@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using Installer_Test.Lib;
 
 
-namespace Installer_Test.Tests
+namespace Installer_Test.Archive_Tests
 {
 
     public class TestSwitch

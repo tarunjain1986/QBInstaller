@@ -17,7 +17,7 @@ using System.IO;
 using System.Reflection;
 using Installer_Test.Lib;
 
-namespace Installer_Test.Tests
+namespace Installer_Test.Archive_Tests
 {
     
     public class VerifyRebuild
