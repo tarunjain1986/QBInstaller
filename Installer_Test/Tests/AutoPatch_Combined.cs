@@ -33,7 +33,7 @@ using Installer_Test.Lib;
 namespace Installer_Test.Tests
 {
     // Class for QB Install,Repair & Uninstall Workflows
-    public class Installer_Suite_Combined
+    public class AutoPatch_Suite_Combined
     {
 
 
@@ -67,6 +67,10 @@ namespace Installer_Test.Tests
         //----------------Variable declerations for "Create Company File" ----------------------
         Dictionary<String, String> keyvaluepairdic;
 
+
+        //----------------Variable declerations for "AutoPatch" ----------------------
+        public static string installed_datapath, service_source, service_dest, service_backup;
+        Dictionary<string, string> dic_AP = new Dictionary<string, string>();
 
         //-----------------Variable declerations for "Repair / Uninstall" --------------------------------------------
         public static string installed_dir, installed_path, installed_product, ver, reg_ver;
@@ -125,6 +129,15 @@ namespace Installer_Test.Tests
 
             ver = dic["Select Version:"];
 
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            // AutoPatch
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+            dic_AP = File_Functions.ReadExcelValues(readpath, "AutoPatch", "B2");
+            service_source = dic_AP["B2"];
+            // installed_datapath = File_Functions.GetDataPath(ver, reg_ver);
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
 
@@ -279,8 +292,80 @@ namespace Installer_Test.Tests
             }
         }
 
-        [AndThen(StepTitle = "Then - Perform Money In Money Out")]
+        [AndThen(StepTitle = "Then - Perform AutoPatch")]
+        public void AutoPatch()
+        {
 
+            // Close QuickBooks
+            CloseQB();
+
+            // Kill QuickBooks processes
+            OSOperations.KillProcess("QBW32");
+            OSOperations.KillProcess("qbupdate");
+
+            Thread.Sleep(1000);
+            installed_datapath = File_Functions.GetDataPath(ver, reg_ver);
+            if (installed_datapath != "")
+            {
+                // Replace the local copy of the serviceguide.xml with the server copy
+                service_dest = installed_datapath + @"Components\QBUpdate\serviceguide.xml";
+                service_source = service_source + "serviceguide.xml";
+                service_backup = installed_datapath + @"Components\QBUpdate\serviceguide_backup.xml";
+
+                if (File.Exists(service_backup))
+                {
+                    File.SetAttributes(service_backup, FileAttributes.Normal);
+                    File.Delete(service_backup);
+                    Logger.logMessage("Earlier version of service_backup.xml file deleted.");
+                }
+
+                System.IO.File.Move(service_dest, service_backup);
+                File.Copy(service_source, service_dest);
+                Logger.logMessage("service_backup.xml file copied from " + service_source + " to " + service_dest);
+            }
+
+            conf.reload(); // Reload the property file
+            exe = conf.get("QBExePath");
+
+            // Launch QuickBooks
+            qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
+            qbApp.WaitWhileBusy();
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////
+            Boolean flag = false;
+
+            flag = Actions.CheckDesktopWindowExists("QuickBooks Update Service");
+            if (flag == true)
+            {
+                Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Update Service"));
+                SendKeys.SendWait("%l");
+                Logger.logMessage("QuickBooks Update Service Window found.");
+            }
+
+            flag = false;
+
+            while (flag == false)
+            {
+                flag = Actions.CheckDesktopWindowExists("QuickBooks " + SKU);
+
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            // Set focus on the QuickBooks window
+            qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.MaximizeQB(qbApp);
+            qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
+
+            // Close QuickBook pop-up windows
+            Install_Functions.CheckWindowsAndClose(SKU);
+
+            Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
+            // Actions.SelectMenu(qbApp, qbWindow, "Help", "Update QuickBooks...");
+
+            Help.ClickHelpUpdate_AutoPatch(qbApp, qbWindow, resultsPath);
+
+        }
+
+        [AndThen(StepTitle = "Then - Perform Money In Money Out")]
         public void PerformMIMO()
         {
             //Read Execution flow data from "Install Execution Flow" sheet
