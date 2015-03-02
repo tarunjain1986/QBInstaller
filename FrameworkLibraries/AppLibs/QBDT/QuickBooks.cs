@@ -230,6 +230,7 @@ namespace FrameworkLibraries.AppLibs.QBDT
                 var controlPanelWindow = Actions.GetDesktopWindow("Programs and Features");
                 var uiaWindow = Actions.UIA_GetAppWindow("Programs and Features");
                 
+<<<<<<< HEAD
                 if (controlPanelWindow.DisplayState != DisplayState.Maximized)
                    controlPanelWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
                 Thread.Sleep(int.Parse(Execution_Speed));
@@ -237,6 +238,29 @@ namespace FrameworkLibraries.AppLibs.QBDT
 
                 // If the uiaWindow is not created for some reason.
                 if (uiaWindow == null)
+=======
+                //if (controlPanelWindow.DisplayState != DisplayState.Maximized)
+                //   controlPanelWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+                //Thread.Sleep(int.Parse(Execution_Speed));
+             
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                try
+                {
+
+                    Actions.UIA_SetTextByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), "Search Box", qbVersion);
+                    Thread.Sleep(int.Parse(Execution_Speed)); //////////////////////////// 
+                }
+
+                catch (Exception e)
+                {
+                    controlPanelWindow.Keyboard.PressSpecialKey(TestStack.White.WindowsAPI.KeyboardInput.SpecialKeys.F3);
+                    Logger.logMessage(e.Message);
+                    Logger.logMessage("Sending F3 to Programs and Features window instead");
+                }
+                try
+>>>>>>> ff5e6a90ac86bb899cea94780306a7f9653e6b00
                 {
                     
                     controlPanelWindow.Enter(qbVersion);                    

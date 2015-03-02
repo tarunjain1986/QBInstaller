@@ -124,11 +124,7 @@ namespace Installer_Test.Tests
             ///////////////////////////////////////////////////////////////////////////////////////////////////
 
             ver = dic["Select Version:"];
-<<<<<<< HEAD
-            reg_ver = File_Functions.GetRegVer(SKU);
-=======
-            reg_ver = File_Functions.GetRegVer(SKU); 
->>>>>>> b331ea61c3541412d52bb58b87568da90ad590cc
+
         }
 
 
@@ -179,13 +175,18 @@ namespace Installer_Test.Tests
             conf.reload();
             exe = conf.get("QBExePath");
 
+            // Kill any existing QuickBooks process
+            OSOperations.KillProcess("QBW32");
+            Thread.Sleep(1000);
+
             // Initializing variables for QB application and main QB window.
             qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
             qbApp.WaitWhileBusy();
 
 
             // Check for QuickBooks Update Service Window
-            if (Actions.CheckDesktopWindowExists("QuickBooks Update Service"))
+            if (Actions.CheckDesktopWindowExists("QuickBooks Update Service")) 
+
             {
                 Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks Update Service"));
                 SendKeys.SendWait("%l");
