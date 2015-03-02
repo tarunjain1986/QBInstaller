@@ -134,7 +134,7 @@ namespace Installer_Test.Tests
             ///////////////////////////////////////////////////////////////////////////////////////////////////
 
             ver = dic["Select Version:"];
-
+            reg_ver = Lib.File_Functions.GetRegVer(SKU);
         }
 
         [Then(StepTitle = "Then - Invoke QuickBooks installer")]
