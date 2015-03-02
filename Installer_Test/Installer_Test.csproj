@@ -78,6 +78,8 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Archive_Tests\AutoPatch.cs" />
+    <Compile Include="Archive_Tests\WebPatch_t.cs" />
     <Compile Include="CategoryAttribute.cs" />
     <Compile Include="Properties\Lib\Install_Functions.cs" />
     <Compile Include="Properties\Lib\PostInstall_Functions.cs" />
@@ -102,8 +104,6 @@
     <Compile Include="Archive_Tests\MIMO.cs" />
     <Compile Include="Archive_Tests\TestSwitch.cs" />
     <Compile Include="Archive_Tests\VerifyRebuild.cs" />
-    <Compile Include="Tests\AutoPatch.cs" />
-    <Compile Include="Tests\WebPatch_t.cs" />
     <Compile Include="Archive_Tests\Install.cs" />
     <Compile Include="ScreenCapture.cs" />
     <Compile Include="Tests\AntiVirus.cs" />
