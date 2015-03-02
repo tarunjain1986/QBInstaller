@@ -105,7 +105,6 @@
     <Compile Include="Archive_Tests\MIMO.cs" />
     <Compile Include="Archive_Tests\TestSwitch.cs" />
     <Compile Include="Archive_Tests\VerifyRebuild.cs" />
-=======
     <Compile Include="Archive_Tests\AutoPatch.cs" />
     <Compile Include="Archive_Tests\WebPatch_t.cs" />
     <Compile Include="Archive_Tests\Install.cs" />
