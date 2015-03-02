@@ -233,14 +233,26 @@ namespace FrameworkLibraries.AppLibs.QBDT
                 // Added by Pooja
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////
                 
-                if (controlPanelWindow.DisplayState != DisplayState.Maximized)
-                   controlPanelWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
-                Thread.Sleep(int.Parse(Execution_Speed));
+                //if (controlPanelWindow.DisplayState != DisplayState.Maximized)
+                //   controlPanelWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+                //Thread.Sleep(int.Parse(Execution_Speed));
              
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                Actions.UIA_SetTextByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), "Search Box", qbVersion);
-                Thread.Sleep(int.Parse(Execution_Speed)); //////////////////////////// 
+
+                try
+                {
+
+                    Actions.UIA_SetTextByName(uiaWindow, Actions.GetDesktopWindow("Programs and Features"), "Search Box", qbVersion);
+                    Thread.Sleep(int.Parse(Execution_Speed)); //////////////////////////// 
+                }
+
+                catch (Exception e)
+                {
+                    controlPanelWindow.Keyboard.PressSpecialKey(TestStack.White.WindowsAPI.KeyboardInput.SpecialKeys.F3);
+                    Logger.logMessage(e.Message);
+                    Logger.logMessage("Sending F3 to Programs and Features window instead");
+                }
                 try
                 {
                     Logger.logMessage("---------------Try-Catch Block------------------------");
