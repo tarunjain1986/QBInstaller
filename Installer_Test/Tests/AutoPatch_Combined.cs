@@ -595,7 +595,7 @@ namespace Installer_Test.Tests
 
         [Fact]
         [Category("AutoPatch_Suite")]
-        public void RunQBInstallSuite()
+        public void RunAPSuite_Combined()
         {
             this.BDDfy();
         }

@@ -510,7 +510,7 @@ namespace Installer_Test.Tests
 
         [Fact]
         [Category("Installer_Suite")]
-        public void RunQBInstallSuite()
+        public void RunQBInstallSuite_Combined()
         {
             this.BDDfy();
         }
