@@ -95,6 +95,7 @@
     <Compile Include="Archive_Tests\Help_About.cs" />
     <Compile Include="Tests\AutoPatch_Suite.cs" />
     <Compile Include="Tests\AutoPatch_Combined.cs" />
+    <Compile Include="Tests\WebPatch_Combined.cs" />
     <Compile Include="Tests\Install_Combined.cs" />
     <Compile Include="Tests\WebPatch_Suite.cs" />
     <Compile Include="Tests\Install_Suite.cs" />
@@ -104,6 +105,9 @@
     <Compile Include="Archive_Tests\MIMO.cs" />
     <Compile Include="Archive_Tests\TestSwitch.cs" />
     <Compile Include="Archive_Tests\VerifyRebuild.cs" />
+=======
+    <Compile Include="Archive_Tests\AutoPatch.cs" />
+    <Compile Include="Archive_Tests\WebPatch_t.cs" />
     <Compile Include="Archive_Tests\Install.cs" />
     <Compile Include="ScreenCapture.cs" />
     <Compile Include="Tests\AntiVirus.cs" />
