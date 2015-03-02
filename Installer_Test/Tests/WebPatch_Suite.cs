@@ -73,7 +73,9 @@ namespace Installer_Test.Tests
         public string exe = conf.get("QBExePath");
         // public string exe = conf.get("QBExePath");
 
-
+        /// <summary>
+        /// WebPatch
+        /// </summary>
         Dictionary<string, string> dic_WebPatch = new Dictionary<string, string>();
         public string SKU_WebPatch, targetPath_WP;
 
@@ -204,8 +206,6 @@ namespace Installer_Test.Tests
             Install_Functions.Get_QuickBooks_Edition(qbApp, qbWindow);
             conf.reload();
         }   
-
-       
 
         [AndThen(StepTitle = "Then - Perform PostInstall Tests")]
         public void Test_PostInstall()
