@@ -513,7 +513,7 @@ namespace Installer_Test.Tests
         
        [Fact]
        [Category("WebPatch_Suite")]
-        public void RunQBInstallSuite()
+        public void RunWPSuite()
         {
             this.BDDfy();
         }
