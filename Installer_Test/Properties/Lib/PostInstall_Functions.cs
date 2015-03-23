@@ -436,6 +436,13 @@ namespace Installer_Test.Lib
                     {
                         Actions.ClickElementByAutomationID(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "btn_Continue");
                     }
+
+                    if (Actions.CheckElementExistsByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Continue") == true)
+                    {
+                        Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"), "Continue");
+                        Thread.Sleep(2000);
+                    }
+
                     else
                     {
                         Actions.SendTABToWindow(Actions.GetChildWindow(qbWindow, "QuickBooks Setup"));

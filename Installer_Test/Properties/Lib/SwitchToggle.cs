@@ -63,6 +63,10 @@ namespace Installer_Test.Lib
 
             qbApp = QuickBooks.GetApp("QuickBooks");
             qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
+            if (qbWindow == null)
+            {
+                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks: " + SKU);
+            }
 
             // Close QuickBook pop-up windows
             Install_Functions.CheckWindowsAndClose(SKU);
@@ -81,13 +85,29 @@ namespace Installer_Test.Lib
 
                 Thread.Sleep(2000);
 
-                if (Actions.CheckDesktopWindowExists("QuickBooks " + SKU))
+                try
                 {
-                    if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks " + SKU), "Automatic Backup") == true)
+                    if (Actions.CheckDesktopWindowExists("QuickBooks " + SKU))
                     {
-                        SendKeys.SendWait("%N");
+                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks " + SKU), "Automatic Backup") == true)
+                        {
+                            SendKeys.SendWait("%N");
+                        }
+                    }
+
+                    // For Premier
+                    if (Actions.CheckDesktopWindowExists("QuickBooks: " + SKU))
+                    {
+                        if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks: " + SKU), "Automatic Backup") == true)
+                        {
+                            SendKeys.SendWait("%N");
+                        }
                     }
                 }
+
+                catch (Exception e)
+                {}
+
                 Install_Functions.Select_Edition(currEdition); 
 
                 //qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
@@ -95,6 +115,11 @@ namespace Installer_Test.Lib
 
                 qbApp = QuickBooks.GetApp("QuickBooks");
                 qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
+                if (qbWindow == null)
+                {
+                    qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks: " + SKU);
+                }
+
                 Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
 
                 Install_Functions.Get_QuickBooks_Edition(qbApp, qbWindow);
@@ -150,14 +175,20 @@ namespace Installer_Test.Lib
             qbApp = QuickBooks.GetApp("QuickBooks");
             qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
 
+            // Close QuickBook pop-up windows
+            Install_Functions.CheckWindowsAndClose(SKU);
+
             try
             {
-                Actions.SelectMenu(qbApp, qbWindow, "File", "Toggle to Another Edition...");
+                Actions.SelectMenu(qbApp, qbWindow, "File", "Toggle to Another Edition... ");
                 Thread.Sleep(500);
                 Window editionWindow = Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition");
-         
+
+                Thread.Sleep(1000);
                 Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition"), currEdition);
+                Thread.Sleep(1000);
                 Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition"), "Next >");
+                Thread.Sleep(1000);
                 Actions.ClickElementByName(Actions.GetChildWindow(qbWindow, "Select QuickBooks Industry-Specific Edition"), "Toggle");
 
                 Thread.Sleep(2000);

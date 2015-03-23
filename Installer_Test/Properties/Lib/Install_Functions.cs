@@ -73,29 +73,6 @@ namespace Installer_Test
   
             string readpath = "C:\\Temp\\Parameters.xlsm";
 
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //// Read all the input values from "C:\\Temp\\Parameters.xlsm"
-            //Dictionary<string, string> dic = new Dictionary<string, string>();
-            //dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B2:B27");
-            //country = dic["B5"];
-            //SKU = dic["B7"];
-            //installType = dic["B8"];
-
-            //targetPath = dic["B12"];
-            //targetPath = targetPath + @"QBooks\";
-
-            //customOpt = dic["B17"];
-            //wkflow = dic["B18"];
-            //License_No = dic["B19"];
-            //Product_No = dic["B20"];
-            //UserID = dic["B21"];
-            //Passwd = dic["B22"];
-            //firstName = dic["B23"];
-            //lastName = dic["B24"];
-
-            //installPath = dic["B27"];
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
             // Read all the input values from "C:\\Temp\\Parameters.xlsm"
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B7:B30");
@@ -223,7 +200,7 @@ namespace Installer_Test
                conf.reload(); // Added
 
                 // Launch QuickBooks after installation
-               Launch_QB(SKU);
+               Install_Functions.Launch_QB(SKU);
         
                Logger.logMessage ("**********************************************************************");
                Logger.logMessage ("**********************************************************************");
@@ -951,9 +928,50 @@ namespace Installer_Test
             }
         }
 
-        public static void Open_QB (string targetPath)
+        //public static void Open_QB (string targetPath)
+        //{
+        //   // This function clicks on 'Open QuickBooks' in the final installer dialog box
+        //    ScreenCapture sc = new ScreenCapture();
+        //    System.Drawing.Image img = sc.CaptureScreen();
+        //    IntPtr pointer = GetForegroundWindow();
+
+        //    Boolean flag = false;
+        //    int loopCounter = 0;
+        //    // Click on Open QuickBooks
+        //    try
+        //    {
+        //        flag = false;
+
+        //        // Wait for the QuickBooks Installation dialog to show up
+        //        Actions.WaitForAppWindow("QuickBooks Installation", int.Parse(Sync_Timeout));
+
+
+        //        // Wait for the "Open QuickBooks" button for max 10 mins
+        //        while (flag == false && loopCounter < 120)
+        //        {
+        //            flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks"); //Window name changed by maneet
+        //            Thread.Sleep(5000);
+        //            loopCounter += 1;
+        //        }
+
+        //        Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks"); // Window name changed by maneet
+        //        Logger.logMessage("Click on Open QuickBooks - Successful");
+        //        Logger.logMessage("------------------------------------------------------------------------------");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Logger.logMessage("Click on Open QuickBooks - Failed");
+        //        Logger.logMessage(e.Message);
+        //        Logger.logMessage("------------------------------------------------------------------------------");
+        //    }
+
+        //    Logger.logMessage("Installation of Quickbooks " + targetPath + " - Successful");
+        //    Logger.logMessage("----------------------------------------------------------------------");
+        //}
+
+        public static void Open_QB(string targetPath)
         {
-           // This function clicks on 'Open QuickBooks' in the final installer dialog box
+            // This function clicks on 'Open QuickBooks' in the final installer dialog box
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
             IntPtr pointer = GetForegroundWindow();
@@ -964,28 +982,53 @@ namespace Installer_Test
             try
             {
                 flag = false;
-                //while (flag == false)
-                //{
-                //    flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("Intuit QuickBooks Installer"), "Open QuickBooks"); //Window name changed by maneet
-                //    Thread.Sleep(5000);
-                //}
-
 
                 // Wait for the QuickBooks Installation dialog to show up
                 Actions.WaitForAppWindow("QuickBooks Installation", int.Parse(Sync_Timeout));
 
-
                 // Wait for the "Open QuickBooks" button for max 10 mins
                 while (flag == false && loopCounter < 120)
                 {
-                    flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks"); //Window name changed by maneet
-                    Thread.Sleep(5000);
-                    loopCounter += 1;
+                    try
+                    {
+                        flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks");
+                        Logger.logMessage("CheckElementExistsByName - QuickBooks Installation " + loopCounter);
+                        if (flag == true) { break; }
+                    }
+                    catch
+                    {
+                        //MessageBox.Show("CheckElementExistsByName - QuickBooks Installation - Get desktop window failed.");
+                    }
+
+                    try
+                    {
+                        flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("Intuit QuickBooks Installer"), "Open QuickBooks");
+                        Logger.logMessage("CheckElementExistsByName - Intuit QuickBooks Installer  " + loopCounter);
+                        Thread.Sleep(5000);
+                        loopCounter += 1;
+                    }
+                    catch
+                    {
+                        // MessageBox.Show("CheckElementExistsByName - Intuit QuickBooks Installer - Get desktop window failed.");
+                    }
+
                 }
 
-                Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks"); // Window name changed by maneet
+                if (Actions.CheckDesktopWindowExists("QuickBooks Installation"))
+                {
+                    Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks");
+                    MessageBox.Show("QuickBooks Installation Found");
+                }
+                if (Actions.CheckDesktopWindowExists("Intuit QuickBooks Installer"))
+                {
+                    Actions.ClickElementByName(Actions.GetDesktopWindow("Intuit QuickBooks Installer"), "Open QuickBooks");
+                    MessageBox.Show("Intuit QuickBooks Installer Found");
+                }
+
+                //Actions.ClickElementByName(Actions.GetDesktopWindow("QuickBooks Installation"), "Open QuickBooks"); 
                 Logger.logMessage("Click on Open QuickBooks - Successful");
                 Logger.logMessage("------------------------------------------------------------------------------");
+
             }
             catch (Exception e)
             {
@@ -993,10 +1036,8 @@ namespace Installer_Test
                 Logger.logMessage(e.Message);
                 Logger.logMessage("------------------------------------------------------------------------------");
             }
-
-            Logger.logMessage("Installation of Quickbooks " + targetPath + " - Successful");
-            Logger.logMessage("----------------------------------------------------------------------");
         }
+
 
         public static void AddEntry(string targetPath, String SearchStr)
         {
@@ -1510,10 +1551,13 @@ namespace Installer_Test
         public static void Launch_QB(string SKU)
         {
 
+            Boolean flag =  false;
+            int loopCounter = 0;
+
             switch (SKU)
             {
                 case "Enterprise":
-                case "Enterprise Accountant":
+               // case "Enterprise Accountant":
                     industryEdition = "Enterprise Solutions General Business";
                     break;
 
@@ -1523,6 +1567,7 @@ namespace Installer_Test
                     industryEdition = "Premier Edition (General Business)";
                     break;
 
+                case "Enterprise Accountant": // Added
                 case "Pro":
                 case "Pro Plus":
                 industryEdition = "";
@@ -1534,17 +1579,22 @@ namespace Installer_Test
                 if (industryEdition != "")
                 {
                   
-                    Thread.Sleep(10000);
-                     if(false == Actions.WaitForWindow("Select QuickBooks Industry-Specific Edition", 180000))
+                    while (flag == false && loopCounter < 120)
                     {
-                        SendKeys.Send("{TAB}");
-                        Thread.Sleep(1000);
-                        SendKeys.Send("{ENTER}");
-                        Thread.Sleep(1000);
-                        SendKeys.Send("{ENTER}");
-                        Thread.Sleep(1000);
+                        try
+                        {
+                            flag = Actions.CheckElementExistsByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), industryEdition);
+                            Thread.Sleep(5000);
+                            Logger.logMessage(" Industry Edition loop - " + loopCounter);
+                        }
+                        catch
+                        {
+                            // MessageBox.Show("CheckElementExistsByName for industry Edition -Failed ");
+                        }
+                        loopCounter += 1;
                     }
-                    else
+
+                    if (Actions.CheckDesktopWindowExists("Select QuickBooks Industry-Specific Edition"))
                     {
                         Thread.Sleep(2000);
                         Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), industryEdition);
@@ -1553,16 +1603,15 @@ namespace Installer_Test
                         Thread.Sleep(2000);
                         Actions.ClickElementByName(Actions.GetDesktopWindow("Select QuickBooks Industry-Specific Edition"), "Finish");
                         Thread.Sleep(5000);
+                        //MessageBox.Show("QuickBooks Installation Found");
                     }
+
+
+
+
 
                     Select_Edition(industryEdition);
 
-                    //string exe = conf.get("QBExePath");
-                    //qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
-                    //qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.PrepareBaseState(qbApp);
-
-                    //QuickBooks.ResetQBWindows(qbApp, qbWindow, false);
-                    //Thread.Sleep(20000);
                 }
                 else
                 {
@@ -1643,13 +1692,17 @@ namespace Installer_Test
 
                 string readpath = "C:\\Temp\\Parameters.xlsm";
                 Dictionary<string, string> dic_SKU = new Dictionary<string, string>();
-                //dic_SKU = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B7");
-                //string SKU = dic_SKU["B7"];
 
                 dic_SKU = Lib.File_Functions.ReadExcelValues(readpath, "Install", "B12");
                 string SKU = dic_SKU["B12"];
 
                 qbApp = QuickBooks.GetApp("QuickBooks " + SKU);
+
+                if (qbApp == null)
+                {
+                    qbApp = QuickBooks.GetApp("QuickBooks: " + SKU);
+                }
+
                 // qbApp.WaitWhileBusy();
 
                 // to be updated
@@ -1680,33 +1733,42 @@ namespace Installer_Test
 
         public static void CheckWindowsAndClose (string SKU)
         {
+           
             var MainWindow = Actions.GetDesktopWindow("QuickBooks " + SKU);
+            string WindowName = "QuickBooks " + SKU;
 
-            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks " + SKU), "QuickBooks Setup") == true)
+            if (MainWindow == null)
             {
-                Window SetupWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks " + SKU), "QuickBooks Setup");
+                MainWindow = Actions.GetDesktopWindow("QuickBooks: " + SKU);
+                WindowName = "QuickBooks: " + SKU;
+            }
+
+
+            if (Actions.CheckWindowExists(Actions.GetDesktopWindow(WindowName), "QuickBooks Setup") == true)
+            {
+                Window SetupWin = Actions.GetChildWindow(Actions.GetDesktopWindow(WindowName), "QuickBooks Setup");
                // Actions.ClickElementByName(SetupWin, "Close"); // Does not work
                 SendKeys.SendWait("%{F4}");
                 Logger.logMessage("QuickBooks Setup Window found.");
                 Logger.logMessage("-----------------------------------------------------------------");
             }
 
-            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks " + SKU), "Set Up an External Accountant User") == true)
+            if (Actions.CheckWindowExists(Actions.GetDesktopWindow(WindowName), "Set Up an External Accountant User") == true)
             {
-                Window ExtAcctWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks " + SKU), "Set Up an External Accountant User");
+                Window ExtAcctWin = Actions.GetChildWindow(Actions.GetDesktopWindow(WindowName), "Set Up an External Accountant User");
                 Actions.ClickElementByName(ExtAcctWin, "No");
                 Logger.logMessage("Set Up an External Accountant User Window found.");
                 Logger.logMessage("-----------------------------------------------------------------");
             }
 
-            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks " + SKU), "Automatic Backup") == true)
+            if (Actions.CheckWindowExists(Actions.GetDesktopWindow(WindowName), "Automatic Backup") == true)
             {
                 SendKeys.SendWait("%N");
                 Logger.logMessage("Automatic Backup Window found.");
                 Logger.logMessage("-----------------------------------------------------------------");
             }
 
-            if (Actions.CheckWindowExists(Actions.GetDesktopWindow("QuickBooks " + SKU), "Accountant Center") == true)
+            if (Actions.CheckWindowExists(Actions.GetDesktopWindow(WindowName), "Accountant Center") == true)
             {
 
                 Window AcctCenWin = Actions.GetChildWindow(Actions.GetDesktopWindow("QuickBooks " + SKU), "Accountant Center");
@@ -2083,20 +2145,39 @@ namespace Installer_Test
         {
             string Edition = qbWindow.Title;
 
-            Edition = Edition.Substring(Edition.IndexOf("Intuit ") + "Intuit ".Length);
-
-            if (Edition.Contains("Manufacturing and Wholesale"))
+            if (!Edition.Contains("Pro") && (!Edition.Contains ("Premier")))
             {
-                Edition = Edition.Replace("Manufacturing and Wholesale", "Mfg and Whsle");
+                Edition = Edition.Substring(Edition.IndexOf("Intuit ") + "Intuit ".Length);
+
+                if (Edition.Contains("Manufacturing and Wholesale"))
+                {
+                    Edition = Edition.Replace("Manufacturing and Wholesale", "Mfg and Whsle");
+                }
+
+                string left_str = Edition.Substring(0, Edition.LastIndexOf(' '));
+                string right_str = Edition.Substring(Edition.LastIndexOf(' ') + 1);
+
+                if (left_str != "QuickBooks Enterprise Solutions")
+                {
+                    Edition = left_str + " Edition " + right_str;
+                }
             }
 
-            string left_str = Edition.Substring(0, Edition.LastIndexOf(' '));
-            string right_str = Edition.Substring(Edition.LastIndexOf(' ') + 1);
-
-            if (left_str != "QuickBooks Enterprise Solutions")
+            else
             {
-                Edition = left_str + " Edition " + right_str;
+                Edition = Edition.Substring(Edition.IndexOf("-") + "- ".Length);
+
+                string left_str = Edition.Substring(0, Edition.LastIndexOf(' '));
+                string right_str = Edition.Substring(Edition.LastIndexOf(' ') + 1);
+
+                if (left_str.Contains ("Plus"))
+                {
+                    left_str = left_str.Replace("Plus", "");
+                }
+
+                Edition = left_str + " " + right_str;
             }
+
 
             Install_Functions.Add_Edition_Automation_Properties(Edition);
 

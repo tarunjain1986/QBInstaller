@@ -232,24 +232,17 @@ namespace Installer_Test
             ScreenCapture sc = new ScreenCapture();
             System.Drawing.Image img = sc.CaptureScreen();
             IntPtr pointer = GetForegroundWindow();
+            string Edition = qbWindow.Title;
 
             try
             {
-                string OS_Name = Installer_Test.Lib.File_Functions.GetOS();
-                Dictionary<string, string> dic = new Dictionary<string, string>();
+                
+                if (Edition.Contains ("-"))
+                {
+                   Edition = Edition.Substring(Edition.IndexOf("-") + "- ".Length);
+                }
 
-                //dic = Installer_Test.Lib.File_Functions.ReadExcelValues("C:\\Temp\\Parameters.xlsm", "PostInstall", "B2:B3");
-
-                //string ver = dic["B2"];
-                //string reg_ver = dic["B3"];
-
-                dic = Lib.File_Functions.ReadExcelValues("C:\\Temp\\Parameters.xlsm", "Install", "B8:B12");
-                string SKU = dic["B12"];
-                string ver = dic["B8"];
-                string reg_ver = Lib.File_Functions.GetRegVer(SKU);
-
-                string product = Installer_Test.Lib.File_Functions.GetProduct(ver, reg_ver);
-                string menu = "About Intuit " + product + "...";
+                string menu = "About " + Edition + "..."; //
                 Actions.SelectMenu(qbApp, qbWindow, "Help", menu );
                 pointer = GetForegroundWindow();
                 sc.CaptureWindowToFile(pointer, resultsPath + "Help_About.png", ImageFormat.Png);

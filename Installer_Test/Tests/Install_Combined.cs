@@ -36,7 +36,7 @@ namespace Installer_Test.Tests
     public class Installer_Suite_Combined
     {
 
-
+        
         //-------------------To enable screen capture functionality-----------------------
         [DllImport("User32.dll")]
         public static extern int SetForegroundWindow(IntPtr point);
@@ -53,7 +53,7 @@ namespace Installer_Test.Tests
 
 
         public static string testName = "Install QuickBooks";
-        public string country, targetPath, SKU;
+        public string country, targetPath, SKU, QBTitle;
         //Dictionary object variable to read data from "Install" Sheet of Input file.
         Dictionary<string, string> dic = new Dictionary<string, string>();
 
@@ -82,8 +82,6 @@ namespace Installer_Test.Tests
 
         public void Setup()
         {
-
-
             var timeStamp = DateTimeOperations.GetTimeStamp(DateTime.Now);
             //Reading content of Install Execution Flow sheet from Input File
             dictionaryExecutionFlow = Lib.File_Functions.ReadExcelCellValues(readpath, "Install Execution Flow");
@@ -95,6 +93,13 @@ namespace Installer_Test.Tests
             targetPath = dic["Build Location (Local):"];
             targetPath = targetPath + @"QBooks\";
             SKU = dic["Select SKU:"];
+            QBTitle = SKU;
+
+            if (SKU == "Enterprise Accountant")
+            {
+                QBTitle = "Enterprise";
+            }
+
 
             //Reading values from Input Data excel to initialize logger
             customOpt = dic["Select Custom and Network Options:"];
@@ -159,7 +164,7 @@ namespace Installer_Test.Tests
                         break;
 
                     case "CA":
-                        Install_Functions.Install_CA();
+                        Install_Functions.Install_US(); // Install_Functions.Install_CA();
                         break;
                 }
             }
@@ -182,7 +187,7 @@ namespace Installer_Test.Tests
             // Initializing variables for QB application and main QB window.
             qbApp = FrameworkLibraries.AppLibs.QBDT.QuickBooks.Initialize(exe);
             qbApp.WaitWhileBusy();
-
+            Thread.Sleep(5000);
 
             // Check for QuickBooks Update Service Window
             if (Actions.CheckDesktopWindowExists("QuickBooks Update Service")) 
@@ -197,7 +202,7 @@ namespace Installer_Test.Tests
             // Wait for Window to appear for Ceratin iterations and then Break out
             while (Flag == false && loopCounter < 20)
             {
-                Flag = Actions.CheckDesktopWindowExists("QuickBooks " + SKU);
+                Flag = Actions.CheckDesktopWindowExists("QuickBooks " + QBTitle);
                 Thread.Sleep(3000);
                 loopCounter += 1;
             }
@@ -208,9 +213,9 @@ namespace Installer_Test.Tests
             qbWindow.WaitWhileBusy();
 
             // Check for multiple QB windows QuickBook pop-up windows and eloading QB app and QB window variables.
-            Install_Functions.CheckWindowsAndClose(SKU);
+            Install_Functions.CheckWindowsAndClose(QBTitle);
             qbApp = QuickBooks.GetApp("QuickBooks");
-            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
+            qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + QBTitle);
 
             // Save the window title in the Automation.Properties file
             Install_Functions.Get_QuickBooks_Edition(qbApp, qbWindow);
@@ -241,10 +246,10 @@ namespace Installer_Test.Tests
             if (executionRequired == "1")
             {
                 // Check for multiple QB windows QuickBook pop-up windows and eloading QB app and QB window variables.
-                Install_Functions.CheckWindowsAndClose(SKU);
+                Install_Functions.CheckWindowsAndClose(QBTitle);
                 qbApp = QuickBooks.GetApp("QuickBooks");
-                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
-                PostInstall_Functions.CheckF2value(qbApp, qbWindow, resultsPath, SKU);
+                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + QBTitle);
+                PostInstall_Functions.CheckF2value(qbApp, qbWindow, resultsPath, QBTitle);
             }
         }
 
@@ -256,9 +261,9 @@ namespace Installer_Test.Tests
             if (executionRequired == "1")
             {
                 // Check for multiple QB windows QuickBook pop-up windows and eloading QB app and QB window variables.
-                Install_Functions.CheckWindowsAndClose(SKU);
+                Install_Functions.CheckWindowsAndClose(QBTitle);
                 qbApp = QuickBooks.GetApp("QuickBooks");
-                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
+                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + QBTitle);
                 Help.ClickHelpAbout(qbApp, qbWindow, resultsPath);
             }
         }
@@ -272,9 +277,9 @@ namespace Installer_Test.Tests
             if (executionRequired == "1")
             {
                 // Check for multiple QB windows QuickBook pop-up windows and eloading QB app and QB window variables.
-                Install_Functions.CheckWindowsAndClose(SKU);
+                Install_Functions.CheckWindowsAndClose(QBTitle);
                 qbApp = QuickBooks.GetApp("QuickBooks");
-                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
+                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + QBTitle);
                 PostInstall_Functions.CreateCompanyFile(keyvaluepairdic);
             }
         }
@@ -288,9 +293,9 @@ namespace Installer_Test.Tests
             if (executionRequired == "1")
             {
                 // Check for multiple QB windows QuickBook pop-up windows and eloading QB app and QB window variables.
-                Install_Functions.CheckWindowsAndClose(SKU);
+                Install_Functions.CheckWindowsAndClose(QBTitle);
                 qbApp = QuickBooks.GetApp("QuickBooks");
-                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
+                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + QBTitle);
                 Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
                 PostInstall_Functions.PerformMIMO(qbApp, qbWindow);
             }
@@ -305,9 +310,9 @@ namespace Installer_Test.Tests
             if (executionRequired == "1")
             {
                 // Check for multiple QB windows QuickBook pop-up windows and eloading QB app and QB window variables.
-                Install_Functions.CheckWindowsAndClose(SKU);
+                Install_Functions.CheckWindowsAndClose(QBTitle);
                 qbApp = QuickBooks.GetApp("QuickBooks");
-                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
+                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + QBTitle);
                 Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
                 PostInstall_Functions.PerformVerify(qbApp, qbWindow);
 
@@ -323,9 +328,9 @@ namespace Installer_Test.Tests
             if (executionRequired == "1")
             {
                 // Check for multiple QB windows QuickBook pop-up windows and eloading QB app and QB window variables.
-                Install_Functions.CheckWindowsAndClose(SKU);
+                Install_Functions.CheckWindowsAndClose(QBTitle);
                 qbApp = QuickBooks.GetApp("QuickBooks");
-                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
+                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + QBTitle);
                 Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
                 PostInstall_Functions.PerformRebuild(qbApp, qbWindow);
             }
@@ -343,36 +348,25 @@ namespace Installer_Test.Tests
                 {
                     case "Enterprise":
                         if (country == "US" | country == "CA")
-                        {
-                            SwitchToggle.SwitchEdition("Enterprise");
-                            // PostInstall_Functions.SwitchEdition(qbApp, dic_Switch_Enterprise, exe, Bizname, SearchText);
-                        }
+                          SwitchToggle.SwitchEdition("Enterprise");
                         break;
 
                     case "Premier":
                         SwitchToggle.SwitchEdition("Premier");
-                        // PostInstall_Functions.SwitchEdition(qbApp, dic_Switch_Premier, exe, Bizname, SearchText);
                         break;
 
                     case "Premier Plus":
                         if (country == "US")
-                        {
-                            SwitchToggle.SwitchEdition("Premier");
-                            // PostInstall_Functions.SwitchEdition(qbApp, dic_Switch_Premier, exe, Bizname, SearchText);
-                        }
+                        SwitchToggle.SwitchEdition("Premier");
                         break;
 
                     case "Enterprise Accountant":
                         if (country == "US" | country == "CA")
-                        {
-                            SwitchToggle.ToggleEdition("Enterprise");
-                            // PostInstall_Functions.ToggleEdition(qbApp, dic_Toggle_Enterprise, exe, Bizname);
-                        }
+                        SwitchToggle.ToggleEdition("Enterprise");
                         break;
 
                     case "Premier Accountant":
                         SwitchToggle.ToggleEdition("Premier");
-                        // PostInstall_Functions.ToggleEdition(qbApp, dic_Toggle_Premier, exe, Bizname);
                         break;
                 }
 
@@ -387,7 +381,7 @@ namespace Installer_Test.Tests
             if (executionRequired == "1")
             {
                 qbApp = QuickBooks.GetApp("QuickBooks");
-                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + SKU);
+                qbWindow = QuickBooks.GetAppWindow(qbApp, "QuickBooks " + QBTitle);
                 Actions.SelectMenu(qbApp, qbWindow, "Window", "Close All");
                 Properties.Lib.QB_functions.CloseQBApplication(qbApp, qbWindow);
 
@@ -456,7 +450,7 @@ namespace Installer_Test.Tests
                 // Wait for Window to appear for Ceratin iterations and then Break out
                 while (flag == false && loopCounter < 20)
                 {
-                    flag = Actions.CheckDesktopWindowExists("QuickBooks " + SKU);
+                    flag = Actions.CheckDesktopWindowExists("QuickBooks " + QBTitle);
                     Thread.Sleep(1000);
                     loopCounter += 1;
                 }
@@ -466,12 +460,12 @@ namespace Installer_Test.Tests
                 qbWindow = FrameworkLibraries.AppLibs.QBDT.QuickBooks.MaximizeQB(qbApp);
                 qbWindow.WaitWhileBusy();
 
-                Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks " + SKU));
+                Actions.SetFocusOnWindow(Actions.GetDesktopWindow("QuickBooks " + QBTitle));
                 pointer = GetForegroundWindow();
                 sc.CaptureWindowToFile(pointer, resultsPath + "QuickBooks_launched_after_Repair.png", ImageFormat.Png);
 
                 // Close QuickBook pop-up windows
-                Install_Functions.CheckWindowsAndClose(SKU);
+                Install_Functions.CheckWindowsAndClose(QBTitle);
                 Thread.Sleep(1000);
                 CloseQB();
             }

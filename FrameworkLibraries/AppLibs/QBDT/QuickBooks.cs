@@ -218,20 +218,30 @@ namespace FrameworkLibraries.AppLibs.QBDT
             {
                 FrameworkLibraries.Utils.OSOperations.CommandLineExecute("control appwiz.cpl");
 
-                try
-                {
+                //try
+                //{
                     Logger.logMessage("---------------Try-Catch Block------------------------");
                     Actions.WaitForWindow("Programs and Features", int.Parse(Sync_Timeout));
-                }
-                catch { }
-
+                //}
+                //catch  (Exception e)
+                //{
+                //    Logger.logMessage(e.Message);
+                //    Logger.logMessage("------------------------------------------------------");
+                //}
 
                 Actions.SetFocusOnWindow(Actions.GetDesktopWindow("Programs and Features"));
                 var controlPanelWindow = Actions.GetDesktopWindow("Programs and Features");
                 var uiaWindow = Actions.UIA_GetAppWindow("Programs and Features");
 
-                if (controlPanelWindow.DisplayState != DisplayState.Maximized)
-                   controlPanelWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+                Thread.Sleep(2000);
+                //if (controlPanelWindow.DisplayState != DisplayState.Maximized)
+                //   controlPanelWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+
+                controlPanelWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Restored;
+                
+
+                Thread.Sleep(2000);
+             
                 Thread.Sleep(int.Parse(Execution_Speed));
                 
 

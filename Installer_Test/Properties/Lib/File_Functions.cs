@@ -76,18 +76,6 @@ namespace Installer_Test.Lib
         public static Dictionary<string, string> ReadExcelValues (string readpath,string workSheet, string Range)
         {
            
-            //Excel._Application xlApp = null;
-            //Excel.Workbooks xlWorkBooks = null;
-            //Excel.Workbook xlWorkBook = null;
-            //Excel.Worksheet xlWorkSheet = null;
-            //Excel.Range xlRng = null;
-
-            //xlApp = new Microsoft.Office.Interop.Excel.Application();
-            //xlWorkBooks = xlApp.Workbooks;
-            //xlWorkBook = xlWorkBooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-            //xlWorkSheet = xlWorkBook.Worksheets.get_Item(workSheet);
-            //xlRng = xlWorkSheet.get_Range(Range, Type.Missing);
-
             Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
             Excel.Workbook xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
             Excel.Worksheet xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(workSheet);
@@ -104,7 +92,15 @@ namespace Installer_Test.Lib
                 dic.Add(cellIndex, cellValue);
 
             }
-         
+
+            // xlWorkBook.Close();
+            object misValue = System.Reflection.Missing.Value;
+            xlWorkBook.Close(false, misValue, misValue);
+
+            xlApp.Quit();
+            return dic;
+
+
 
             ////if (xlRng != null) Marshal.FinalReleaseComObject(xlRng);
             ////if (xlWorkSheet != null) Marshal.FinalReleaseComObject(xlWorkSheet);
@@ -123,49 +119,53 @@ namespace Installer_Test.Lib
             ////xlWorkBook.Close();
             ////xlApp.Quit();
 
-         //   GC.Collect();
-         //   GC.WaitForPendingFinalizers();
-         ////   GC.Collect();
+            //   GC.Collect();
+            //   GC.WaitForPendingFinalizers();
+            ////   GC.Collect();
 
 
-         //   Marshal.FinalReleaseComObject(xlRng);
-         //   Marshal.FinalReleaseComObject(xlWorkSheet);
-         //   Marshal.FinalReleaseComObject(xlWorkBook);
-         //   Marshal.FinalReleaseComObject(xlWorkBooks);
-         //   Marshal.FinalReleaseComObject(xlApp);
+            //   Marshal.FinalReleaseComObject(xlRng);
+            //   Marshal.FinalReleaseComObject(xlWorkSheet);
+            //   Marshal.FinalReleaseComObject(xlWorkBook);
+            //   Marshal.FinalReleaseComObject(xlWorkBooks);
+            //   Marshal.FinalReleaseComObject(xlApp);
 
-         //   xlApp = null;
-         //   xlWorkBooks = null;
-         //   xlWorkBook = null;
-         //   xlWorkSheet = null;
-         //   xlRng = null;
+            //   xlApp = null;
+            //   xlWorkBooks = null;
+            //   xlWorkBook = null;
+            //   xlWorkSheet = null;
+            //   xlRng = null;
 
-            xlWorkBook.Close();
-            xlApp.Quit();
-            return dic;
         }
 
         public static Dictionary<string, string> ReadExcelCellValues(string readpath, string workSheet)
         {
-            Excel.Application xlApp;
-            Excel.Workbook xlWorkBook;
-            Excel.Worksheet xlWorkSheet;
+            Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+            Excel.Workbook xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+            Excel.Worksheet xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(workSheet);
+            //Excel.Range xlRng = (Excel.Range)xlWorkSheet.get_Range(Range, Type.Missing);
+            
+            //Excel.Application xlApp;
+            //Excel.Workbook xlWorkBook;
+            //Excel.Worksheet xlWorkSheet;
             Excel.Range range;
+            
+
+            // object misValue = System.Reflection.Missing.Value;
+
+            //xlApp = new Excel.Application();
+            //Excel.Workbook xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+
+
+            //xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(workSheet);
+
+            range = xlWorkSheet.UsedRange;
+
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
             string str1, str2;
 
             int rCnt = 0;
-
-            // object misValue = System.Reflection.Missing.Value;
-
-            xlApp = new Excel.Application();
-            xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-
-
-            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(workSheet);
-
-            range = xlWorkSheet.UsedRange;
 
             for (rCnt = 1; rCnt <= range.Rows.Count; rCnt++)
             {
@@ -183,13 +183,16 @@ namespace Installer_Test.Lib
             }
 
             // Cleanup
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+            //GC.Collect();
+            //GC.WaitForPendingFinalizers();
 
-            Marshal.FinalReleaseComObject(range);
-            Marshal.FinalReleaseComObject(xlWorkSheet);
+            //Marshal.FinalReleaseComObject(range);
+            //Marshal.FinalReleaseComObject(xlWorkSheet);
 
-            xlWorkBook.Close();
+            object misValue = System.Reflection.Missing.Value;
+            xlWorkBook.Close(false, misValue, misValue);
+
+            // xlWorkBook.Close(0);
             Marshal.ReleaseComObject(xlWorkBook);
 
             xlApp.Quit();
@@ -221,7 +224,10 @@ namespace Installer_Test.Lib
 
             Bizname = (string)(xlWorkSheet.Cells[2,1] as Excel.Range).Value;
             
-            xlWorkBook.Close();
+           // xlWorkBook.Close();
+            object misValue = System.Reflection.Missing.Value;
+            xlWorkBook.Close(false, misValue, misValue);
+
             xlApp.Quit();
             return Bizname;
 
@@ -243,9 +249,9 @@ namespace Installer_Test.Lib
 
             xlApp = new Excel.Application();
             xlWorkBook = xlApp.Workbooks.Open(readpath, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-            // Get worksheet names
-            foreach (Excel.Worksheet sh in xlWorkBook.Worksheets)
-                Debug.WriteLine(sh.Name);
+            //// Get worksheet names
+            //foreach (Excel.Worksheet sh in xlWorkBook.Worksheets)
+            //    Debug.WriteLine(sh.Name);
 
             xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(workSheet);
             range = xlWorkSheet.UsedRange;
@@ -264,7 +270,10 @@ namespace Installer_Test.Lib
 
             }
 
-            xlWorkBook.Close();
+            // xlWorkBook.Save(); 
+            object misValue = System.Reflection.Missing.Value;
+            xlWorkBook.Close(false, misValue, misValue);
+            // xlWorkBook.Close();
             xlApp.Quit();
 
 
